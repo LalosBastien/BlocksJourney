@@ -1,0 +1,28 @@
+<mat-card>
+  <mat-card-title>
+    <h1>Détails de la progression de {{student.prenom | titlecase }} {{student.nom | titlecase}}</h1>
+  </mat-card-title>
+  <mat-card-content>
+    <h3>Statistiques par niveau</h3>
+    <table *ngFor="let level of levels">
+      <thead>
+        <th>Niveau °</th>
+        <th>Temps total</th>
+        <th>Durée de l'algo</th>
+        <th>Date de la tentative</th>
+        <th>Nombre de tentative</th>
+        <th>Résultat</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{level.name}}</td>
+          <td>{{level.Stats.totalTime}}</td>
+          <td>{{level.Stats.algoTime}}</td>
+          <td>{{level.Stats.createdAt | date:'HH:mm dd/MM/yyyy'}}</td>
+          <td>{{level.Stats.tryNumber}}</td>
+          <td>{{level.Stats.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card-content>
+</mat-card>

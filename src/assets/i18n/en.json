@@ -1,0 +1,61 @@
+{
+  "PAGES": {
+      "HOME": {
+          "TITLE": "PensAlgo",
+          "SUBTITLE": "Learn to code while having fun !",
+          "LAUNCH": "Start the game",
+          "SIGN_IN": "Login",
+          "SIGN_UP": "Register",
+          "EXIT": "Exit",
+          "ACCOUNT_NAME": "Account name",
+          "ACCOUNT_NAME_ERR": "Please enter your account name",
+          "PASSWORD": "Password",
+          "PASSWORD_ERR": "Please enter your password",
+          "FORGOT_PASSWORD": "Forgot your password ?"
+        },
+      "GAME": {
+        "TAB_TITLE_1": "Introduction",
+        "TAB_TITLE_2": "Algorithm zone",
+        "TAB_TITLE_3": "Game zone",
+        "TAB_TITLE_4": "Need help ?",
+        "BACK_MENU_BTN": "Return to main menu",
+        "NO_HELP": "No help available for this level.",
+        "ACTION_ZONE_TITLE": "Available action blocks : ",
+        "ALGO_ZONE_TITLE": "Your code : "
+      },
+      "REGISTER": {
+        "STEP1": "Identifiers",
+        "STEP2": "Informations",
+        "STEP3": "Confirmation",
+        "NEXT": "Next",
+        "BACK": "Back to menu",
+        "CONFIRM": "Confirm",
+        "USERNAME": "Enter an account name",
+        "PASSWORD": "Enter a password",
+        "USERNAME_ERR": "Please enter an username",
+        "PASSWORD_ERR": "Please enter a password",
+        "EMAIL": "Please enter a email address",
+        "EMAIL_ERR": "Please enter a valid email address",
+        "FIRSTNAME": "Entrez your firstname",
+        "LASTNAME": "Entrez your lastname",
+        "C_USERNAME": "Username",
+        "C_PASSWORD": "Password",
+        "C_EMAIL": "E-mail address",
+        "C_FIRSTNAME": "Firstname",
+        "C_LASTNAME": "Lastname",
+        "WELCOME": "Hello, we welcome you to PensAlgo and remain at your disposal when needed!",
+        "INSTRUCTION": "Be sure to review your personal information before you start on PensAlgo"
+      },
+      "PASSWORD": {
+        "EMAIL_HINT": "Please enter the email address of your account we will send you a reset link",
+        "EMAIL_ERR": "Please enter a valid email address",
+        "SEND": "Send",
+        "CONFIRM": "Confirm",
+        "BACK": "Back",
+        "NEW_PASSWORD": "New password",
+        "PLACEHOLDER": "Enter your password",
+        "PASSWORD_HINT": "Please enter a new password",
+        "CONFIRM_HINT": "Confirm your password"
+    }
+  }
+}

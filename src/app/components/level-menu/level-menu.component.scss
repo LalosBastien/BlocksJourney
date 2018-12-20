@@ -1,0 +1,22 @@
+.mat-slider-red {
+  .mat-slider-thumb {
+    background-color: red !important;
+  }
+}
+
+.mat-slider-yellow {
+  .mat-slider-thumb {
+    background-color: yellow !important;
+  }
+}
+
+.mat-slider-green {
+  .mat-slider-wrapper {
+    .mat-slider-thumb-container {
+      .mat-slider-thumb {
+        background-color:green!important;
+      }
+    }
+  }
+
+}

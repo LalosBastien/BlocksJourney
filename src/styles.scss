@@ -1,0 +1,68 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+html {
+  height: 100%;
+  width: 100%;
+  /* min-height: 100%; */
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  background-color:#333;
+  /* min-height: 100% !important;
+  padding-bottom: 70px; */
+}
+
+.title{
+  text-align: center;
+  font-weight: bolder;
+}
+
+
+.mat-slider-red {
+  .mat-slider-thumb {
+    background-color:red!important;
+  }
+  .mat-slider-track-fill {
+    background-color:red!important;
+  }
+}
+
+.mat-slider-yellow {
+  .mat-slider-thumb {
+    background-color:yellow!important;
+  }
+  .mat-slider-track-fill {
+    background-color:yellow!important;
+  }
+}
+
+.mat-slider-green {
+  .mat-slider-thumb {
+    background-color:green!important;
+    border: none;
+  }
+  .mat-slider-track-fill {
+    background-color:green!important;
+  }
+}
+
+.main-menu {
+  height: 100%;
+  .menu-content {
+
+  }
+
+div.mat-expansion-panel-content:not(.mat-expanded) {
+    height: 0px !important;
+    visibility: hidden !important;
+}
+
+.mat-expansion-panel-header  {
+    height: 48px;
+}
+}
+
+

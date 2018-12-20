@@ -1,0 +1,72 @@
+<div style="background-color: white; height: 100%">
+    <mat-list style="background-color: white">
+        <a mat-button routerLink='/teacherPanel'><mat-icon>keyboard_arrow_left</mat-icon>Retour</a>
+        <h2 mat-subheader>Progression : {{progression}}%</h2>
+        <mat-progress-bar mode="determinate" value="{{progression}}"></mat-progress-bar>
+        <div *ngFor="let lvl of levels">
+            <mat-divider></mat-divider>
+            <mat-list-item matLine>
+                <button mat-icon-button (click)="toggleExpansion(lvl)">
+                    <mat-icon class="mat-icon-rtl-mirror">
+                        {{lvl.isExpended ? 'expand_more' : 'chevron_right'}}
+                    </mat-icon>
+                </button>
+                <mat-icon mat-list-icon>games</mat-icon>
+
+                <h4 mat-line>{{lvl.name}}</h4>
+
+                <h6 mat-line> - Difficulté:
+                    <mat-slider
+                            [ngClass]= "{
+                                'mat-slider-green':lvl.difficulty <= 4,
+                                'mat-slider-yellow':lvl.difficulty > 4 && lvl.difficulty <= 7,
+                                'mat-slider-red':lvl.difficulty > 7
+                              }"
+                            tickInterval="1"
+                            min="0"
+                            max="10"
+                            [(ngModel)]="lvl.difficulty"
+                            disabled>
+                    </mat-slider>
+                </h6>
+                <div mat-line style="display: flex;
+                        align-items: center;">
+                    <span>- Status:</span>
+                    <mat-icon class="mat-icon-rtl-mirror"
+                              [ngStyle]= "{'color':statusColor(lvl.status)}">
+                        {{statusIcon(lvl.status)}}
+                    </mat-icon></div>
+            </mat-list-item>
+
+
+            <mat-table style="margin-left: 3%;" *ngIf="lvl.isExpended && lvl.history.length > 0"
+                       [dataSource]="lvl.historyDataSource">
+
+                <!--- Note that these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="totalTime">
+                    <mat-header-cell *matHeaderCellDef> Total Time</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.totalTime}}</mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="algoTime">
+                    <mat-header-cell *matHeaderCellDef> Algo Time</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.algoTime}}</mat-cell>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="status">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef> Status</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"> {{element.status}}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </div>
+
+    </mat-list>
+</div>

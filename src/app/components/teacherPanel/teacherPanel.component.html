@@ -1,0 +1,191 @@
+<div style="background-color: white; height: 100%">
+  <mat-tab-group style='background-color: white'>
+    <mat-tab style='background-color: white'>
+      <ng-template mat-tab-label>
+        <mat-icon>group</mat-icon>
+        Classement des élèves
+      </ng-template>
+
+
+      <div style="padding-left:2%;background-color: #f2f2f2">
+        <mat-icon>search</mat-icon>
+        <mat-form-field style="color:#333">
+
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Recherche">
+        </mat-form-field>
+      </div>
+
+
+      <mat-table #table [dataSource]="dataSource">
+
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+        </ng-container>
+
+        <!-- Username Column -->
+        <ng-container matColumnDef="username">
+          <mat-header-cell *matHeaderCellDef> Username </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
+        </ng-container>
+
+        <!--  Firstname -->
+        <ng-container matColumnDef="firstname">
+          <mat-header-cell *matHeaderCellDef> Firstname </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.prenom}} </mat-cell>
+        </ng-container>
+
+        <!-- Lastname Column -->
+        <ng-container matColumnDef="lastname">
+          <mat-header-cell *matHeaderCellDef> Lastname </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.nom}} </mat-cell>
+        </ng-container>
+
+        <!-- Progression Column -->
+        <ng-container matColumnDef="progression">
+          <mat-header-cell *matHeaderCellDef> Progression (%) </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.progression}} % </mat-cell>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon style="cursor:pointer" (click)=moveToDetail(element.id)>find_in_page</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <ng-container>
+        <div style="background-color: #f2f2f2">
+          <!-- <button mat-icon-button (click)="openDialogAddStudent()"> -->
+          <mat-icon style='padding:1% 1% 1% 2%;font-size:35px;cursor: pointer;color:#333' (click)="openDialogAddStudent()">
+            group_add
+          </mat-icon>
+          <!-- </button> -->
+        </div>
+
+      </ng-container>
+
+
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>widgets</mat-icon>
+        Statistiques par niveaux
+      </ng-template>
+      <mat-card>
+        <mat-accordion>
+
+          <div *ngFor="let levelStat of levelStats">
+            <mat-expansion-panel [expanded]="false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Level {{levelStat.level.id}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{levelStat.level.name}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-grid-list cols="4" rowHeight="40px">
+                <mat-grid-tile style="background-color:lightblue;font-size: 16px">
+                  <mat-icon>track_changes</mat-icon>&nbsp;<b>Statistique</b>
+                </mat-grid-tile>
+                <mat-grid-tile style="background-color:lightcoral;font-size: 16px">
+                  <mat-icon>trending_down</mat-icon>&nbsp;<b>Moins bonne performance</b>
+                </mat-grid-tile>
+                <mat-grid-tile style="background-color:wheat; font-size: 16px">
+                  <mat-icon>trending_flat</mat-icon>&nbsp;<b>Moyenne</b>
+                </mat-grid-tile>
+                <mat-grid-tile style="background-color:lightgreen; font-size: 16px">
+                  <mat-icon>trending_up</mat-icon>&nbsp;<b>Meilleure performance</b>
+                </mat-grid-tile>
+              </mat-grid-list>
+              <mat-grid-list cols="4" rowHeight="30px">
+                <mat-grid-tile><b>Temps d'algo</b></mat-grid-tile>
+                <div *ngIf='levelStat.stats.algoTime.worst.Stats && levelStat.stats.algoTime.best.Stats && levelStat.stats.algoTime.average'>
+                  <mat-grid-tile>{{levelStat.stats.algoTime.worst.Stats.value | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.algoTime.worst.id)'>{{levelStat.stats.algoTime.worst.nom}}&nbsp;{{levelStat.stats.algoTime.worst.prenom}}</a> )</i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.algoTime.average | date: 'mm\:ss'}}</mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.algoTime.best.Stats.value | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.algoTime.best.id)'>{{levelStat.stats.algoTime.best.nom}}&nbsp;{{levelStat.stats.algoTime.best.prenom}}</a> ) </i></mat-grid-tile>
+
+                </div>
+                <div *ngIf='!levelStat.stats.algoTime.worst.Stats || !levelStat.stats.algoTime.best.Stats'>
+                  <mat-grid-tile *ngIf='levelStat.stats.algoTime.worst == "none"'>None</mat-grid-tile>
+                  <mat-grid-tile *ngIf='levelStat.stats.algoTime.average == "none"'>None</mat-grid-tile>
+                  <mat-grid-tile *ngIf='levelStat.stats.algoTime.best == "none"'>None</mat-grid-tile>
+                </div>
+
+                <mat-grid-tile><b>Temps Total</b></mat-grid-tile>
+                <div *ngIf='levelStat.stats.totalTime.worst.Stats && levelStat.stats.totalTime.best.Stats && levelStat.stats.totalTime.average'>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value * 1000 | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a> )</i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.average * 1000 | date: 'mm\:ss'}}</mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value * 1000 | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a> ) </i></mat-grid-tile>
+                </div>
+                <div *ngIf='!levelStat.stats.totalTime.worst.Stats || !levelStat.stats.totalTime.best.Stats'>
+                  <mat-grid-tile *ngIf='levelStat.stats.totalTime.worst == "none"'>None</mat-grid-tile>
+                  <mat-grid-tile *ngIf='levelStat.stats.totalTime.average == "none"'>None</mat-grid-tile>
+                  <mat-grid-tile *ngIf='levelStat.stats.totalTime.best == "none"'>None</mat-grid-tile>
+                </div>
+          <!-- <mat-grid-tile><b>Nombre de blocs utilisés</b></mat-grid-tile>
+                  <mat-grid-tile>12 &nbsp;<i> (lalos_b)</i></mat-grid-tile>
+                  <mat-grid-tile>11</mat-grid-tile>
+                  <mat-grid-tile>8 &nbsp;<i> (mounj_a) </i></mat-grid-tile> -->
+          </mat-grid-list>
+          </mat-expansion-panel>
+</div>
+
+</mat-accordion>
+</mat-card>
+</mat-tab>
+
+<mat-tab>
+  <ng-template mat-tab-label>
+    <mat-icon>insert_chart_outlined</mat-icon>
+    Statistiques globales
+  </ng-template>
+
+  <mat-grid-list cols="3" rowHeight="200px">
+    <mat-grid-tile>
+      <mat-card *ngIf='nbStudent'>
+        <b style='font-size:45px'>{{nbStudent}}</b>
+        <mat-icon style='text-align:center;font-size:64px'>person</mat-icon>
+        <br>Nombre d'éleves en charge
+
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card *ngIf='nbGames'>
+        <b style='font-size:45px'>{{nbGames}}</b>
+        <mat-icon style='text-align:center;font-size:64px'>videogame_asset</mat-icon>
+        <br>Nombre de parties jouées
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card *ngIf='nbLevels'>
+        <b style='font-size:45px'>{{nbLevels}}</b>
+        <mat-icon style='text-align:center;font-size:64px'>games</mat-icon>
+        <br>Nombre de niveaux disponibles
+
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-grid-list cols="2" rowHeight="1:1">
+    <mat-grid-tile>
+      <mat-card>
+        <div [chart]="pieChart"></div>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card>
+        <div [chart]="barChart"></div>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</mat-tab>
+</mat-tab-group>
+</div>

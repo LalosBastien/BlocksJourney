@@ -1,0 +1,40 @@
+<!-- <div *ngIf="!listClass">
+  <p>Vous n'avez aucune classe actuellement enregistrer</p>
+  <button (click)="openAddClassDialog()"></button>
+</div>
+
+<div *ngIf="listClass" [formGroup]="classSel">
+  <mat-select formControlName="currentClass">
+    <mat-option *ngFor="let class of listClass" [value]="class">{{class.libelle}}</mat-option>
+  </mat-select>
+</div>
+<div *ngIf="selectedClass">
+  {{selectedClass | titlecase}}
+  <mat-divider></mat-divider>
+</div> -->
+<div *ngIf="listStudent">
+  <table>
+    <thead>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Taux de progression</th>
+      <th>Details</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of listStudent">
+        <td>{{student.nom | titlecase}}</td>
+        <td>{{student.prenom | titlecase}}</td>
+        <td>{{student.progress.progression |percent}}</td>
+        <!--        <td>
+          Need to fix module or find another 
+         <circle-progress [percent]="student.progress.progression"></circle-progress> 
+       </td> -->
+        <td>
+          <button mat-icon-button (click)="openImproveTrackingDialog(student)">
+            <mat-icon style="font-size: 25px; color: #868686">list_alt</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

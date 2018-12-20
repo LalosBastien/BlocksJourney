@@ -1,0 +1,22 @@
+<div style="background-color: white; height: 100%">
+<mat-card *ngIf="user">
+  <h2>Profil</h2>
+  <mat-list>
+    <mat-list-item *ngIf="user.role.accessLevel == 2">
+      <mat-icon>info</mat-icon>&nbsp;<b>#:&nbsp;</b> {{ user.id }}
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon>email</mat-icon>&nbsp;<b>Email:&nbsp;</b> {{ user.email }}
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon>face</mat-icon>&nbsp;<b>Identité&nbsp;</b> {{ user.nom }}&nbsp;{{ user.prenom }}
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon>group</mat-icon>&nbsp;<b>Role:&nbsp;</b> {{ user.role.name }}
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+</div>

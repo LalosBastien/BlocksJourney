@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GPE-Client</title>
+  <base href="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="assets/web/logo-pensalgo.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+</head>
+<body>
+  <app-root style="height: 100%">Loading...</app-root>
+</body>
+<script>
+    document.addEventListener("keydown", function (e) {
+      if (e.which === 123) {
+        require('remote').getCurrentWindow().toggleDevTools();
+      } else if (e.which === 116) {
+        location.reload();
+      }
+    });
+  </script>
+</html>

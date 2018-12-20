@@ -1,0 +1,39 @@
+{
+  "productName": "GPE-Client",
+  "directories": {
+    "output": "app-builds"
+  },
+    "files": [
+        "**/*",
+        "!*.ts",
+        "!*.code-workspace",
+        "!LICENSE.md",
+        "!package.json",
+        "!package-lock.json",
+        "!src/",
+        "!e2e/",
+        "!config/",
+        "!.angular-cli.json",
+        "!karma.conf.js",
+        "!tsconfig.json",
+        "!tslint.json"
+    ],
+  "win": {
+    "icon": "dist",
+    "target": [
+      "portable"
+    ]
+  },
+  "mac": {
+    "icon": "dist",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "dist",
+    "target": [
+      "AppImage"
+    ]
+  }
+}

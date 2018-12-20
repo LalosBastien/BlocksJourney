@@ -1,0 +1,15 @@
+<mat-card [formGroup]="addStudentFormGroup">
+  <mat-card-title>Ajouter un élève</mat-card-title>
+  <mat-card-content>
+    <mat-form-field class="col-md-12">
+      <input matInput placeholder="Email" formControlName="email" type='email' required>
+      <mat-icon matSuffix>mail</mat-icon>
+      <mat-error>Veuillez entrez une adresse e-mail valide </mat-error>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button [disabled]="addStudentFormGroup.invalid" style="background-color:	#5cb85c;color:white"
+      (click)="confirmAddStudent()">Ajouter</button>
+    <button mat-raised-button matDialogClose color="warn">ANNULER</button>
+  </mat-card-actions>
+</mat-card>
