@@ -1,0 +1,26 @@
+{
+  "type": "move",
+  "message0": "Avancer %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "DIRECTION",
+      "options": [
+        [
+          "Droite",
+          "Right"
+        ],
+        [
+          "Gauche",
+          "Left"
+        ]
+      ]
+    }
+  ],
+  "inputsInline": false,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 0,
+  "tooltip": "Fait avancer le personnage d'un pas.",
+  "helpUrl": ""
+}

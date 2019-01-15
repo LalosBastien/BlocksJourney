@@ -7,13 +7,9 @@
     <span style="padding-bottom: 5px">{{description}}</span>
   </div>
 
-<div style=" height: 89%; width: 100%; display: inline-flex; text-align: center; background-color: white">
-  <div id="blocklyDiv" style=" width: 40%; height: 100%"></div>
-  <div id="gameHolder" style="padding-left: 5px; height: 100%; display: table-cell; vertical-align: middle;" >
-    <div id="canvasHolder"></div>
-    <button (click)="runAlgo()" id="startGameBtn" style="margin-top: 10px; width: 30%" mat-raised-button color="primary">Lancer</button>
-    <button (click)="stopAlgo()" id="stopGameBtn" style="margin-top: 10px; width: 30%" mat-raised-button color="warn">Arrêter</button>
-  </div>
+<div style=" height: 89%; width: 100%; display: inline-flex; text-align: center; background-color: white" *ngIf="json">
+  <app-blockly [data]=json #blocklyRef></app-blockly>
+  <app-phaser [blockly]=blocklyRef [api]="_api" [data]=json></app-phaser>
 </div>
 
 </div>

@@ -1,0 +1,10 @@
+{
+  "type": "stop",
+  "message0": "Stop",
+  "inputsInline": false,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 0,
+  "tooltip": "Le personnage s'arrête",
+  "helpUrl": ""
+}
