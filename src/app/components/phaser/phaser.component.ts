@@ -42,9 +42,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     height;
     buttonPanelHeight;
     currentBlock;
-    playerDoigAction: boolean;
+    isPlayerRunning: boolean;
+    isPlayerJumping: boolean;
     xTarget: number;
-    bgData;
+    bgClouds;
+    bgGround;
+    i;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -58,6 +61,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.meta = this.data.level;
         this.data = this.data.levelInfo;
         this.started = false;
+        this.i = 0;
 
         this.message = {
             text: 'Hello',
@@ -87,7 +91,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.game.load.image(element.name, 'assets/game/tiles/' + element.image);
         });
 
-        this.game.load.image('background', this.json.images.background);
+        this.game.load.image('bg_clouds', 'assets/game/bg_clouds.png');
+        this.game.load.image('bg_ground', 'assets/game/bg_ground.png');
         this.game.load.image('grid', 'assets/game/grid-cell-80.png');
 
         this.game.load.spritesheet('star', this.json.goal.path, 16, 16);
@@ -114,9 +119,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.component.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.component.game.stage.backgroundColor = '#fafafa';
-        this.component.bg = this.game.add.tileSprite(0, 0, this.component.width, this.component.height, 'background');
+        this.component.bgClouds = this.game.add.tileSprite(0, 0, this.component.width, this.component.height, 'bg_clouds');
+        this.component.bgGround = this.game.add.tileSprite(0, 0, this.component.width, this.component.height, 'bg_ground');
 
-        this.component.bg.fixedToCamera = true;
+        this.component.bgGround.fixedToCamera = true;
         this.component.map = this.game.add.tilemap('level');
 
         this.json.level.tilesets.forEach(element => {
@@ -218,8 +224,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     update() {
         this.message.text = this.component.message.text;
         this.message.fill = this.component.message.fill;
-
         this.message.x = this.component.width / 2 - this.message.width / 2;
+
+        this.component.bgClouds.tilePosition.x -= 1 / 2;
 
         if (!this.component.player || !this.component.player.body) {
 
@@ -256,28 +263,49 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             }
         }, () => true, this);
 
-        if (this.component.playerDoigAction) {
-            const direction = this.component.xTarget > this.component.player.body.position.x; // true right, false left
-            this.component.player.body.velocity.x = direction ? 50 : -50;
-            if (this.component.xTarget === Math.round(this.component.player.body.position.x)) {
-                this.component.player.body.position.x = this.component.xTarget;
-                this.component.player.body.velocity.x = 0;
-                this.component.player.body.acceleration.x = 0;
-                this.component.playerDoigAction = false;
-                this.component.player.animations.stop();
-            }
-            return;
-        } else if (this.component.started) {
-            if (!this.component.blockly.interpreter.step()) {
-                this.component.blockly.interpreter = null;
-                this.component.started = false;
-                const time = Date.now() - this.component.timerStart;
-                this.component.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, time);
+        this.component.synchronizeBlockly();
+    }
+
+    synchronizeBlockly() {
+        // Handle actions here
+        if (this.isPlayerRunning) {
+            this.handleMove();
+        } else if (this.started) {
+            if (!this.blockly.interpreter.step()) {
+                this.blockly.interpreter = null;
+                this.started = false;
+                const time = Date.now() - this.timerStart;
+                this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, time);
             }
         } else {
-            this.component.player.body.acceleration.x = 0;
-            this.component.player.body.velocity.x = 0;
-            this.component.player.animations.stop();
+            this.handleIdle();
+        }
+    }
+
+
+
+    handleIdle() {
+        this.player.body.acceleration.x = 0;
+        this.player.body.velocity.x = 0;
+        this.player.animations.stop(null, true);
+        this.player.animations.frame = 4;
+    }
+
+    handleMove() {
+        const direction = this.xTarget > this.player.body.position.x; // true right, false left
+        this.player.body.velocity.x = direction ? 50 : -50;
+        const playerReachedTarget = this.xTarget === Math.round(this.player.body.position.x);
+
+        if (this.isPlayerJumping) {
+            this.player.body.velocity.y = -300;
+            this.isPlayerJumping = false;
+        }
+        if (playerReachedTarget) {
+            this.player.body.position.x = this.xTarget;
+            this.player.body.velocity.x = 0;
+            this.player.body.acceleration.x = 0;
+            this.isPlayerRunning = false;
+            this.player.animations.stop();
         }
     }
 
@@ -296,22 +324,23 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     async moveRight() {
         this.player.animations.play('right');
-        this.playerDoigAction = true;
+        this.isPlayerRunning = true;
         this.xTarget = this.player.body.position.x + 80;
-        // this.player.body.acceleration.x = 2000;
-        // this.player.body.velocity.x = 200;
     }
 
     async moveLeft() {
         this.player.animations.play('left');
-        this.playerDoigAction = true;
+        this.isPlayerRunning = true;
         this.xTarget = this.player.body.position.x - 80;
-        //this.player.body.acceleration.x = -2000;
-        //this.player.body.velocity.x = -200;
     }
 
-    async jump() {
-        this.player.body.velocity.y = -350;
+    async jump(sign) {
+        this.isPlayerRunning = true;
+        this.isPlayerJumping = true;
+        this.player.animations.play(sign > 0 ? 'right' : 'left');
+        this.player.animations.stop(null, true);
+        this.player.animations.frame = sign > 0 ? 6 : 1;
+        this.xTarget = this.player.body.position.x + sign * 80;
     }
 
     async up() {

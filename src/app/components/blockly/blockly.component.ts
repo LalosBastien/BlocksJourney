@@ -64,7 +64,6 @@ export class BlocklyComponent implements OnInit {
   }
 
   movesGenerator() {
-
     Blockly.JavaScript['move'] = function(block) {
       const dir = block.getFieldValue('DIRECTION');
       const instructions = {
@@ -91,8 +90,13 @@ export class BlocklyComponent implements OnInit {
       return 'stop();';
     };
 
-    Blockly.JavaScript['jump'] = function() {
-      return 'jump();';
+    Blockly.JavaScript['jump'] = function(block) {
+      const dir = block.getFieldValue('DIRECTION');
+      const instructions = {
+        Right: 'jump(1);',
+        Left: 'jump(-1);'
+      };
+      return instructions[dir];
     };
 
     Blockly.JavaScript['up'] = function() {
