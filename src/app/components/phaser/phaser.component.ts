@@ -57,9 +57,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         console.log(this.data);
         this.meta = this.data.level;
         this.data = this.data.levelInfo;
-        //this.bgData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAAAAACpleexAAAAAnRSTlMAKTQhVVQAAAACYktHRAD/h4/MvwAAAAlwSFlzAAAASAAAAEgARslrPgAAAB9JREFUOMtj0CQONDCMKhxVOKpwVOGowlGFCIUNRAIAnikbKaoomDsAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMDEtMTVUMTg6MzA6MDAtMDU6MDBBZsw3AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTAxLTE1VDE4OjMwOjAwLTA1OjAwMDt0iwAAAABJRU5ErkJggg==';
-        //this.bgData = 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABHNCSVQICAgIfAhkiAAAAFFJREFUWIXtzjERACAQBDFgMPOKzr8ScADFFlBsFKRX1WqfStLG68SNQcogZZAySBmkDFIGKYOUQcogZZAySBmkDFIGKYOUQcog9X1wJnl9ONrTcwPWLGFOywAAAABJRU5ErkJggg==';
-
+        this.started = false;
 
         this.message = {
             text: 'Hello',
@@ -90,7 +88,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.game.load.image('background', this.json.images.background);
-        this.game.load.image('grid', 'assets/game/grid_unit.png');
+        this.game.load.image('grid', 'assets/game/grid-cell-80.png');
 
         this.game.load.spritesheet('star', this.json.goal.path, 16, 16);
         this.json.sprites.forEach(element => {
@@ -268,17 +266,18 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 this.component.playerDoigAction = false;
                 this.component.player.animations.stop();
             }
-        } else {
-            if (this.component.blockly.interpreter.step()) {
-            } else if (this.component.started) {
+            return;
+        } else if (this.component.started) {
+            if (!this.component.blockly.interpreter.step()) {
+                this.component.blockly.interpreter = null;
                 this.component.started = false;
                 const time = Date.now() - this.component.timerStart;
                 this.component.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, time);
-            } else {
-                this.component.player.body.acceleration.x = 0;
-                this.component.player.body.velocity.x = 0;
-                this.component.player.animations.stop();
             }
+        } else {
+            this.component.player.body.acceleration.x = 0;
+            this.component.player.body.velocity.x = 0;
+            this.component.player.animations.stop();
         }
     }
 
@@ -305,7 +304,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     async moveLeft() {
         this.player.animations.play('left');
-
         this.playerDoigAction = true;
         this.xTarget = this.player.body.position.x - 80;
         //this.player.body.acceleration.x = -2000;
