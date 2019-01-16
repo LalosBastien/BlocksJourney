@@ -6,3 +6,32 @@
   left: 25%;
   padding: 10px;
 }
+
+#canvasHolder {
+  position: relative;
+}
+
+
+// Configuration
+$gridSize: 80px;
+
+$gridColor: #FF0000;
+$gridOpacity: 0.5;
+
+// END Configuration
+$gridSize_: ($gridSize - 1px);
+
+/*.grid {
+  height: 100%;
+  width: 100%;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent $gridSize_, $gridColor $gridSize_, $gridColor $gridSize), repeating-linear-gradient(-90deg, transparent, transparent $gridSize_, $gridColor $gridSize_, $gridColor $gridSize);
+  background-size: $gridSize $gridSize;
+  position: absolute;
+  opacity: $gridOpacity;
+  top: 0;
+  left: 0;
+  display: block;
+  pointer-events: none;
+  content: " ";
+}
+*/
