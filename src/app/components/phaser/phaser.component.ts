@@ -48,6 +48,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     bgClouds;
     bgGround;
     i;
+    detector;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -55,6 +56,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     private component: any;
 
     ngOnInit() {
+        this.detector = { rightHole: false, leftHole: false};
         this.runAlgo = this.runAlgo.bind(this);
         // this.data = json;
         console.log(this.data);
@@ -206,6 +208,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     async handleEndGame(win, message, time) {
         this.steps = 0;
         this.player.x = this.data.player.x;
+        this.isPlayerRunning = false;
         this.message.fill = win ? 'green' : 'red';
         this.message.text = message;
         this.blockly.resetInterpreter();
@@ -225,6 +228,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.text = this.component.message.text;
         this.message.fill = this.component.message.fill;
         this.message.x = this.component.width / 2 - this.message.width / 2;
+        const { x: posX, y: posY } = this.component.player.body.position;
+
+        this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30,  posY + 100);
+        this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30,  posY + 100);
+        console.log('update', this.component.detector.rightHole)
 
         this.component.bgClouds.tilePosition.x -= 1 / 2;
 
@@ -274,6 +282,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             if (!this.blockly.interpreter.step()) {
                 this.blockly.interpreter = null;
                 this.started = false;
+                this.isPlayerRunning = false;
                 const time = Date.now() - this.timerStart;
                 this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, time);
             }
@@ -293,23 +302,34 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     handleMove() {
         const direction = this.xTarget > this.player.body.position.x; // true right, false left
-        this.player.body.velocity.x = direction ? 50 : -50;
-        const playerReachedTarget = this.xTarget === Math.round(this.player.body.position.x);
+        // this.player.body.velocity.x = direction ? 100 : -100;
+        const aproximateX = Math.trunc(this.player.body.position.x);
+        const playerReachedTarget = this.xTarget === aproximateX;
+        console.log('target', this.xTarget, 'player:', aproximateX);
+        const speedRun = 100;
+        const speedJump = 75;
+
+        this.player.body.velocity.x = this.isPlayerJumping ? (direction ? speedRun : -speedRun) : (direction ? speedJump : -speedJump);
 
         if (this.isPlayerJumping) {
-            this.player.body.velocity.y = -300;
+            this.player.body.velocity.y = -260;
+
             this.isPlayerJumping = false;
         }
         if (playerReachedTarget) {
+            console.log("REACH!!!")
             this.player.body.position.x = this.xTarget;
             this.player.body.velocity.x = 0;
-            this.player.body.acceleration.x = 0;
             this.isPlayerRunning = false;
             this.player.animations.stop();
         }
     }
 
     render() {
+        /*this.game.debug.geom(this.component.detector.straight);
+        this.game.debug.geom(this.component.detector.floor);
+        this.game.debug.lineInfo(this.component.detector.straight, 32, 32);
+        this.game.debug.lineInfo(this.component.detector.floor, 32, 32);*/
     }
 
     async monsterMove(monster: any) {
@@ -343,6 +363,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.xTarget = this.player.body.position.x + sign * 80;
     }
 
+    rightHole() {
+        console.log('gunna return ', this.detector.rightHole)
+        return this.blockly.interpreter.createPrimitive(this.detector.rightHole);
+    }
+
     async up() {
         // TODO: implement method
     }
@@ -365,11 +390,18 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     bindInterpreter(interpreter, scope) {
         interpreter.setProperty(scope, 'moveRight', interpreter.createNativeFunction(this.moveRight.bind(this)));
         interpreter.setProperty(scope, 'moveLeft', interpreter.createNativeFunction(this.moveLeft.bind(this)));
+        interpreter.setProperty(scope, 'moveLeft', interpreter.createNativeFunction(this.moveLeft.bind(this)));
+        interpreter.setProperty(scope, 'rightHole', interpreter.createNativeFunction(this.rightHole.bind(this)));
         interpreter.setProperty(scope, 'jump', interpreter.createNativeFunction(this.jump.bind(this)));
         interpreter.setProperty(scope, 'up', interpreter.createNativeFunction(this.up.bind(this)));
         interpreter.setProperty(scope, 'down', interpreter.createNativeFunction(this.down.bind(this)));
         interpreter.setProperty(scope, 'pick', interpreter.createNativeFunction(this.pick.bind(this)));
         interpreter.setProperty(scope, 'highlightBlock', interpreter.createNativeFunction(this.highlightBlock.bind(this)));
+        interpreter.setProperty(scope, 'log', interpreter.createNativeFunction(this.interpreterLog));
+    }
+
+    interpreterLog(val) {
+        console.log(`[INTERPRETER] ${val}`);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -377,6 +409,5 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy(): void {
         this.game.destroy();
-        console.log('DESTROYED PHASER LOL');
     }
 }

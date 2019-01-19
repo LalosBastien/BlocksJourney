@@ -6,7 +6,8 @@ import {
 // const Interpreter = require('js-interpreter');
 declare var Blockly: any;
 import * as Interpreter from 'js-interpreter';
-import blocs from './blocs/actions/index.js';
+import actionBlocs from './blocs/actions/index.js';
+import conditionBlocs from './blocs/conditions/index.js';
 
 @Component({
   selector: 'app-blockly',
@@ -46,17 +47,18 @@ export class BlocklyComponent implements OnInit {
   generateCode(bindMethod) {
     console.log('test: ', bindMethod);
     Blockly.JavaScript.addReservedWords('code');
-      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-      Blockly.JavaScript.addReservedWords('highlightBlock');
+    Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+    Blockly.JavaScript.addReservedWords('highlightBlock');
     this.code = Blockly.JavaScript.workspaceToCode(this.workspace);
+    console.log(this.code)
     this.interpreter = new Interpreter(this.code.toString(), bindMethod);
   }
 
   createMoves() {
-    Object.entries(blocs).forEach(([name, json]) => {
+    console.log({ ...actionBlocs, ...conditionBlocs })
+    Object.entries({ ...actionBlocs, ...conditionBlocs }).forEach(([name, json]) => {
       Blockly.Blocks[name] = {
         init: function() {
-          console.log('init !!', json)
           this.jsonInit(json);
         }
       };
@@ -97,6 +99,10 @@ export class BlocklyComponent implements OnInit {
         Left: 'jump(-1);'
       };
       return instructions[dir];
+    };
+
+    Blockly.JavaScript['check_holes'] = function() {
+      return ['rightHole()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
 
     Blockly.JavaScript['up'] = function() {
