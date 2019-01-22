@@ -1,0 +1,102 @@
+version: "3.1"
+
+services:
+    client:
+        image: client
+        environment:
+            - ENV=LOCAL
+            - API_HOST=api
+        ports:
+        - "4000:80"
+        depends_on:
+            - api
+        networks:
+            - api-client
+            - db-api
+        deploy:
+            mode: global
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
+
+    api:
+        image: api
+        environment:
+            - ENV=LOCAL
+            - DATABASE_HOST=apidb
+            - DATABASE_PORT=3306
+            - DATABASE_TYPE=mysql
+            - DATABASE_USER=admin
+            - DATABASE_PASSWORD=v4bU_WqHs(RzfuQ+
+            - DATABASE_SCHEMA=GPE
+        ports:
+        - "3000:3000"
+        depends_on:
+            - api-client
+            - apidb
+        networks:
+            - db-api
+        deploy:
+            mode: global
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
+
+    apidb:
+        image: mysql:5.7
+        environment:
+            - MYSQL_DATABASE=GPE
+            - MYSQL_USER=admin
+            - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/api_mysql_root
+            - MYSQL_PASSWORD_FILE=/run/secrets/api_mysql_password
+        volumes:
+        - mysql:/var/lib/mysql
+        secrets:
+            - api_mysql_root
+            - api_mysql_password
+        networks:
+            - db-api
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - 80
+        environment:
+            - MYSQL_USER=admin
+            - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/api_mysql_root
+            - MYSQL_PASSWORD_FILE=/run/secrets/api_mysql_password
+            - PMA_HOST=apidb
+        secrets:
+            - api_mysql_root
+            - api_mysql_password
+        networks:
+            - db-api
+
+secrets:
+    api_mysql_password:
+        file: ../secrets/api_mysql_password.txt
+        # external: true <= for prod
+    api_mysql_root:
+        file: ../secrets/api_mysql_root.txt
+        # external: true <= for prod
+
+networks:
+    db-api:
+        driver: overlay
+    api-client:
+        driver: overlay
+
+volumes:
+    mysql:
+        driver: local
+

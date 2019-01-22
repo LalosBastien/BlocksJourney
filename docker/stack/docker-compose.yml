@@ -1,0 +1,50 @@
+version: "3.1"
+
+services:
+    dbapi:
+        image: mysql:5.7
+        environment:
+            - MYSQL_DATABASE=GPE
+            - MYSQL_USER=admin
+            - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/api_mysql_root
+            - MYSQL_PASSWORD_FILE=/run/secrets/api_mysql_password
+        secrets:
+            - api_mysql_root
+            - api_mysql_password
+        networks:
+            - gpe-api
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - 80
+        environment:
+            - SERVICE_80_NAME=phpmyadmin-api
+            - SERVICE_80_TAGS=https
+            - MYSQL_USER=admin
+            - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/api_mysql_root
+            - MYSQL_PASSWORD_FILE=/run/secrets/api_mysql_password
+            - PMA_HOST=dbapi
+        secrets:
+            - api_mysql_root
+            - api_mysql_password
+        networks:
+            - gpe-api
+
+secrets:
+    api_mysql_password:
+        file: api_mysql_password.txt
+        # external: true <= for prod
+    api_mysql_root:
+        file: api_mysql_root.txt
+        # external: true <= for prod
+
+networks:
+    gpe-api:
+        driver: overlay
