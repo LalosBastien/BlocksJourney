@@ -1,0 +1,26 @@
+version: "3.1"
+
+services:
+    client:
+        image: gpe-client
+        environment:
+            - ENV=LOCAL
+            - API_HOST=api
+        ports:
+        - "4000:80"
+        depends_on:
+            - api
+        networks:
+            - app-api
+        deploy:
+            mode: global
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
+
+networks:
+    app-api:
+        driver: overlay
+
