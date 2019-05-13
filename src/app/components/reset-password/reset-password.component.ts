@@ -72,7 +72,7 @@ export class ResetPasswordComponent implements OnInit {
     this.flag_fr = require('../../../assets/web/flag_fr.png');
     this.flag_en = require('../../../assets/web/flag_en.png');
     this.flag_us = require('../../../assets/web/flag_us.png');
-    this.logo = require('../../../assets/web/logo-pensalgo.png');
+    this.logo = require('../../../assets/web/logo-gpe.png');
   }
   async onSubmit() {
     try {
