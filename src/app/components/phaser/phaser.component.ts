@@ -242,7 +242,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30,  posY + 100);
         this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30,  posY + 100);
-        console.log('update', this.component.detector.rightHole)
+        // console.log('update right', this.component.detector.rightHole)
+        console.log('update left', this.component.detector.leftHole)
+
 
         this.component.bgClouds.tilePosition.x -= 1 / 2;
 
@@ -336,10 +338,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     render() {
-        /*this.game.debug.geom(this.component.detector.straight);
-        this.game.debug.geom(this.component.detector.floor);
-        this.game.debug.lineInfo(this.component.detector.straight, 32, 32);
-        this.game.debug.lineInfo(this.component.detector.floor, 32, 32);*/
+        // this.game.debug.geom(this.component.detector.straight);
+        // this.game.debug.geom(this.component.detector.floor);
+        // this.game.debug.lineInfo(this.component.detector.straight, 32, 32);
+        // this.game.debug.lineInfo(this.component.detector.floor, 32, 32);
     }
 
     async monsterMove(monster: any) {
@@ -377,8 +379,13 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     rightHole() {
-        console.log('gunna return ', this.detector.rightHole)
+        console.log('Right gunna return ', this.detector.rightHole);
         return this.blockly.interpreter.createPrimitive(this.detector.rightHole);
+    }
+
+    leftHole() {
+        console.log('Left gunna return ', this.detector.leftHole);
+        return this.blockly.interpreter.createPrimitive(this.detector.leftHole);
     }
 
     async up() {
@@ -405,6 +412,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         interpreter.setProperty(scope, 'moveLeft', interpreter.createNativeFunction(this.moveLeft.bind(this)));
         interpreter.setProperty(scope, 'moveLeft', interpreter.createNativeFunction(this.moveLeft.bind(this)));
         interpreter.setProperty(scope, 'rightHole', interpreter.createNativeFunction(this.rightHole.bind(this)));
+        interpreter.setProperty(scope, 'leftHole', interpreter.createNativeFunction(this.leftHole.bind(this)));
         interpreter.setProperty(scope, 'jump', interpreter.createNativeFunction(this.jump.bind(this)));
         interpreter.setProperty(scope, 'up', interpreter.createNativeFunction(this.up.bind(this)));
         interpreter.setProperty(scope, 'down', interpreter.createNativeFunction(this.down.bind(this)));

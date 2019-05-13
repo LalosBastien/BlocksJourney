@@ -101,8 +101,14 @@ export class BlocklyComponent implements OnInit {
       return instructions[dir];
     };
 
-    Blockly.JavaScript['check_holes'] = function() {
-      return ['rightHole()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    Blockly.JavaScript['check_holes'] = function(block) {
+      const dir = block.getFieldValue('DIRECTION');
+      console.log('DIRECTION :' + dir);
+      const instructions = {
+        right: ['rightHole()', Blockly.JavaScript.ORDER_FUNCTION_CALL],
+        left: ['leftHole()', Blockly.JavaScript.ORDER_FUNCTION_CALL]
+      };
+      return instructions[dir];
     };
 
     Blockly.JavaScript['up'] = function() {
