@@ -49,6 +49,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     bgGround;
     i;
     detector;
+    energy;
+    energyLevel;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -64,6 +66,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
+        this.energyLevel = 1000;
+        this.energy = {
+            text: this.energyLevel,
+            fill: 'yellow'
+        };
 
         this.message = {
             text: 'Hello',
@@ -141,6 +148,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.game.physics.arcade.gravity.y = this.json.physics.gravity;
         this.message = this.game.add.text(32, 32, '', {fill: 'white'});
+        this.energy = this.game.add.text(10, 10, '', {fill: 'yellow'});
 
         this.component.player = this.game.add.sprite(this.json.player.x, this.json.player.y, 'player');
         this.component.target = this.game.add.sprite(this.json.goal.x, this.json.goal.y, 'star');
@@ -225,6 +233,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     update() {
+        this.energy.text = this.component.energyLevel;
+        this.energy.fill = this.component.energy.fill;
         this.message.text = this.component.message.text;
         this.message.fill = this.component.message.fill;
         this.message.x = this.component.width / 2 - this.message.width / 2;
@@ -265,7 +275,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.physics.arcade.collide(this.component.player, this.component.target, () => {
             if (this.component.started) {
                 const time = Date.now() - this.component.timerStart;
-                const message = `Gagné avec ${this.component.steps} étapes en ${Math.floor(time / 1000)} secondes`;
+                const message = `Gagné avec ${this.component.steps} étapes en ${Math.floor(time / 1000)} ` +
+                    `secondes et ${Math.floor(1000 - this.component.energyLevel)} energie`;
                 this.component.handleEndGame(true, message, time);
                 this.component.started = false;
             }
@@ -294,6 +305,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
 
     handleIdle() {
+        this.energyLevel = 1000;
         this.player.body.acceleration.x = 0;
         this.player.body.velocity.x = 0;
         this.player.animations.stop(null, true);
@@ -301,10 +313,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     handleMove() {
-        const direction = this.xTarget > this.player.body.position.x; // true right, false left
-        // this.player.body.velocity.x = direction ? 100 : -100;
         const aproximateX = Math.trunc(this.player.body.position.x);
-        const playerReachedTarget = this.xTarget === aproximateX;
+        const direction = this.xTarget > aproximateX; // true right, false left
+        const playerReachedTarget = direction ? this.xTarget <= aproximateX : this.xTarget >= aproximateX;
         console.log('target', this.xTarget, 'player:', aproximateX);
         const speedRun = 100;
         const speedJump = 75;
@@ -317,7 +328,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.isPlayerJumping = false;
         }
         if (playerReachedTarget) {
-            console.log("REACH!!!")
             this.player.body.position.x = this.xTarget;
             this.player.body.velocity.x = 0;
             this.isPlayerRunning = false;
@@ -343,18 +353,21 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     async moveRight() {
+        this.energyLevel -= 100;
         this.player.animations.play('right');
         this.isPlayerRunning = true;
         this.xTarget = this.player.body.position.x + 80;
     }
 
     async moveLeft() {
+        this.energyLevel -= 100;
         this.player.animations.play('left');
         this.isPlayerRunning = true;
         this.xTarget = this.player.body.position.x - 80;
     }
 
     async jump(sign) {
+        this.energyLevel -= 200;
         this.isPlayerRunning = true;
         this.isPlayerJumping = true;
         this.player.animations.play(sign > 0 ? 'right' : 'left');
