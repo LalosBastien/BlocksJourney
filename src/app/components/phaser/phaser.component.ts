@@ -211,11 +211,13 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     stopAlgo() {
         window.dispatchEvent(new Event('StopGame'));
         this.started = false;
+        this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, 0);
     }
 
     async handleEndGame(win, message, time) {
         this.steps = 0;
         this.player.x = this.data.player.x;
+        this.player.y = this.data.player.y;
         this.isPlayerRunning = false;
         this.message.fill = win ? 'green' : 'red';
         this.message.text = message;
@@ -243,7 +245,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30,  posY + 100);
         this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30,  posY + 100);
         // console.log('update right', this.component.detector.rightHole)
-        console.log('update left', this.component.detector.leftHole)
+        // console.log('update left', this.component.detector.leftHole)
 
 
         this.component.bgClouds.tilePosition.x -= 1 / 2;
@@ -338,7 +340,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     render() {
-        // this.game.debug.geom(this.component.detector.straight);
+        this.game.debug.body(this.component.player);
+        this.game.debug.body(this.component.layer);
         // this.game.debug.geom(this.component.detector.floor);
         // this.game.debug.lineInfo(this.component.detector.straight, 32, 32);
         // this.game.debug.lineInfo(this.component.detector.floor, 32, 32);
