@@ -66,7 +66,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
-        this.energyLevel = 1000;
+        this.energyLevel = this.data.player.initialEnergy;
         this.energy = {
             text: this.energyLevel,
             fill: 'yellow'
@@ -222,12 +222,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.fill = win ? 'green' : 'red';
         this.message.text = message;
         this.blockly.resetInterpreter();
-        await this.validateLevel(time, win ? 'success' : 'failed');
+        await this.validateLevel(time, win ? 'success' : 'failed', this.data.player.initialEnergy - this.energyLevel);
     }
 
-    async validateLevel(algoTime, status) {
+    async validateLevel(algoTime, status, energyConsumed) {
         try {
-            await this.api.validate(this.meta.id, algoTime, status);
+            await this.api.validate(this.meta.id, algoTime, status, energyConsumed);
             await this.api.get(this.meta.id);
         } catch (e) {
             console.log('not validated', e);
@@ -309,7 +309,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
 
     handleIdle() {
-        this.energyLevel = 1000;
+        console.log(this.data.levelInfo)
+        this.energyLevel = this.data.player.initialEnergy;
         this.player.body.acceleration.x = 0;
         this.player.body.velocity.x = 0;
         this.player.animations.stop(null, true);

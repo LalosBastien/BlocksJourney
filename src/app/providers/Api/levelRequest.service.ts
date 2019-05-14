@@ -24,8 +24,8 @@ export class LevelRequestService extends RequestService {
   get(id): Promise < any > {
     return this._getRequest('/levels/' + id);
   }
-  validate(id, algoTime, status): Promise < any > {
-    return this._putRequest('/levels/' + id + '/validate', { algoTime, status });
+  validate(id, algoTime, status, energyConsumed): Promise < any > {
+    return this._putRequest('/levels/' + id + '/validate', { algoTime, status, energyConsumed });
   }
 
   getHistory(): Promise < any > {
