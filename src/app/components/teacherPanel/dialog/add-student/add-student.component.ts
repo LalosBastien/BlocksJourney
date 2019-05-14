@@ -12,15 +12,16 @@ import { TeacherRequestService } from '../../../../providers/Api/teacherRequest.
 })
 export class AddStudentComponent implements OnInit {
 
-  addStudentFormGroup: FormGroup
+  addStudentFormGroup: FormGroup;
+
   constructor(private _translate: TranslateService,
     private _fb: FormBuilder,
     public dialogRef: MatDialogRef<AddStudentComponent>,
-    private _api: TeacherRequestService,) {
+    private _api: TeacherRequestService) {
 
     this.addStudentFormGroup = this._fb.group({
       email: ['', [Validators.email, Validators.required]],
-    })
+    });
   }
 
   onNoClick(): void {
@@ -28,10 +29,12 @@ export class AddStudentComponent implements OnInit {
   }
   async confirmAddStudent() {
     if (this.addStudentFormGroup.valid) {
-      let email = this.addStudentFormGroup.controls.email.value;
+      const email = this.addStudentFormGroup.controls.email.value;
       try {
-        let res = await this._api.inviteStudent([email]);
-        if (res && res.message) this.dialogRef.close({ message: res.message })
+        const res = await this._api.inviteStudent([email]);
+        if (res && res.message) {
+          this.dialogRef.close({ message: res.message });
+        }
       } catch (err) {
         this.dialogRef.close({ error: err });
       }

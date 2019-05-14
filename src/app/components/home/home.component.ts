@@ -12,7 +12,7 @@ import {
   FormBuilder
 } from '@angular/forms';
 import {
-  loginForm
+  LoginForm
 } from '../../models/form/login.component';
 import {
   ErrorStateMatcher
@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
   }
 
   matcher = new ErrorStateMatcher();
-  model = new loginForm('', '');
+  model = new LoginForm('', '');
 
   ngOnInit() {
     this.onErrorTriggered = new BehaviorSubject(null);

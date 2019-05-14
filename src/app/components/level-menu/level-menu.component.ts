@@ -49,46 +49,55 @@ export class LevelMenuComponent implements OnInit {
         this.getLevels();
     }
 
-    colorByDifficulty(difficulty) {
-        let name;
-        if (difficulty <= 4)
+    colorByDifficulty(difficulty: number) {
+        let name: string;
+        if (difficulty <= 4) {
             name = 'mat-slider-green';
+        }
 
-        if (difficulty > 4 && difficulty <= 7)
+        if (difficulty > 4 && difficulty <= 7) {
             name = 'mat-slider-yellow';
+        }
 
-        if (difficulty > 7)
+        if (difficulty > 7) {
             name = 'mat-slider-red';
+        }
         console.log(name);
         return name;
     }
 
-    statusIcon(status) {
-        if (!status)
+    statusIcon(status: string) {
+        if (!status) {
             return 'fiber_new';
-        if (status === 'in_progress')
+        }
+        if (status === 'in_progress') {
             return 'timelapse';
-        if (status === 'success')
-            return 'done'
+        }
+        if (status === 'success') {
+            return 'done';
+        }
     }
 
-    statusColor(status) {
-        if (!status)
+    statusColor(status: string) {
+        if (!status) {
             return 'orange';
-        if (status === 'in_progress')
+        }
+        if (status === 'in_progress') {
             return 'grey';
-        if (status === 'success')
-            return 'green'
+        }
+        if (status === 'success') {
+            return 'green';
+        }
     }
 
-    toggleExpansion(level) {
+    toggleExpansion(level: any) {
         level.isExpended = !level.isExpended;
     }
 
     async getLevels() {
         try {
             const response = await this._api.getAll();
-            let history = await this._api.getHistory();
+            const history = await this._api.getHistory();
 
             console.log('response', response);
             console.log('history 1', history);
@@ -114,8 +123,7 @@ export class LevelMenuComponent implements OnInit {
                 this.progression = history.progression * 100;
                 this.levels = this.levels
                     .map((level) => history.levels.find(l => l.id === level.id) || level)
-                    .map(level => ({...level, difficultyColor: this.colorByDifficulty(level.difficulty)}))
-
+                    .map(level => ({...level, difficultyColor: this.colorByDifficulty(level.difficulty)}));
 
                 console.log('levels', this.levels);
             }

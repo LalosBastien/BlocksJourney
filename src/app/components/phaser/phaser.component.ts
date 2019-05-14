@@ -24,33 +24,32 @@ import * as Interpreter from 'js-interpreter';
 export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     game: Phaser.Game;
     router: Router;
-    map;
-    layer;
-    target;
-    player;
-    monsters;
-    spikes;
-    message;
-    bg;
-    json;
-    meta;
-    steps;
-    started;
-    timerStart;
-    items;
-    width;
-    height;
-    buttonPanelHeight;
-    currentBlock;
+    map: any;
+    layer:  any;
+    target: any;
+    player: any;
+    monsters: any;
+    spikes: any;
+    message: any;
+    bg: any;
+    json: any;
+    meta: any;
+    steps: any;
+    started: any;
+    timerStart: any;
+    items: any;
+    width: any;
+    height: any;
+    buttonPanelHeight: any;
+    currentBlock: any;
     isPlayerRunning: boolean;
     isPlayerJumping: boolean;
     xTarget: number;
-    bgClouds;
-    bgGround;
-    i;
-    detector;
-    energy;
-    energyLevel;
+    bgClouds: any;
+    bgGround: any;
+    detector: any;
+    energy: any;
+    energyLevel: any;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -65,7 +64,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.meta = this.data.level;
         this.data = this.data.levelInfo;
         this.started = false;
-        this.i = 0;
         this.energyLevel = 1000;
         this.energy = {
             text: this.energyLevel,
@@ -275,7 +273,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             }, () => true, this);
         });
 
-
         this.game.physics.arcade.collide(this.component.player, this.component.target, () => {
             if (this.component.started) {
                 const time = Date.now() - this.component.timerStart;
@@ -305,8 +302,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.handleIdle();
         }
     }
-
-
 
     handleIdle() {
         this.energyLevel = 1000;

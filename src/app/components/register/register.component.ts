@@ -11,7 +11,7 @@ import {
   AuthRequestService
 } from '../../providers/Api/authRequest.service';
 import {
-    RoleRequestService
+  RoleRequestService
 } from '../../providers/Api/roleRequest.service';
 import {
   BehaviorSubject
@@ -41,21 +41,21 @@ export class RegisterComponent implements OnInit {
   register1FormGroup: FormGroup;
   register2FormGroup: FormGroup;
   register3FormGroup: FormGroup;
-  onErrorTriggered: BehaviorSubject < any > ;
+  onErrorTriggered: BehaviorSubject<any>;
 
   flag_fr: any;
   flag_en: any;
   flag_us: any;
 
   constructor(private _apiAuth: AuthRequestService, private _apiRole: RoleRequestService, private _fb: FormBuilder, private _router: Router,
-    public snackBar: MatSnackBar, private _translate: TranslateService) {}
+    public snackBar: MatSnackBar, private _translate: TranslateService) { }
 
   async ngOnInit() {
 
     this.hide = true;
     this.onErrorTriggered = new BehaviorSubject(null);
-    this.roleSelect = (role) => {
-      console.log("role", role);
+    this.roleSelect = (role: any) => {
+      console.log('role', role);
       this.role = role;
     };
     this.onErrorTriggered.subscribe((error) => {
@@ -71,19 +71,19 @@ export class RegisterComponent implements OnInit {
     });
     this.register2FormGroup = this._fb.group({
       emailCtrl: [{
-          value: undefined,
-          disabled: false
-        },
-        [Validators.required, Validators.email]
+        value: undefined,
+        disabled: false
+      },
+      [Validators.required, Validators.email]
       ],
       firstnameCtrl: ['', Validators.required],
       lastnameCtrl: ['', Validators.required],
     });
 
-      this.register3FormGroup = this._fb.group({
-          roleCtrl: ['', Validators.required],
-          profIDCtrl: '',
-      });
+    this.register3FormGroup = this._fb.group({
+      roleCtrl: ['', Validators.required],
+      profIDCtrl: '',
+    });
 
 
 
@@ -124,8 +124,8 @@ export class RegisterComponent implements OnInit {
   }
 
   checkAccessLevel() {
-    console.log("value", this.register3FormGroup.value.roleCtrl);
-      return this.register3FormGroup.controls.roleCtrl.value  == 1;
+    console.log('value', this.register3FormGroup.value.roleCtrl);
+    return this.register3FormGroup.controls.roleCtrl.value === 1;
   }
 
   openSnackBar(message: string, action: string) {

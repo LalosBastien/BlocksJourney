@@ -21,7 +21,7 @@ export class BlocklyComponent implements OnInit {
   public code;
 
   @Input() data: any;
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.createBlocks();
@@ -38,7 +38,7 @@ export class BlocklyComponent implements OnInit {
     this.workspace = Blockly.inject('blocklyDiv', {
       toolbox: this.data.levelInfo.toolbox
     });
-      this.workspace.traceOn(true);
+    this.workspace.traceOn(true);
     window.dispatchEvent(new Event('blockyLoaded'));
 
     return this.workspace;
@@ -50,15 +50,15 @@ export class BlocklyComponent implements OnInit {
     Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
     Blockly.JavaScript.addReservedWords('highlightBlock');
     this.code = Blockly.JavaScript.workspaceToCode(this.workspace);
-    console.log(this.code)
+    console.log(this.code);
     this.interpreter = new Interpreter(this.code.toString(), bindMethod);
   }
 
   createMoves() {
-    console.log({ ...actionBlocs, ...conditionBlocs })
+    console.log({ ...actionBlocs, ...conditionBlocs });
     Object.entries({ ...actionBlocs, ...conditionBlocs }).forEach(([name, json]) => {
       Blockly.Blocks[name] = {
-        init: function() {
+        init: function () {
           this.jsonInit(json);
         }
       };
@@ -66,7 +66,7 @@ export class BlocklyComponent implements OnInit {
   }
 
   movesGenerator() {
-    Blockly.JavaScript['move'] = function(block) {
+    Blockly.JavaScript['move'] = function (block) {
       const dir = block.getFieldValue('DIRECTION');
       const instructions = {
         Right: 'moveRight();',
@@ -75,7 +75,7 @@ export class BlocklyComponent implements OnInit {
       return instructions[dir];
     };
 
-    Blockly.JavaScript['run'] = function(block) {
+    Blockly.JavaScript['run'] = function (block) {
       const dir = block.getFieldValue('DIRECTION');
       const instructions = {
         Right: 'moveRight();',
@@ -88,11 +88,11 @@ export class BlocklyComponent implements OnInit {
       return code;
     };
 
-    Blockly.JavaScript['stop'] = function() {
+    Blockly.JavaScript['stop'] = function () {
       return 'stop();';
     };
 
-    Blockly.JavaScript['jump'] = function(block) {
+    Blockly.JavaScript['jump'] = function (block) {
       const dir = block.getFieldValue('DIRECTION');
       const instructions = {
         Right: 'jump(1);',
@@ -101,7 +101,7 @@ export class BlocklyComponent implements OnInit {
       return instructions[dir];
     };
 
-    Blockly.JavaScript['check_holes'] = function(block) {
+    Blockly.JavaScript['check_holes'] = function (block) {
       const dir = block.getFieldValue('DIRECTION');
       console.log('DIRECTION :' + dir);
       const instructions = {
@@ -111,18 +111,16 @@ export class BlocklyComponent implements OnInit {
       return instructions[dir];
     };
 
-    Blockly.JavaScript['up'] = function() {
+    Blockly.JavaScript['up'] = function () {
       return 'up();';
     };
 
-    Blockly.JavaScript['down'] = function() {
+    Blockly.JavaScript['down'] = function () {
       return 'down();';
     };
 
-    Blockly.JavaScript['pick'] = function() {
+    Blockly.JavaScript['pick'] = function () {
       return 'pick();';
     };
-
   }
-
 }
