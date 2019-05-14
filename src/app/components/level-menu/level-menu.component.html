@@ -58,6 +58,11 @@
                     <mat-cell *matCellDef="let element"> {{element.algoTime}}</mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="energy">
+                    <mat-header-cell *matHeaderCellDef> Energie</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.energy}}</mat-cell>
+                </ng-container>
+
                 <!-- Weight Column -->
                 <ng-container matColumnDef="status">
                     <mat-header-cell mat-header-cell *matHeaderCellDef> Status</mat-header-cell>

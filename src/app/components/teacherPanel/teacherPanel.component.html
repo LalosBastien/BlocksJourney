@@ -121,14 +121,27 @@
 
                 <mat-grid-tile><b>Temps Total</b></mat-grid-tile>
                 <div *ngIf='levelStat.stats.totalTime.worst.Stats && levelStat.stats.totalTime.best.Stats && levelStat.stats.totalTime.average'>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value * 1000 | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a> )</i></mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.average * 1000 | date: 'mm\:ss'}}</mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value * 1000 | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a> ) </i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value * 1000 | date: 'hh\:mm\:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a> )</i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.average * 1000 | date: 'hh\:mm\:ss'}}  </mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value * 1000 | date: 'hh\:mm\:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a> ) </i></mat-grid-tile>
                 </div>
                 <div *ngIf='!levelStat.stats.totalTime.worst.Stats || !levelStat.stats.totalTime.best.Stats'>
                   <mat-grid-tile *ngIf='levelStat.stats.totalTime.worst == "none"'>None</mat-grid-tile>
                   <mat-grid-tile *ngIf='levelStat.stats.totalTime.average == "none"'>None</mat-grid-tile>
                   <mat-grid-tile *ngIf='levelStat.stats.totalTime.best == "none"'>None</mat-grid-tile>
+                </div>
+
+                <mat-grid-tile><b>Energie</b></mat-grid-tile>
+                <div *ngIf='levelStat.stats.energy.worst.Stats && levelStat.stats.algoTime.best.Stats && levelStat.stats.energy.average'>
+                  <mat-grid-tile>{{levelStat.stats.energy.worst.Stats.value}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.energy.worst.id)'>{{levelStat.stats.energy.worst.nom}}&nbsp;{{levelStat.stats.energy.worst.prenom}}</a> )</i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.energy.average}}</mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.energy.best.Stats.value}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.energy.best.id)'>{{levelStat.stats.energy.best.nom}}&nbsp;{{levelStat.stats.energy.best.prenom}}</a> ) </i></mat-grid-tile>
+
+                </div>
+                <div *ngIf='!levelStat.stats.energy.worst.Stats || !levelStat.stats.energy.best.Stats'>
+                  <mat-grid-tile *ngIf='levelStat.stats.energy.worst == "none"'>None</mat-grid-tile>
+                  <mat-grid-tile *ngIf='levelStat.stats.energy.average == "none"'>None</mat-grid-tile>
+                  <mat-grid-tile *ngIf='levelStat.stats.energy.best == "none"'>None</mat-grid-tile>
                 </div>
           <!-- <mat-grid-tile><b>Nombre de blocs utilisés</b></mat-grid-tile>
                   <mat-grid-tile>12 &nbsp;<i> (lalos_b)</i></mat-grid-tile>

@@ -17,6 +17,7 @@ import * as moment from 'moment';
 export interface LevelHisto {
     algoTime: string;
     totalTime: string;
+    energy: number;
     status: string;
 }
 
@@ -30,7 +31,7 @@ export class LevelMenuComponent implements OnInit {
 
     error: any;
     progression: number;
-    displayedColumns: string[] = ['totalTime', 'algoTime', 'status'];
+    displayedColumns: string[] = ['totalTime', 'algoTime', 'energy', 'status'];
     onErrorTriggered: BehaviorSubject<any>;
     levels: any;
     dataSources: MatTableDataSource<LevelHisto>[];
