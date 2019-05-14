@@ -51,6 +51,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     detector;
     energy;
     energyLevel;
+    energyTotal;
+    bmd;
+    healthBar;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -66,10 +69,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
-        this.energyLevel = this.data.player.initialEnergy;
+        this.energyTotal = this.data.player.initialEnergy;
+        this.energyLevel = this.energyTotal;
         this.energy = {
             text: this.energyLevel,
-            fill: 'yellow'
+            fill: '#c79a00'
         };
 
         this.message = {
@@ -147,8 +151,19 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.layer.debug = false;
 
         this.game.physics.arcade.gravity.y = this.json.physics.gravity;
-        this.message = this.game.add.text(32, 32, '', {fill: 'white'});
-        this.energy = this.game.add.text(10, 10, '', {fill: 'yellow'});
+        this.message = this.game.add.text(32, 50, '', {fill: 'white'});
+
+
+        this.energy = this.game.add.text(10, 10, '', {fill: '#c79a00'});
+        this.component.energyBackground = this.game.add.bitmapData(160, 40);
+        this.component.formatProgressBar(this.component.energyBackground, 0, 0 , 180, 30, '#333');
+        this.component.energyBar = this.game.add.bitmapData(160, 40);
+        this.component.formatProgressBar(this.component.energyBar, 5, 5 , 150, 20, '#c79a00');
+
+        this.component.backgroundBar = this.game.add.sprite(80, 32, this.component.energyBackground);
+        this.component.backgroundBar.anchor.y = 0.5;
+        this.component.healthBar = this.game.add.sprite(80, 32, this.component.energyBar);
+        this.component.healthBar.anchor.y = 0.5;
 
         this.component.player = this.game.add.sprite(this.json.player.x, this.json.player.y, 'player');
         this.component.target = this.game.add.sprite(this.json.goal.x, this.json.goal.y, 'star');
@@ -202,6 +217,25 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'grid');
     }
 
+    /*
+    ** x:   number
+    ** -- The x coordinate of the top-left of the Rectangle.
+    ** y:   number
+    ** -- The y coordinate of the top-left of the Rectangle.
+    ** width:   number
+    ** -- The width of the Rectangle.
+    ** height:  number
+    ** -- The height of the Rectangle.
+    ** fillStyle:   string <optional>
+    ** If set the context fillStyle will be set to this value before the rect is drawn.
+    **/
+    formatProgressBar(progressBar, x, y, width, height, fillStyle) {
+        progressBar.ctx.beginPath();
+        progressBar.ctx.rect(x, y, width, height);
+        progressBar.ctx.fillStyle = fillStyle;
+        progressBar.ctx.fill();
+    }
+
     runAlgo() {
         this.blockly.generateCode(this.bindInterpreter.bind(this));
         this.started = true;
@@ -236,6 +270,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     update() {
         this.energy.text = this.component.energyLevel;
+        const energyLoose = 160 * (this.component.energyLevel / this.component.energyTotal);
+        if ( energyLoose < 0 && this.component.started) {
+            this.component.handleEndGame(false, `Perdu : Le personnage n'a plus d'énergie`, 0);
+        } else {
+            this.component.healthBar.width = energyLoose;
+        }
         this.energy.fill = this.component.energy.fill;
         this.message.text = this.component.message.text;
         this.message.fill = this.component.message.fill;
@@ -244,9 +284,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30,  posY + 100);
         this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30,  posY + 100);
-        // console.log('update right', this.component.detector.rightHole)
-        // console.log('update left', this.component.detector.leftHole)
-
 
         this.component.bgClouds.tilePosition.x -= 1 / 2;
 
