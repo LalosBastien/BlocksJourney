@@ -132,8 +132,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.component.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.component.game.stage.backgroundColor = '#fafafa';
-        this.component.bgClouds = this.game.add.tileSprite(0, 0, this.component.width, this.component.height, 'bg_clouds');
-        this.component.bgGround = this.game.add.tileSprite(0, 0, this.component.width, this.component.height, 'bg_ground');
+        this.component.bgClouds = this.game.add.tileSprite(0, 0, 9000, this.component.height, 'bg_clouds');
+        this.component.bgGround = this.game.add.tileSprite(0, 0, 9000, this.component.height, 'bg_ground');
 
         this.component.bgGround.fixedToCamera = true;
         this.component.map = this.game.add.tilemap('level');
@@ -148,11 +148,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.layer.resizeWorld();
 
         //  Only for debug
-        this.component.layer.debug = false;
+        this.component.layer.debug = true;
 
         this.game.physics.arcade.gravity.y = this.json.physics.gravity;
         this.message = this.game.add.text(32, 50, '', {fill: 'white'});
-
 
         this.energy = this.game.add.text(10, 10, '', {fill: '#c79a00'});
         this.component.energyBackground = this.game.add.bitmapData(160, 40);
@@ -162,8 +161,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.component.backgroundBar = this.game.add.sprite(80, 32, this.component.energyBackground);
         this.component.backgroundBar.anchor.y = 0.5;
+        this.component.backgroundBar.fixedToCamera = true;
         this.component.healthBar = this.game.add.sprite(80, 32, this.component.energyBar);
         this.component.healthBar.anchor.y = 0.5;
+        this.component.healthBar.fixedToCamera = true;
 
         this.component.player = this.game.add.sprite(this.json.player.x, this.json.player.y, 'player');
         this.component.target = this.game.add.sprite(this.json.goal.x, this.json.goal.y, 'star');
@@ -195,7 +196,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             newSpike.body.immovable = true;
             newSpike.body.allowGravity = false;
             newSpike.body.collideWorldBounds = true;
-            newSpike.body.setSize(5, 10, 22, 20);
+            newSpike.body.setSize(5, 10, 20, 20);
             newSpike.animations.add('action', [0, 1, 2, 3], 5, true);
             newSpike.animations.play('action');
             return newSpike;
@@ -214,7 +215,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.player.animations.play(this.json.player.facing);
 
         this.game.camera.follow(this.component.player);
-        this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'grid');
+        this.game.add.tileSprite(0, 0, 9000, 9000, 'grid');
     }
 
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
@@ -236,10 +237,20 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, 0);
     }
 
+    replaceMonsters() {
+        let i = 0;
+        this.monsters.forEach((monster) => {
+            monster.x = this.data.monsters[i].x;
+            monster.y = this.data.monsters[i].y;
+            ++i;
+        });
+    }
+
     async handleEndGame(win, message, time) {
         this.steps = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
+        this.replaceMonsters();
         this.isPlayerRunning = false;
         this.message.fill = win ? 'green' : 'red';
         this.message.text = message;
@@ -266,11 +277,15 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.component.healthBar.width = energyLoose;
         }
         this.energy.fill = this.component.energy.fill;
+        this.energy.x = this.game.camera.x + 5;
+        this.energy.y = this.game.camera.y + 10;
+
         this.message.text = this.component.message.text;
         this.message.fill = this.component.message.fill;
-        this.message.x = this.component.width / 2 - this.message.width / 2;
-        const { x: posX, y: posY } = this.component.player.body.position;
+        this.message.x = this.game.camera.x + (this.component.width / 6);
+        this.message.y = this.game.camera.y + 50;
 
+        const { x: posX, y: posY } = this.component.player.body.position;
         this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30,  posY + 100);
         this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30,  posY + 100);
 
@@ -294,7 +309,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.component.spikes.forEach(spike => {
-            this.game.physics.arcade.collide(this.player, spike, () => {
+            this.game.physics.arcade.collide(this.component.player, spike, () => {
+                console.log('collide with trap');
                 const time = Date.now() - this.timerStart;
                 this.component.handleEndGame(false, 'Perdu: tué par un piège', time);
                 this.component.started = false;
@@ -367,11 +383,18 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     render() {
+        // this.game.debug.spriteInfo(this.component.player, 32, 32);
+        // this.game.debug.cameraInfo(this.game.camera, 400, 32);
         this.game.debug.body(this.component.player);
         this.game.debug.body(this.component.layer);
-        // this.game.debug.geom(this.component.detector.floor);
-        // this.game.debug.lineInfo(this.component.detector.straight, 32, 32);
-        // this.game.debug.lineInfo(this.component.detector.floor, 32, 32);
+
+        this.component.monsters.forEach(monster => {
+            this.game.debug.body(monster);
+        });
+
+        this.component.spikes.forEach(spike => {
+            this.game.debug.body(spike);
+        });
     }
 
     async monsterMove(monster: any) {
@@ -410,11 +433,13 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     rightHole() {
         console.log('Right gunna return ', this.detector.rightHole);
+        this.energyLevel -= 25;
         return this.blockly.interpreter.createPrimitive(this.detector.rightHole);
     }
 
     leftHole() {
         console.log('Left gunna return ', this.detector.leftHole);
+        this.energyLevel -= 25;
         return this.blockly.interpreter.createPrimitive(this.detector.leftHole);
     }
 
