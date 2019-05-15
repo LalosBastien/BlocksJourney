@@ -217,18 +217,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'grid');
     }
 
-    /*
-    ** x:   number
-    ** -- The x coordinate of the top-left of the Rectangle.
-    ** y:   number
-    ** -- The y coordinate of the top-left of the Rectangle.
-    ** width:   number
-    ** -- The width of the Rectangle.
-    ** height:  number
-    ** -- The height of the Rectangle.
-    ** fillStyle:   string <optional>
-    ** If set the context fillStyle will be set to this value before the rect is drawn.
-    **/
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
         progressBar.ctx.beginPath();
         progressBar.ctx.rect(x, y, width, height);
@@ -273,6 +261,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         const energyLoose = 160 * (this.component.energyLevel / this.component.energyTotal);
         if ( energyLoose < 0 && this.component.started) {
             this.component.handleEndGame(false, `Perdu : Le personnage n'a plus d'énergie`, 0);
+            this.component.started = false;
         } else {
             this.component.healthBar.width = energyLoose;
         }
