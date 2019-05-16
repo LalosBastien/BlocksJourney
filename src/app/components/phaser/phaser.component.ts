@@ -54,6 +54,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     energyTotal;
     bmd;
     healthBar;
+    bgSound;
+    algoSound;
+    winSound;
+    looseSound;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -123,6 +127,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.json.player.spriteWidth,
             this.json.player.spriteHeight
         );
+
+        this.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bgsound.mp3'));
+        this.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'we_are_one.mp3'));
+        this.game.load.audio('coin', 'assets/game/audio/coin.wav');
+        this.game.load.audio('winner', 'assets/game/audio/weeee.wav');
+        this.game.load.audio('looser', 'assets/game/audio/game_over.wav');
     }
 
     create() {
@@ -216,6 +226,13 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.game.camera.follow(this.component.player);
         this.game.add.tileSprite(0, 0, 9000, 9000, 'grid');
+
+        this.component.bgSound = this.game.add.audio('bg_sounds');
+        this.component.algoSound = this.game.add.audio('algo_sounds');
+        this.component.winSound = this.game.add.audio('winner');
+        this.component.looseSound = this.game.add.audio('looser');
+        this.component.bgSound.play();
+        // this.component.sounds = [ this.component.algoSound, this.component.bgSound];
     }
 
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
@@ -229,6 +246,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.blockly.generateCode(this.bindInterpreter.bind(this));
         this.started = true;
         this.timerStart = Date.now();
+        this.bgSound.stop();
+        this.algoSound.play();
     }
 
     stopAlgo() {
@@ -246,7 +265,17 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    handleEndGameSound(win) {
+        this.algoSound.stop();
+        if (win) {
+            this.winSound.play();
+        } else {
+            this.looseSound.play();
+            this.bgSound.play();
+        }
+    }
     async handleEndGame(win, message, time) {
+        this.handleEndGameSound(win);
         this.steps = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
