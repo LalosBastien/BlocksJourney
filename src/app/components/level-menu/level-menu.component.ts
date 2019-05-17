@@ -27,7 +27,10 @@ export class LevelMenuComponent implements OnInit {
     displayedColumns: string[] = ['totalTime', 'algoTime', 'energy', 'status'];
     onErrorTriggered: BehaviorSubject<any>;
     chapters: any;
-
+    emptyStars;
+    oneStars;
+    twoStars;
+    threeStars;
     constructor(private _api: LevelRequestService, public _snackBar: MatSnackBar, private _translate: TranslateService) {
     }
 
@@ -39,7 +42,9 @@ export class LevelMenuComponent implements OnInit {
             }
         });
         this.getLevels();
+        this.initStarsAssets();
     }
+
 
     colorByDifficulty(difficulty: number) {
         let name: string;
@@ -81,21 +86,22 @@ export class LevelMenuComponent implements OnInit {
     toggleExpansion(level: any) {
         level.isExpended = !level.isExpended;
     }
-
+    getLevelStars(history){
+        let fHist = history.filter(x => x.stars != null).map(x=> x.stars);
+        fHist.push(0);
+        let max = Math.max(...fHist);
+        return max;
+    }
     async getLevels() {
         try {
             const response = await this._api.getAllSortedByChapter();
             const history = await this._api.getHistory();
-
-            console.log('response', response);
-            console.log('history 1', history);
 
             if (!response || response.error) {
                 throw response.error;
             } else {
                 this.chapters = response.list;
 
-                console.log('history 2', history);
                 history.levels = history.levels
                     .map((level) => {
                         const newLevel = level;
@@ -103,12 +109,12 @@ export class LevelMenuComponent implements OnInit {
                             levelHistory.totalTime = moment.utc(levelHistory.totalTime * 1000).format('HH:mm:ss');
                             levelHistory.algoTime = moment.utc(levelHistory.algoTime).format('HH:mm:ss.SSS');
                         });
+                        newLevel.stars = this.getLevelStars(newLevel.history);
                         newLevel.historyDataSource = new MatTableDataSource<LevelHisto>(newLevel.history);
                         return newLevel;
                     })
                     .map(level => ({ ...level, isExpended: false }));
 
-                console.log('history 3', history);
                 this.progression = history.progression * 100;
                 this.chapters = this.chapters.map((chapter) => ({
                     ...chapter, levels: chapter.levels
@@ -126,5 +132,11 @@ export class LevelMenuComponent implements OnInit {
         this._snackBar.open(message, action, {
             duration: 5000,
         });
+    }
+    initStarsAssets(){
+        this.emptyStars = require('../../../assets/game/star0.png');
+        this.oneStars = require('./../../../assets/game/star1.png');
+        this.twoStars = require('./../../../assets/game/star2.png');
+        this.threeStars = require('./../../../assets/game/star3.png');
     }
 }
