@@ -348,7 +348,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     handleIdle() {
-        console.log(this.data.levelInfo)
+        console.log(this.data.levelInfo);
         this.energyLevel = this.data.player.initialEnergy;
         this.player.body.acceleration.x = 0;
         this.player.body.velocity.x = 0;

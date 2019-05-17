@@ -37,6 +37,7 @@ import {
   ShowOnDirtyErrorStateMatcher,
   MatDialogModule,
   MatExpansionModule,
+  MatSortModule,
 } from '@angular/material';
 import {
   Http,
@@ -88,6 +89,7 @@ import { AddStudentComponent } from './components/teacherPanel/dialog/add-studen
 import { UserRequestService } from './providers/Api/userRequest.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { ProfilComponent } from './components/profil/profil.component';
+import { LevelHistoryComponent } from './components/level-history/level-history.component';
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -108,13 +110,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     TeacherPanelComponent,
     AddStudentComponent,
     StudentDetailComponent,
-    ProfilComponent
+    ProfilComponent,
+    LevelHistoryComponent
   ],
   entryComponents: [
     AddStudentComponent
   ],
   imports: [
     BrowserModule,
+    MatSortModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,

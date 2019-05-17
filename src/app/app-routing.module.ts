@@ -10,6 +10,7 @@ import { ProfilComponent } from './components/profil/profil.component';
 import { LevelMenuComponent } from './components/level-menu/level-menu.component';
 import { TeacherPanelComponent } from './components/teacherPanel/teacherPanel.component';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -57,4 +58,5 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes, { useHash: true })],
     exports: [RouterModule]
 })
+
 export class AppRoutingModule { }
