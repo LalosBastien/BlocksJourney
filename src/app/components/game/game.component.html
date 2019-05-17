@@ -7,7 +7,7 @@
     <span style="padding-bottom: 5px">{{description}}</span>
   </div>
 
-<div style=" height: 89%; width: 100%; display: inline-flex; text-align: center; background-color: white" *ngIf="json">
+<div style=" height: 89%; width: 100%; display: inline-flex; text-align: center; background-color: white" *ngIf="json && json.objectifs">
   <app-blockly [data]=json #blocklyRef></app-blockly>
   <app-phaser [blockly]=blocklyRef [api]="_api" [data]=json></app-phaser>
 </div>

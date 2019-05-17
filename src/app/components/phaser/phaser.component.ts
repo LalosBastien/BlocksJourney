@@ -39,6 +39,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     bg: any;
     json: any;
     meta: any;
+    objectifs: any;
     steps: any;
     started: any;
     timerStart: any;
@@ -79,8 +80,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.detector = { rightHole: false, leftHole: false};
         this.runAlgo = this.runAlgo.bind(this);
         // this.data = json;
-        console.log(this.data);
         this.meta = this.data.level;
+        this.objectifs = this.data.objectifs;
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
@@ -431,7 +432,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     handleIdle() {
-        console.log(this.data.levelInfo);
         this.energyLevel = this.data.player.initialEnergy;
         this.player.body.acceleration.x = 0;
         this.player.body.velocity.x = 0;
@@ -543,10 +543,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     async up() {
-        console.log(this.ladders);
         this.ladders.forEach(ladder => {
             if (ladder.checkCollision(this.player)) {
-                console.log('YES !')
                 this.onLadder = true;
                 this.yTarget = ladder.y - this.player.body.height;
                 this.collisionEnabled = false;

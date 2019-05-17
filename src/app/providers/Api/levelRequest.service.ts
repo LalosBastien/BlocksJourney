@@ -40,4 +40,7 @@ export class LevelRequestService extends RequestService {
   getUserHistory(id: number): Promise<any> {
     return this._getRequest('/levels/history?id=' + id);
   }
+  getLvlObjectifs(idLevel: number): Promise<any> {
+    return this._getRequest('/levels/objectifs/'+idLevel)
+  }
 }

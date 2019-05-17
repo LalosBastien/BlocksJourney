@@ -48,7 +48,9 @@ export class GameComponent implements OnInit {
         this.openSnackBar('Une erreur s\'est produite : ' + error, 'Ok');
       }
     });
-    this.json = await this.getJSON(this.route.snapshot.paramMap.get('levelID'));
+    let lvlId = this.route.snapshot.paramMap.get('levelID')
+    this.json = await this.getJSON(lvlId);
+    this.json.objectifs = await this.getObjectifs(this.json.level.id); 
     this.name = this.json.level.name;
     this.description = this.json.levelInfo.description;
     this.id = parseInt(this.route.snapshot.paramMap.get('levelID'), 10);
@@ -116,12 +118,17 @@ export class GameComponent implements OnInit {
   async getJSON(id: string) {
     try {
       const response = await this._api.get(id);
-      console.log('resp', response.message.levelInfo);
-      if (!response || response.error) {
-        throw response.error;
-      } else {
-        return response.message;
-      }
+      if (!response || response.error) throw response.error;
+      return response.message;
+    } catch (error) {
+      this.onErrorTriggered.next(error);
+    }
+  }
+  async getObjectifs(idLevel: number) {
+    try {
+      const response = await this._api.getLvlObjectifs(idLevel);
+      if (!response || response.error) throw response.error;
+      return response.objectifs;
     } catch (error) {
       this.onErrorTriggered.next(error);
     }

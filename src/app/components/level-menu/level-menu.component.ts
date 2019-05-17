@@ -55,7 +55,6 @@ export class LevelMenuComponent implements OnInit {
         } else {
             name = 'mat-slider-yellow';
         }
-        console.log(name);
         return name;
     }
 
