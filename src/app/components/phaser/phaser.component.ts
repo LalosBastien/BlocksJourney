@@ -103,7 +103,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         };
         this.coinCountText = {
             text: this.coinCount,
-            fill: 'blue'
+            fill: '#ffcd02'
         };
         this.message = {
             status: 'pending',
@@ -124,7 +124,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 component: this
             });
         }
-        
     }
     toggleObj() {
         this.showLevelObj = (this.showLevelObj) ? false : true;
@@ -148,6 +147,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.load.image('grid', 'assets/game/grid-cell-80.png');
         this.game.load.image('ladderMid', 'assets/game/ladderMid.png');
         this.game.load.image('ladderTop', 'assets/game/ladderTop.png');
+        this.game.load.image('coinIco', 'assets/game/sprites/coinIco.png');
+        this.game.load.image('energyIco', 'assets/game/sprites/energy.png');
 
         this.game.load.spritesheet('star', this.json.goal.path, 16, 16);
         this.json.sprites.forEach(element => {
@@ -209,17 +210,34 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.ladders = this.json.ladders ? this.json.ladders.map(ladder => new Ladder(ladder, this.game)) : [];
 
         this.energy = this.game.add.text(10, 10, '', { fill: '#c79a00' });
+
+        this.component.menuBar = this.game.add.bitmapData(this.component.width, 150);
+        this.component.formatProgressBar(this.component.menuBar, 0, 0 , this.component.width, 130, '#333');
         this.component.energyBackground = this.game.add.bitmapData(160, 40);
         this.component.formatProgressBar(this.component.energyBackground, 0, 0, 180, 30, '#333');
         this.component.energyBar = this.game.add.bitmapData(160, 40);
-        this.component.formatProgressBar(this.component.energyBar, 5, 5, 150, 20, '#c79a00');
+        this.component.formatProgressBar(this.component.energyBar, 5, 5 , 150, 20, '#d47a1d');
 
+        this.component.menuBar = this.game.add.sprite(0, 0, this.component.menuBar);
+        this.component.menuBar.anchor.y = 0.5;
+        this.component.menuBar.alpha = 0.5;
+
+        this.component.menuBar.fixedToCamera = true;
+
+        this.component.energyImg = this.game.add.sprite(35, 10, 'energyIco');
+        this.component.energyImg.fixedToCamera = true;
         this.component.backgroundBar = this.game.add.sprite(80, 32, this.component.energyBackground);
         this.component.backgroundBar.anchor.y = 0.5;
         this.component.backgroundBar.fixedToCamera = true;
         this.component.healthBar = this.game.add.sprite(80, 32, this.component.energyBar);
         this.component.healthBar.anchor.y = 0.5;
         this.component.healthBar.fixedToCamera = true;
+
+        this.component.coinImg = this.game.add.sprite(this.component.width - 100, 15, 'coinIco');
+        this.component.coinImg.fixedToCamera = true;
+        this.energy = this.game.add.text(0, 0, '', {fill: 'white', fontSize: 12});
+        this.message = this.game.add.text(0, 0, '', {fill: 'white'});
+        this.coinCountText = this.game.add.text(0, 0, '', {fill: 'white'});
 
         this.component.player = this.game.add.sprite(this.json.player.x, this.json.player.y, 'player');
         this.component.target = this.game.add.sprite(this.json.goal.x, this.json.goal.y, 'star');
@@ -266,7 +284,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             newCoin.body.immovable = true;
             newCoin.body.allowGravity = false;
             newCoin.body.collideWorldBounds = true;
-            // newCoin.body.setSize(5, 10, 20, 20);
             newCoin.animations.add('action', [0, 1, 2, 1], 6, true);
             newCoin.animations.play('action');
             return newCoin;
@@ -284,7 +301,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.component.player.animations.add('ladder', [9, 10], 5, true);
         this.component.player.animations.play(this.json.player.facing);
-        //this.component.player.animations.play('ladder');
 
         this.game.camera.follow(this.component.player);
         this.game.add.tileSprite(0, 0, 9000, 9000, 'grid');
@@ -317,6 +333,20 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.started = false;
         this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, 0);
     }
+    replaceCoins() {
+        // console.log('JSON DATA', this.component.json.sprites.coins);
+        console.log('COINS DATA', this.coins);
+        this.coins.map((coin) => {
+            coin.revive();
+            return { ...coin};
+        });
+        console.log('COINS DATA NEW', this.coins);
+        // this.coins.map((coin, i) => {
+        //     const { x, y } = this.monstersInitialPositions[i];
+        //     console.log('JSON DATA', this.this.monstersInitialPositions);
+        //     return { ...coin, x, y };
+        // });
+    }
 
     replaceMonsters() {
        this.monsters.map((monster, i) => {
@@ -336,8 +366,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
     async handleEndGame(win, message, time) {
         this.toggleLvlEnd();
+        this.replaceCoins();
         this.handleEndGameSound(win);
         this.steps = 0;
+        this.coinCount = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
         this.replaceMonsters();
@@ -368,6 +400,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             else if (obj.libelle == "AlgoTime") {
+                console.log(data.time);
                 if (data && data.time && data.time <= obj.goal) {
                     objComplete[obj.libelle] = true;
                     stars += 1;
@@ -401,14 +434,13 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.component.healthBar.width = energyLoose;
         }
-        this.energy.fill = this.component.energy.fill;
-        this.energy.x = this.game.camera.x + 5;
-        this.energy.y = this.game.camera.y + 10;
+        this.energy.x = this.game.camera.x + this.component.width / 7.5;
+        this.energy.y = this.game.camera.y + this.component.height / 24;
 
         this.coinCountText.text = 'x' + this.component.coinCount;
         this.coinCountText.fill = this.component.coinCountText.fill;
-        this.coinCountText.x = this.game.camera.x + (this.component.width / 2);
-        this.coinCountText.y = this.game.camera.y;
+        this.coinCountText.x = this.game.camera.x + this.component.width - 70;
+        this.coinCountText.y = this.game.camera.y + 11;
 
         const { x: posX, y: posY } = this.component.player.body.position;
         this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30, posY + 100);
