@@ -20,7 +20,7 @@ export class AppComponent {
     translate.setDefaultLang('fr');
     console.log('AppConfig', AppConfig);
 
-    console.log("userLevel", this.currentUser)
+    console.log('userLevel', this.currentUser);
 
 
 

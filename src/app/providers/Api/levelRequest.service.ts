@@ -11,28 +11,33 @@ import {
 import {
   RequestService
 } from './request.service';
-import {CookieService} from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie';
 
 @Injectable()
 export class LevelRequestService extends RequestService {
   constructor(private h: Http, private r: Router, private c: CookieService) {
     super(h, r, c);
   }
-  getAll(): Promise < any > {
+
+  getAllSortedByChapter(): Promise<any> {
+    return this._getRequest('/chapter');
+  }
+
+  getAll(): Promise<any> {
     return this._getRequest('/levels');
   }
-  get(id): Promise < any > {
+  get(id: string): Promise<any> {
     return this._getRequest('/levels/' + id);
   }
   validate(id, algoTime, status, energyConsumed): Promise < any > {
     return this._putRequest('/levels/' + id + '/validate', { algoTime, status, energyConsumed });
   }
 
-  getHistory(): Promise < any > {
+  getHistory(): Promise<any> {
     return this._getRequest('/levels/history');
   }
 
-  getUserHistory(id): Promise < any > {
+  getUserHistory(id: number): Promise<any> {
     return this._getRequest('/levels/history?id=' + id);
   }
 }

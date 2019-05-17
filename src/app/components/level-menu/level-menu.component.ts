@@ -8,18 +8,11 @@ import {
 import {
     BehaviorSubject
 } from 'rxjs/BehaviorSubject';
-import {MatSnackBar, MatTableDataSource} from '@angular/material';
-import {TranslateService} from '@ngx-translate/core';
+import { MatSnackBar, MatTableDataSource } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { LevelHisto } from './../level-history/level-history.component';
 
-// import moment = require('moment');
-
-export interface LevelHisto {
-    algoTime: string;
-    totalTime: string;
-    energy: number;
-    status: string;
-}
 
 @Component({
     selector: 'app-level-menu',
@@ -33,11 +26,9 @@ export class LevelMenuComponent implements OnInit {
     progression: number;
     displayedColumns: string[] = ['totalTime', 'algoTime', 'energy', 'status'];
     onErrorTriggered: BehaviorSubject<any>;
-    levels: any;
-    dataSources: MatTableDataSource<LevelHisto>[];
+    chapters: any;
 
     constructor(private _api: LevelRequestService, public _snackBar: MatSnackBar, private _translate: TranslateService) {
-        this.dataSources = [];
     }
 
     ngOnInit() {
@@ -50,46 +41,51 @@ export class LevelMenuComponent implements OnInit {
         this.getLevels();
     }
 
-    colorByDifficulty(difficulty) {
-        let name;
-        if (difficulty <= 4)
+    colorByDifficulty(difficulty: number) {
+        let name: string;
+        if (difficulty <= 4) {
             name = 'mat-slider-green';
-
-        if (difficulty > 4 && difficulty <= 7)
-            name = 'mat-slider-yellow';
-
-        if (difficulty > 7)
+        } else if (difficulty > 7) {
             name = 'mat-slider-red';
+        } else {
+            name = 'mat-slider-yellow';
+        }
         console.log(name);
         return name;
     }
 
-    statusIcon(status) {
-        if (!status)
+    statusIcon(status: string) {
+        if (!status) {
             return 'fiber_new';
-        if (status === 'in_progress')
+        }
+        if (status === 'in_progress') {
             return 'timelapse';
-        if (status === 'success')
-            return 'done'
+        }
+        if (status === 'success') {
+            return 'done';
+        }
     }
 
-    statusColor(status) {
-        if (!status)
+    statusColor(status: string) {
+        if (!status) {
             return 'orange';
-        if (status === 'in_progress')
+        }
+        if (status === 'in_progress') {
             return 'grey';
-        if (status === 'success')
-            return 'green'
+        }
+        if (status === 'success') {
+            return 'green';
+        }
     }
 
-    toggleExpansion(level) {
+    toggleExpansion(level: any) {
         level.isExpended = !level.isExpended;
     }
 
     async getLevels() {
         try {
-            const response = await this._api.getAll();
-            let history = await this._api.getHistory();
+            const response = await this._api.getAllSortedByChapter();
+            const history = await this._api.getHistory();
 
             console.log('response', response);
             console.log('history 1', history);
@@ -97,10 +93,11 @@ export class LevelMenuComponent implements OnInit {
             if (!response || response.error) {
                 throw response.error;
             } else {
-                this.levels = response.list;
+                this.chapters = response.list;
+
                 console.log('history 2', history);
                 history.levels = history.levels
-                    .map((level, i) => {
+                    .map((level) => {
                         const newLevel = level;
                         newLevel.history.map(levelHistory => {
                             levelHistory.totalTime = moment.utc(levelHistory.totalTime * 1000).format('HH:mm:ss');
@@ -109,16 +106,16 @@ export class LevelMenuComponent implements OnInit {
                         newLevel.historyDataSource = new MatTableDataSource<LevelHisto>(newLevel.history);
                         return newLevel;
                     })
-                    .map(level => ({...level, isExpended: false}));
+                    .map(level => ({ ...level, isExpended: false }));
 
                 console.log('history 3', history);
                 this.progression = history.progression * 100;
-                this.levels = this.levels
-                    .map((level) => history.levels.find(l => l.id === level.id) || level)
-                    .map(level => ({...level, difficultyColor: this.colorByDifficulty(level.difficulty)}))
-
-
-                console.log('levels', this.levels);
+                this.chapters = this.chapters.map((chapter) => ({
+                    ...chapter, levels: chapter.levels
+                        .map((level) => history.levels.find(l => l.id === level.id) || level)
+                        .map(level => ({ ...level, difficultyColor: this.colorByDifficulty(level.difficulty) }))
+                }));
+                console.log('levels', this.chapters);
             }
         } catch (error) {
             this.onErrorTriggered.next(error);

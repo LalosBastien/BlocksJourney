@@ -11,7 +11,7 @@ import {
 import {
   RequestService
 } from './request.service';
-import {CookieService} from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie';
 
 import {
   UserStorageService

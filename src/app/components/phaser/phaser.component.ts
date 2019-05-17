@@ -26,24 +26,24 @@ import * as Interpreter from 'js-interpreter';
 export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     game: Phaser.Game;
     router: Router;
-    map;
-    layer;
-    target;
-    player;
-    monsters;
-    spikes;
-    message;
-    bg;
-    json;
-    meta;
-    steps;
-    started;
-    timerStart;
-    items;
-    width;
-    height;
-    buttonPanelHeight;
-    currentBlock;
+    map: any;
+    layer:  any;
+    target: any;
+    player: any;
+    monsters: any;
+    spikes: any;
+    message: any;
+    bg: any;
+    json: any;
+    meta: any;
+    steps: any;
+    started: any;
+    timerStart: any;
+    items: any;
+    width: any;
+    height: any;
+    buttonPanelHeight: any;
+    currentBlock: any;
     isPlayerRunning: boolean;
     isPlayerJumping: boolean;
     xTarget: number;
@@ -364,7 +364,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             }, () => true, this);
         });
 
-
         this.game.physics.arcade.collide(this.component.player, this.component.target, () => {
             if (this.component.started) {
                 const time = Date.now() - this.component.timerStart;
@@ -395,10 +394,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-
-
     handleIdle() {
-        console.log(this.data.levelInfo)
+        console.log(this.data.levelInfo);
         this.energyLevel = this.data.player.initialEnergy;
         this.player.body.acceleration.x = 0;
         this.player.body.velocity.x = 0;

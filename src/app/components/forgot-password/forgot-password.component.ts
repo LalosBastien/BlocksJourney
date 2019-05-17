@@ -54,7 +54,7 @@ export class ForgotPasswordComponent implements OnInit {
 
     try {
       const { email } = this.resetForm.value;
-      console.log(email)
+      console.log(email);
       const askReset = await this._api.askResetPassword(email);
       this.openSnackBar('Demande de récupération de mot de passe envoyée', 'Ok');
       console.log(askReset);

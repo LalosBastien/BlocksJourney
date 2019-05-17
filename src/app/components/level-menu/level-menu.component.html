@@ -3,76 +3,52 @@
         <h3 mat-subheader>Niveaux disponibles</h3>
         <h2 mat-subheader>Progression : {{progression}}%</h2>
         <mat-progress-bar mode="determinate" value="{{progression}}"></mat-progress-bar>
-        <div *ngFor="let lvl of levels">
-            <mat-divider></mat-divider>
-            <mat-list-item matLine>
-                <button mat-icon-button (click)="toggleExpansion(lvl)">
-                    <mat-icon class="mat-icon-rtl-mirror">
-                        {{lvl.isExpended ? 'expand_more' : 'chevron_right'}}
-                    </mat-icon>
-                </button>
-                <mat-icon mat-list-icon>games</mat-icon>
+        <mat-accordion>
+            <div *ngFor="let ch of chapters">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Chapitre {{ch.id}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{ch.name}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div *ngFor="let lvl of ch.levels">
+                        <mat-divider></mat-divider>
+                        <mat-list-item matLine>
+                            <button mat-icon-button (click)="toggleExpansion(lvl)">
+                                <mat-icon class="mat-icon-rtl-mirror">
+                                    {{lvl.isExpended ? 'expand_more' : 'chevron_right'}}
+                                </mat-icon>
+                            </button>
+                            <mat-icon mat-list-icon>games</mat-icon>
 
-                <h4 mat-line>{{lvl.name}}</h4>
+                            <h4 mat-line>{{lvl.name}}</h4>
 
-                <h6 mat-line> - Difficulté:
-                    <mat-slider
-                            [ngClass]= "{
-                                'mat-slider-green':lvl.difficulty <= 4,
-                                'mat-slider-yellow':lvl.difficulty > 4 && lvl.difficulty <= 7,
-                                'mat-slider-red':lvl.difficulty > 7
-                              }"
-                            tickInterval="1"
-                            min="0"
-                            max="10"
-                            [(ngModel)]="lvl.difficulty"
-                            disabled>
-                    </mat-slider>
-                </h6>
-                <div mat-line style="display: flex;
-                        align-items: center;">
-                    <span>- Status:</span>
-                    <mat-icon class="mat-icon-rtl-mirror"
-                              [ngStyle]= "{'color':statusColor(lvl.status)}">
-                        {{statusIcon(lvl.status)}}
-                    </mat-icon></div>
-                <a mat-button [routerLink]="['../game', lvl.id]">Play</a>
-            </mat-list-item>
+                            <h6 mat-line> - Difficulté:
+                                <mat-slider [ngClass]="colorByDifficulty(lvl.difficulty)" tickInterval="1" min="0" max="10"
+                                    [(ngModel)]="lvl.difficulty" disabled>
+                                </mat-slider>
+                            </h6>
+                            <div mat-line style="display: flex;
+                                align-items: center;">
+                                <span>- Status:</span>
+                                <mat-icon class="mat-icon-rtl-mirror" [ngStyle]="{'color':statusColor(lvl.status)}">
+                                    {{statusIcon(lvl.status)}}
+                                </mat-icon>
+                            </div>
+                            <a mat-button [routerLink]="['../game', lvl.id]">Play</a>
+                        </mat-list-item>
 
-
-            <mat-table style="margin-left: 3%;" *ngIf="lvl.isExpended && lvl.history.length > 0"
-                       [dataSource]="lvl.historyDataSource">
-
-                <!--- Note that these columns can be defined in any order.
-                      The actual rendered columns are set as a property on the row definition" -->
-
-                <!-- Position Column -->
-                <ng-container matColumnDef="totalTime">
-                    <mat-header-cell *matHeaderCellDef> Total Time</mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.totalTime}}</mat-cell>
-                </ng-container>
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="algoTime">
-                    <mat-header-cell *matHeaderCellDef> Algo Time</mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.algoTime}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="energy">
-                    <mat-header-cell *matHeaderCellDef> Energie</mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.energy}}</mat-cell>
-                </ng-container>
-
-                <!-- Weight Column -->
-                <ng-container matColumnDef="status">
-                    <mat-header-cell mat-header-cell *matHeaderCellDef> Status</mat-header-cell>
-                    <mat-cell mat-cell *matCellDef="let element"> {{element.status}}</mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </mat-table>
-        </div>
-
+                        <app-level-history
+                            [historyDataSource]="lvl.historyDataSource"
+                            [displayedColumns]="displayedColumns"
+                            *ngIf="lvl.isExpended && lvl.history.length > 0">
+                        </app-level-history>
+                    </div>
+                </mat-expansion-panel>
+            </div>
+        </mat-accordion>
     </mat-list>
 </div>

@@ -29,7 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
   providers: [AuthRequestService]
 })
 export class ResetPasswordComponent implements OnInit {
-  onErrorTriggered: BehaviorSubject < any > ;
+  onErrorTriggered: BehaviorSubject<any>;
 
   resetForm: FormGroup;
   token: any;
@@ -56,16 +56,16 @@ export class ResetPasswordComponent implements OnInit {
     });
     this.resetForm = this._fb.group({
       password: [{
-          value: undefined,
-          disabled: false
-        },
-        [Validators.required, Validators.minLength(8)]
+        value: undefined,
+        disabled: false
+      },
+      [Validators.required, Validators.minLength(8)]
       ],
       repeatPassword: [{
-          value: undefined,
-          disabled: false
-        },
-        [Validators.required]
+        value: undefined,
+        disabled: false
+      },
+      [Validators.required]
       ],
     });
 

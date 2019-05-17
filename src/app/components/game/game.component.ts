@@ -1,6 +1,6 @@
 import {
-    Component, OnDestroy,
-    OnInit
+  Component, OnDestroy,
+  OnInit
 } from '@angular/core';
 import {
   ActivatedRoute
@@ -26,7 +26,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 })
 export class GameComponent implements OnInit {
   error: any;
-  onErrorTriggered: BehaviorSubject < any > ;
+  onErrorTriggered: BehaviorSubject<any>;
   phaser: PhaserComponent;
   id: number;
   json: any;
@@ -37,8 +37,8 @@ export class GameComponent implements OnInit {
 
 
   constructor(protected _api: LevelRequestService, public _snackBar: MatSnackBar, private route: ActivatedRoute) {
-      this.initIntro = this.initIntro.bind(this);
-      window.addEventListener('blockyLoaded', this.initIntro);
+    this.initIntro = this.initIntro.bind(this);
+    window.addEventListener('blockyLoaded', this.initIntro);
   }
 
   async ngOnInit() {
@@ -58,72 +58,73 @@ export class GameComponent implements OnInit {
   }
 
   initIntro() {
-          if (parseInt(window.location.href.substr(window.location.href.lastIndexOf('/') + 1), 10) > 1) {
+    if (parseInt(window.location.href.substr(window.location.href.lastIndexOf('/') + 1), 10) > 1) {
 
-              return;
-          }
-          window.removeEventListener('blockyLoaded', this.initIntro);
-          this.ijs = IntroJs().setOptions({
-              showProgress: true,
-              steps: [
-                  {
-                      element: '#blocklyDiv',
-                      intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
-                      position: 'right'
-                  },
-                  {
-                      element: '#gameHolder',
-                      intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Ton but : ' +
-                      'atteindre l\'étoile le plus rapidement possible.',
-                      position: 'right'
-                  },
-                  {
-                      element: document.getElementsByClassName('blocklyTreeRow')[1],
-                      intro: 'Pour déplacer le personnage, place d\'abord un bloc de mouvement.',
-                      position: 'right'
-                  },
-                  {
-                      element: document.getElementsByClassName('blocklyTreeRow')[2],
-                      intro: 'Pour répéter une action, comme un déplacement, utilise un bloc de boucle.',
-                      position: 'right'
-                  },
-                  {
-                      element: '#startGameBtn',
-                      intro: 'Ce bouton permet de lancer ton algorithme et met en mouvement ton héro.',
-                      position: 'right'
-                  },
-                  {
-                      element: '#stopGameBtn',
-                      intro: 'Ce bouton permet de stopper ton algorithme, si tu t\'es trompé par exemple.',
-                      position: 'right'
-                  },
-                  {
-                      element: '#menu-play',
-                      intro: 'Pour revenir à la liste des niveaux, passe par le menu.',
-                      position: 'right'
-                  }
-              ]
-          }).start();
-   }
+      return;
+    }
+    window.removeEventListener('blockyLoaded', this.initIntro);
+    this.ijs = IntroJs().setOptions({
+      showProgress: true,
+      steps: [
+        {
+          element: '#blocklyDiv',
+          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
+          position: 'right'
+        },
+        {
+          element: '#gameHolder',
+          intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Ton but : ' +
+            'atteindre l\'étoile le plus rapidement possible.',
+          position: 'right'
+        },
+        {
+          element: document.getElementsByClassName('blocklyTreeRow')[1],
+          intro: 'Pour déplacer le personnage, place d\'abord un bloc de mouvement.',
+          position: 'right'
+        },
+        {
+          element: document.getElementsByClassName('blocklyTreeRow')[2],
+          intro: 'Pour répéter une action, comme un déplacement, utilise un bloc de boucle.',
+          position: 'right'
+        },
+        {
+          element: '#startGameBtn',
+          intro: 'Ce bouton permet de lancer ton algorithme et met en mouvement ton héro.',
+          position: 'right'
+        },
+        {
+          element: '#stopGameBtn',
+          intro: 'Ce bouton permet de stopper ton algorithme, si tu t\'es trompé par exemple.',
+          position: 'right'
+        },
+        {
+          element: '#menu-play',
+          intro: 'Pour revenir à la liste des niveaux, passe par le menu.',
+          position: 'right'
+        }
+      ]
+    }).start();
+  }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   async ngAfterViewChecked() {
     if (this.introStarted) {
-          window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event('resize'));
     }
   }
 
   async getJSON(id: string) {
-       try {
-        const response = await this._api.get(id);
-        console.log('resp', response.message.levelInfo);
-        if (!response || response.error) {
-          throw response.error;
-        } else {
-          return response.message;
-        }
-      } catch (error) {
-        this.onErrorTriggered.next(error);
+    try {
+      const response = await this._api.get(id);
+      console.log('resp', response.message.levelInfo);
+      if (!response || response.error) {
+        throw response.error;
+      } else {
+        return response.message;
       }
+    } catch (error) {
+      this.onErrorTriggered.next(error);
+    }
   }
 
   openSnackBar(message: string, action: string) {
