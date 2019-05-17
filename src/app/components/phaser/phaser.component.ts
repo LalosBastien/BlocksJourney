@@ -32,7 +32,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     player: any;
     monsters: any;
     spikes: any;
+    coins: any;
     message: any;
+    coinCountText: any;
+    coinCount: any;
     bg: any;
     json: any;
     meta: any;
@@ -61,6 +64,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     algoSound;
     winSound;
     looseSound;
+    coinSound;
     ladders;
     ladder;
     onLadder: boolean;
@@ -80,13 +84,17 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
+        this.coinCount = 0;
         this.energyTotal = this.data.player.initialEnergy;
         this.energyLevel = this.energyTotal;
         this.energy = {
             text: this.energyLevel,
             fill: '#c79a00'
         };
-
+        this.coinCountText = {
+            text: this.coinCount,
+            fill: 'blue'
+        };
         this.message = {
             text: 'Hello',
             fill: 'green'
@@ -173,6 +181,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.game.physics.arcade.gravity.y = this.json.physics.gravity;
         this.message = this.game.add.text(32, 50, '', {fill: 'white'});
+        this.coinCountText = this.game.add.text(32, 50, '', {fill: 'white'});
 
         this.ladders = [];
 
@@ -197,6 +206,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.target = this.game.add.sprite(this.json.goal.x, this.json.goal.y, 'star');
         this.component.monsters = [];
         this.component.spikes = [];
+        this.component.coins = [];
 
         this.json.sprites.forEach((element) => {
             const newSprite = this.game.add.sprite(element.x, element.y, `${element.name}${this.component[element.name + 's'].length}`);
@@ -205,6 +215,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.game.physics.enable(this.component.monsters, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.component.spikes, Phaser.Physics.ARCADE);
+        this.game.physics.enable(this.component.coins, Phaser.Physics.ARCADE);
         this.game.physics.enable([this.component.player, this.component.target], Phaser.Physics.ARCADE);
 
         this.component.monsters.map(monster => {
@@ -229,6 +240,17 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             return newSpike;
         });
 
+        this.component.coins.map(coin => {
+            const newCoin = coin;
+            newCoin.body.immovable = true;
+            newCoin.body.allowGravity = false;
+            newCoin.body.collideWorldBounds = true;
+            // newCoin.body.setSize(5, 10, 20, 20);
+            newCoin.animations.add('action', [0, 1, 2, 1], 6, true);
+            newCoin.animations.play('action');
+            return newCoin;
+        });
+
         this.component.target.body.allowGravity = false;
         this.component.target.body.collideWorldBounds = true;
         this.component.target.body.immovable = true;
@@ -250,8 +272,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.algoSound = this.game.add.audio('algo_sounds');
         this.component.winSound = this.game.add.audio('winner');
         this.component.looseSound = this.game.add.audio('looser');
+        this.component.coinSound = this.game.add.audio('coin');
         this.component.bgSound.play();
-        // this.component.sounds = [ this.component.algoSound, this.component.bgSound];
     }
 
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
@@ -333,6 +355,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.x = this.game.camera.x + (this.component.width / 6);
         this.message.y = this.game.camera.y + 50;
 
+        this.coinCountText.text = 'x' + this.component.coinCount;
+        this.coinCountText.fill = this.component.coinCountText.fill;
+        this.coinCountText.x = this.game.camera.x + (this.component.width / 2);
+        this.coinCountText.y = this.game.camera.y;
+
         const { x: posX, y: posY } = this.component.player.body.position;
         this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30,  posY + 100);
         this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30,  posY + 100);
@@ -361,6 +388,15 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 const time = Date.now() - this.timerStart;
                 this.component.handleEndGame(false, 'Perdu: tué par un piège', time);
                 this.component.started = false;
+            }, () => true, this);
+        });
+
+        this.component.coins.forEach(coin => {
+            this.game.physics.arcade.collide(this.component.player, coin, () => {
+                console.log('collide with coin');
+                coin.kill();
+                this.component.coinSound.play();
+                ++this.component.coinCount;
             }, () => true, this);
         });
 
