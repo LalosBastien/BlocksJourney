@@ -303,12 +303,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.fill = win ? 'green' : 'red';
         this.message.text = message;
         this.blockly.resetInterpreter();
-        await this.validateLevel(time, win ? 'success' : 'failed', this.data.player.initialEnergy - this.energyLevel);
+        await this.validateLevel(time, win ? 'success' : 'failed', this.data.player.initialEnergy - this.energyLevel,0);
     }
 
-    async validateLevel(algoTime, status, energyConsumed) {
+    async validateLevel(algoTime, status, energyConsumed,stars) {
         try {
-            await this.api.validate(this.meta.id, algoTime, status, energyConsumed);
+            await this.api.validate(this.meta.id, algoTime, status, energyConsumed,stars);
             await this.api.get(this.meta.id);
         } catch (e) {
             console.log('not validated', e);
