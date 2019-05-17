@@ -14,6 +14,8 @@ import {
 import {
     LevelRequestService
 } from '../../providers/Api/levelRequest.service';
+
+import Ladder from './ladder';
 import * as Interpreter from 'js-interpreter';
 
 @Component({
@@ -45,6 +47,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     isPlayerRunning: boolean;
     isPlayerJumping: boolean;
     xTarget: number;
+    yTarget: number;
     bgClouds;
     bgGround;
     i;
@@ -54,6 +57,14 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     energyTotal;
     bmd;
     healthBar;
+    bgSound;
+    algoSound;
+    winSound;
+    looseSound;
+    ladders;
+    ladder;
+    onLadder: boolean;
+    collisionEnabled: boolean;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -107,6 +118,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.load.image('bg_clouds', 'assets/game/bg_clouds.png');
         this.game.load.image('bg_ground', 'assets/game/bg_ground.png');
         this.game.load.image('grid', 'assets/game/grid-cell-80.png');
+        this.game.load.image('ladderMid', 'assets/game/ladderMid.png');
+        this.game.load.image('ladderTop', 'assets/game/ladderTop.png');
 
         this.game.load.spritesheet('star', this.json.goal.path, 16, 16);
         this.json.sprites.forEach(element => {
@@ -123,6 +136,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.json.player.spriteWidth,
             this.json.player.spriteHeight
         );
+
+        this.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bgsound.mp3'));
+        this.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'we_are_one.mp3'));
+        this.game.load.audio('coin', 'assets/game/audio/coin.wav');
+        this.game.load.audio('winner', 'assets/game/audio/weeee.wav');
+        this.game.load.audio('looser', 'assets/game/audio/game_over.wav');
     }
 
     create() {
@@ -134,6 +153,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.game.stage.backgroundColor = '#fafafa';
         this.component.bgClouds = this.game.add.tileSprite(0, 0, 9000, this.component.height, 'bg_clouds');
         this.component.bgGround = this.game.add.tileSprite(0, 0, 9000, this.component.height, 'bg_ground');
+
+        this.component.collisionEnabled = true;
 
         this.component.bgGround.fixedToCamera = true;
         this.component.map = this.game.add.tilemap('level');
@@ -152,6 +173,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.game.physics.arcade.gravity.y = this.json.physics.gravity;
         this.message = this.game.add.text(32, 50, '', {fill: 'white'});
+
+        this.ladders = [];
+
+
+        //this.component.ladder = new Ladder({tileHeight: 3, x: 160, y: 160}, this.game);
+        this.component.ladders = this.json.ladders ? this.json.ladders.map(ladder => new Ladder(ladder, this.game)) : [];
 
         this.energy = this.game.add.text(10, 10, '', {fill: '#c79a00'});
         this.component.energyBackground = this.game.add.bitmapData(160, 40);
@@ -212,10 +239,19 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.component.player.animations.add('turn', [4], 10, true);
         this.component.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.component.player.animations.add('ladder', [9, 10], 5, true);
         this.component.player.animations.play(this.json.player.facing);
+        //this.component.player.animations.play('ladder');
 
         this.game.camera.follow(this.component.player);
         this.game.add.tileSprite(0, 0, 9000, 9000, 'grid');
+
+        this.component.bgSound = this.game.add.audio('bg_sounds');
+        this.component.algoSound = this.game.add.audio('algo_sounds');
+        this.component.winSound = this.game.add.audio('winner');
+        this.component.looseSound = this.game.add.audio('looser');
+        this.component.bgSound.play();
+        // this.component.sounds = [ this.component.algoSound, this.component.bgSound];
     }
 
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
@@ -229,6 +265,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.blockly.generateCode(this.bindInterpreter.bind(this));
         this.started = true;
         this.timerStart = Date.now();
+        this.bgSound.stop();
+        this.algoSound.play();
     }
 
     stopAlgo() {
@@ -246,7 +284,17 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    handleEndGameSound(win) {
+        this.algoSound.stop();
+        if (win) {
+            this.winSound.play();
+        } else {
+            this.looseSound.play();
+            this.bgSound.play();
+        }
+    }
     async handleEndGame(win, message, time) {
+        this.handleEndGameSound(win);
         this.steps = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
@@ -295,8 +343,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
             return;
         }
-        this.game.physics.arcade.collide(this.component.player, this.component.layer);
-        this.component.player.body.velocity.x = 0;
+        this.game.physics.arcade.collide(this.component.player, this.component.layer, () => {}, () => this.component.collisionEnabled);
 
         this.component.monsters.forEach(monster => {
             this.component.monsterMove(monster);
@@ -332,7 +379,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     synchronizeBlockly() {
         // Handle actions here
-        if (this.isPlayerRunning) {
+        if (this.isPlayerRunning || this.onLadder) {
             this.handleMove();
         } else if (this.started) {
             if (!this.blockly.interpreter.step()) {
@@ -357,24 +404,43 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     handleMove() {
-        const aproximateX = Math.trunc(this.player.body.position.x);
-        const direction = this.xTarget > aproximateX; // true right, false left
-        const playerReachedTarget = direction ? this.xTarget <= aproximateX : this.xTarget >= aproximateX;
-        console.log('target', this.xTarget, 'player:', aproximateX);
+        const approximateX = Math.trunc(this.player.body.position.x);
+        const approximateY = Math.trunc(this.player.body.position.y);
+        const xDirection = this.xTarget > approximateX; // true right, false left
+        const yDirection = this.yTarget > approximateY; // true right, false left
+        const playerReachedXTarget = xDirection ? this.xTarget <= approximateX : this.xTarget >= approximateX;
+        const playerReachedYTarget = this.onLadder ? yDirection ? this.yTarget <= approximateY : this.yTarget >= approximateY : false;
+        console.log('targetX', this.xTarget, 'player:', approximateX);
+        console.log('targetY', this.yTarget, 'player:', approximateY);
         const speedRun = 100;
         const speedJump = 75;
+        const speedLadder = 80;
 
-        this.player.body.velocity.x = this.isPlayerJumping ? (direction ? speedRun : -speedRun) : (direction ? speedJump : -speedJump);
+        this.player.body.velocity.x = this.isPlayerJumping ? (xDirection ? speedRun : -speedRun) : (xDirection ? speedJump : -speedJump);
+        if (this.onLadder && !playerReachedYTarget) {
+            this.player.body.velocity.y = yDirection ? speedLadder : -speedLadder;
+        }
 
         if (this.isPlayerJumping) {
             this.player.body.velocity.y = -260;
-
             this.isPlayerJumping = false;
         }
-        if (playerReachedTarget) {
+        if (playerReachedXTarget) {
             this.player.body.position.x = this.xTarget;
             this.player.body.velocity.x = 0;
             this.isPlayerRunning = false;
+            //if (playerReachedYTarget)
+            //this.player.animations.stop();
+        }
+        if (playerReachedYTarget) {
+            this.collisionEnabled = true;
+            this.player.body.position.y = this.yTarget;
+            this.player.body.velocity.y = 0;
+            this.onLadder = false;
+            this.isPlayerRunning = false;
+        }
+
+        if (!this.isPlayerRunning && !this.isPlayerJumping && !this.onLadder) {
             this.player.animations.stop();
         }
     }
@@ -441,7 +507,16 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     async up() {
-        // TODO: implement method
+        console.log(this.ladders);
+        this.ladders.forEach(ladder => {
+            if (ladder.checkCollision(this.player)) {
+                console.log('YES !')
+                this.onLadder = true;
+                this.yTarget = ladder.y - this.player.body.height;
+                this.collisionEnabled = false;
+                this.player.animations.play('ladder');
+            }
+        });
     }
 
     async down() {
