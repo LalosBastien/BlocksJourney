@@ -31,6 +31,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     target: any;
     player: any;
     monsters: any;
+    monstersInitialPositions: any;
     spikes: any;
     coins: any;
     message: any;
@@ -69,6 +70,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     ladders;
     ladder;
     onLadder: boolean;
+    wasOnLadder: boolean;
     collisionEnabled: boolean;
 
     @Input() api: LevelRequestService;
@@ -219,6 +221,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.physics.enable(this.component.coins, Phaser.Physics.ARCADE);
         this.game.physics.enable([this.component.player, this.component.target], Phaser.Physics.ARCADE);
 
+        this.component.monstersInitialPositions = this.component.monsters.map(monster => ({ x: monster.x, y: monster.y }));
+
         this.component.monsters.map(monster => {
             const newMonster = monster;
             newMonster.body.bounce.y = 0.5;
@@ -299,12 +303,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     replaceMonsters() {
-        let i = 0;
-        this.monsters.forEach((monster) => {
-            monster.x = this.data.monsters[i].x;
-            monster.y = this.data.monsters[i].y;
-            ++i;
-        });
+       this.monsters.map((monster, i) => {
+           const { x, y } = this.monstersInitialPositions[i];
+           return { ...monster, x, y };
+       });
     }
 
     handleEndGameSound(win) {
@@ -474,6 +476,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.player.body.velocity.y = 0;
             this.onLadder = false;
             this.isPlayerRunning = false;
+            this.wasOnLadder = true;
         }
 
         if (!this.isPlayerRunning && !this.isPlayerJumping && !this.onLadder) {
@@ -507,6 +510,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     async moveRight() {
+        this.wasOnLadder = false;
         this.energyLevel -= 100;
         this.player.animations.play('right');
         this.isPlayerRunning = true;
@@ -514,6 +518,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     async moveLeft() {
+        this.wasOnLadder = false;
         this.energyLevel -= 100;
         this.player.animations.play('left');
         this.isPlayerRunning = true;
@@ -521,6 +526,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     async jump(sign) {
+        this.wasOnLadder = false;
         this.energyLevel -= 200;
         this.isPlayerRunning = true;
         this.isPlayerJumping = true;
@@ -553,6 +559,16 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    checkLadder() {
+        const r = this.ladders.reduce((result, ladder) => {
+            if (!result) {
+                return ladder.checkCollision(this.player);
+            }
+        }, false);
+        console.log("checkLadder() ", r && !this.wasOnLadder);
+        return this.blockly.interpreter.createPrimitive(r && !this.wasOnLadder);
+    }
+
     async down() {
         // TODO: implement method
     }
@@ -575,6 +591,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         interpreter.setProperty(scope, 'rightHole', interpreter.createNativeFunction(this.rightHole.bind(this)));
         interpreter.setProperty(scope, 'leftHole', interpreter.createNativeFunction(this.leftHole.bind(this)));
         interpreter.setProperty(scope, 'jump', interpreter.createNativeFunction(this.jump.bind(this)));
+        interpreter.setProperty(scope, 'checkLadder', interpreter.createNativeFunction(this.checkLadder.bind(this)));
         interpreter.setProperty(scope, 'up', interpreter.createNativeFunction(this.up.bind(this)));
         interpreter.setProperty(scope, 'down', interpreter.createNativeFunction(this.down.bind(this)));
         interpreter.setProperty(scope, 'pick', interpreter.createNativeFunction(this.pick.bind(this)));
