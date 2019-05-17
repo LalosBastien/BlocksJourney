@@ -1,6 +1,6 @@
 {
   "type": "move",
-  "message0": "Avancer %1",
+  "message0": "Avancer vers la %1",
   "args0": [
     {
       "type": "field_dropdown",

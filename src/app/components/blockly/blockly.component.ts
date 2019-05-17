@@ -119,6 +119,15 @@ export class BlocklyComponent implements OnInit {
       return 'up();';
     };
 
+    Blockly.JavaScript['ladder'] = function(block) {
+      const dir = block.getFieldValue('DIRECTION');
+      const instructions = {
+        Top: 'useLadder(1);',
+        Bottom: 'useLadder(-1);'
+      };
+      return instructions[dir];
+    };
+
     Blockly.JavaScript['down'] = function () {
       return 'down();';
     };

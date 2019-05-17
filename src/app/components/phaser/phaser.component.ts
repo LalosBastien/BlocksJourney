@@ -569,6 +569,19 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         return this.blockly.interpreter.createPrimitive(r && !this.wasOnLadder);
     }
 
+    useLadder(value) {
+        console.log("coucou")
+        const direction = value > 0;
+        this.ladders.forEach(ladder => {
+            if (ladder.checkCollision(this.player)) {
+                this.onLadder = true;
+                this.yTarget = direction ? ladder.y - this.player.body.height : ladder.bottom - this.player.body.height;
+                this.collisionEnabled = false;
+                this.player.animations.play('ladder');
+            }
+        });
+    }
+
     async down() {
         // TODO: implement method
     }
@@ -592,6 +605,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         interpreter.setProperty(scope, 'leftHole', interpreter.createNativeFunction(this.leftHole.bind(this)));
         interpreter.setProperty(scope, 'jump', interpreter.createNativeFunction(this.jump.bind(this)));
         interpreter.setProperty(scope, 'checkLadder', interpreter.createNativeFunction(this.checkLadder.bind(this)));
+        interpreter.setProperty(scope, 'useLadder', interpreter.createNativeFunction(this.useLadder.bind(this)));
         interpreter.setProperty(scope, 'up', interpreter.createNativeFunction(this.up.bind(this)));
         interpreter.setProperty(scope, 'down', interpreter.createNativeFunction(this.down.bind(this)));
         interpreter.setProperty(scope, 'pick', interpreter.createNativeFunction(this.pick.bind(this)));

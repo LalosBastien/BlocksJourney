@@ -4,6 +4,7 @@ export default class Ladder {
         this.tileHeight = ladderInfo.tileHeight;
         this.x = ladderInfo.x;
         this.y = ladderInfo.y;
+        this.bottom = this.y + this.tileHeight * 80;
         this.game = game;
         this.internalGroup = this.game.add.group();
         this.internalGroup.enableBody = true;
