@@ -1,7 +1,48 @@
-<div id="gameHolder" style="padding-left: 5px; height: 100%; display: table-cell; vertical-align: middle;" >
-    <div id="canvasHolder" >
-        <div id="canvas-grid" class="grid"></div>
+<div style="display:flex;flex-direction: column">
+
+    <div id="gameHolder">
+        <div id="canvasHolder">
+
+        </div>
+        <div id="canvas-objectifs" class="obj-resume" *ngIf="showLevelObj || showLevelEnd">
+            <ng-container *ngIf="showLevelObj">
+                <h1>Objectifs : </h1>
+                <ul>
+                    <li *ngFor="let obj of objectifs">{{obj.description }} : {{obj.goal}}</li>
+                </ul>
+                <button (click)="toggleObj()" id="startLevelBtn" mat-raised-button color="primary">C'est parti
+                    !</button>
+            </ng-container>
+            <ng-container *ngIf="showLevelEnd">
+                <h1>{{this.message.text}}</h1>
+                <ng-container *ngIf="message.status">
+                    <ul>
+                        <li *ngFor="let obj of objectifs">{{obj.description }} :
+
+                            <ng-container *ngIf="message.objComplete[obj.libelle]">Oui</ng-container>
+                            <ng-container *ngIf="!message.objComplete[obj.libelle]">Non</ng-container>
+                        </li>
+                    </ul>
+                </ng-container>
+
+                <ng-container *ngIf="message.stars == 0"><img src="{{emptyStars}}" class="starsSize" /></ng-container>
+                <ng-container *ngIf="message.stars == 1"><img src="{{oneStars}}" class="starsSize" /></ng-container>
+                <ng-container *ngIf="message.stars == 2"><img src="{{twoStars}}" class="starsSize" /></ng-container>
+                <ng-container *ngIf="message.stars == 3"><img src="{{threeStars}}" class="starsSize" /></ng-container>
+
+                <ng-container *ngIf="!message.status">
+                    <button (click)="toggleLvlEnd()" id="startLevelBtn" mat-raised-button
+                        color="primary">Réessayer</button>
+                </ng-container>
+                <button (click)="navigateToMenu()" id="startLevelBtn" mat-raised-button color="primary">Liste des Chapitre</button>
+
+            </ng-container>
+
+        </div>
+
     </div>
-    <button (click)="runAlgo()" id="startGameBtn" style="margin-top: 10px; width: 30%" mat-raised-button color="primary">Lancer</button>
-    <button (click)="stopAlgo()" id="stopGameBtn" style="margin-top: 10px; width: 30%" mat-raised-button color="warn">Arrêter</button>
+    <div id="actions" *ngIf="!showLevelObj && !showLevelEnd">;
+        <button (click)="runAlgo()" id="startGameBtn" mat-raised-button color="primary">Lancer</button>
+        <button (click)="stopAlgo()" id="stopGameBtn" mat-raised-button color="warn">Arrêter</button>
+    </div>
 </div>

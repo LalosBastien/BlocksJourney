@@ -9,7 +9,18 @@
   color:white;
 }
 
-//.mat-tab-label.mat-tab-label-active {
-//  background-color: #3f51b5!important;
-//  color:white!important;
-//}
+#game-component {
+  display: inline-flex; 
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  background-color: white
+}
+#game-header {
+  width: 100%;
+  height: 10%; 
+  background-color: #263238;
+  border-bottom: 1px #222222 solid;
+  text-align: center;
+  color: white;
+}

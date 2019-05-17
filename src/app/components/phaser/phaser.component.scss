@@ -7,31 +7,38 @@
   padding: 10px;
 }
 
-#canvasHolder {
-  position: relative;
-}
-
-
-// Configuration
-$gridSize: 80px;
-
-$gridColor: #FF0000;
-$gridOpacity: 0.5;
-
-// END Configuration
-$gridSize_: ($gridSize - 1px);
-
-/*.grid {
+#gameHolder{
+  padding-left: 5px;
   height: 100%;
-  width: 100%;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent $gridSize_, $gridColor $gridSize_, $gridColor $gridSize), repeating-linear-gradient(-90deg, transparent, transparent $gridSize_, $gridColor $gridSize_, $gridColor $gridSize);
-  background-size: $gridSize $gridSize;
-  position: absolute;
-  opacity: $gridOpacity;
-  top: 0;
-  left: 0;
-  display: block;
-  pointer-events: none;
-  content: " ";
+  justify-content: center;
+
 }
-*/
+#canvasHolder {
+  position: absolute;
+}
+#actions {
+  position: absolute;
+  top: 575px;
+  left: 130px;
+  justify-content: center;
+}
+
+.obj-resume {
+  background: #FFFFFF;
+  width: 550px;
+  height: 350px;
+  display:flex;
+  flex-direction: column;
+  position: relative;
+  top: 50px;
+  left: 50%;
+}
+div > button {
+  margin-top: 10px;
+   width: 30%;
+   justify-content:center;
+}
+.starsSize {
+  height: 24px;
+  width:76px;
+}

@@ -3,7 +3,7 @@ import {
   OnInit
 } from '@angular/core';
 import {
-  ActivatedRoute
+  ActivatedRoute, Router
 } from '@angular/router';
 import {
   PhaserComponent
@@ -36,11 +36,20 @@ export class GameComponent implements OnInit {
   ijs: any;
 
 
-  constructor(protected _api: LevelRequestService, public _snackBar: MatSnackBar, private route: ActivatedRoute) {
+  constructor(protected _api: LevelRequestService, public _snackBar: MatSnackBar, private route: ActivatedRoute, private _r:Router) {
     this.initIntro = this.initIntro.bind(this);
     window.addEventListener('blockyLoaded', this.initIntro);
   }
 
+
+  navigateTo($event){
+    if($event == "levels")
+      this.navigateToMenu();
+  }
+
+  navigateToMenu(){
+    this._r.navigate(['/levels']);
+  }
   async ngOnInit() {
     this.onErrorTriggered = new BehaviorSubject(null);
     this.onErrorTriggered.subscribe((error) => {
