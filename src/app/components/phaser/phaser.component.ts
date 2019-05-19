@@ -713,10 +713,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.destroy();
     }
     initAssets(){
-        this.emptyStars = require('../../../assets/game/star0.png');
-        this.oneStars = require('./../../../assets/game/star1.png');
-        this.twoStars = require('./../../../assets/game/star2.png');
-        this.threeStars = require('./../../../assets/game/star3.png');
+        this.emptyStars = require('../../../assets/game/star0_white .png');
+        this.oneStars = require('./../../../assets/game/star1_white.png');
+        this.twoStars = require('./../../../assets/game/star2_white.png');
+        this.threeStars = require('./../../../assets/game/star3_white.png');
         this.objFail = require('./../../../assets/game/objFail.png')
         this.objSuccess = require('./../../../assets/game/objSuccess.png')
 
