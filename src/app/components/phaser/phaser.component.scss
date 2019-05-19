@@ -7,31 +7,75 @@
   padding: 10px;
 }
 
-#canvasHolder {
-  position: relative;
-}
-
-
-// Configuration
-$gridSize: 80px;
-
-$gridColor: #FF0000;
-$gridOpacity: 0.5;
-
-// END Configuration
-$gridSize_: ($gridSize - 1px);
-
-/*.grid {
+#gameHolder{
+  padding-left: 5px;
   height: 100%;
-  width: 100%;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent $gridSize_, $gridColor $gridSize_, $gridColor $gridSize), repeating-linear-gradient(-90deg, transparent, transparent $gridSize_, $gridColor $gridSize_, $gridColor $gridSize);
-  background-size: $gridSize $gridSize;
-  position: absolute;
-  opacity: $gridOpacity;
-  top: 0;
-  left: 0;
-  display: block;
-  pointer-events: none;
-  content: " ";
+  justify-content: center;
+
 }
-*/
+#canvasHolder {
+  position: absolute;
+}
+#actions {
+  position: absolute;
+  top: 575px;
+  left: 130px;
+  justify-content: center;
+}
+
+.obj-resume {
+  background: #FFFFFF;
+  width: 550px;
+  height: 350px;
+  display:flex;
+  flex-direction: column;
+  position: relative;
+  top: 50px;
+  left: 50%;
+  background: #EBB085;
+  border-radius: 10px;
+  padding: 50px 25px 35px 25px;
+  box-shadow: 0px 8px 11px 5px #666;
+}
+div > button {
+  margin-top: 10px;
+   width: 30%;
+   justify-content:center;
+}
+.starsSize {
+  height: 24px;
+  width:76px;
+}
+
+.obj-box{
+  background: radial-gradient(#204133, #192F28);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  height: 310px;
+  
+}
+.obj-box > ul{
+  list-style-type: none;
+  height: 30%;
+  display: block;
+}
+.obj-box > ul > li{
+  width:100%;
+}
+.obj-goal{
+  text-align: right !important;
+  float:right;
+  padding-right: 5px;
+  width:25%
+}
+.obj-goal > img {
+  height:24px;
+  width: 24px;
+}
+.obj-lib{
+  text-align:left ;
+  float:left;
+  padding-left: 5px;
+  width:75%;
+}

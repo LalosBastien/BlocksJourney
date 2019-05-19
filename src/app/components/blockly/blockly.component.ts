@@ -55,7 +55,7 @@ export class BlocklyComponent implements OnInit {
   }
 
   createMoves() {
-    console.log({ ...actionBlocs, ...conditionBlocs });
+    console.log("blocs: ", { ...actionBlocs, ...conditionBlocs });
     Object.entries({ ...actionBlocs, ...conditionBlocs }).forEach(([name, json]) => {
       Blockly.Blocks[name] = {
         init: function () {
@@ -111,8 +111,21 @@ export class BlocklyComponent implements OnInit {
       return instructions[dir];
     };
 
-    Blockly.JavaScript['up'] = function () {
+    Blockly.JavaScript['check_ladder'] = function() {
+      return ['checkLadder()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    };
+
+    Blockly.JavaScript['up'] = function() {
       return 'up();';
+    };
+
+    Blockly.JavaScript['ladder'] = function(block) {
+      const dir = block.getFieldValue('DIRECTION');
+      const instructions = {
+        Top: 'useLadder(1);',
+        Bottom: 'useLadder(-1);'
+      };
+      return instructions[dir];
     };
 
     Blockly.JavaScript['down'] = function () {

@@ -1,0 +1,8 @@
+{
+  "type": "check_ladder",
+  "message0": "Il y a une échelle",
+  "output": null,
+  "colour": 230,
+  "tooltip": "",
+  "helpUrl": ""
+}
