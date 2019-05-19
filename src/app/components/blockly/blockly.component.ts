@@ -135,5 +135,9 @@ export class BlocklyComponent implements OnInit {
     Blockly.JavaScript['pick'] = function () {
       return 'pick();';
     };
+
+    Blockly.JavaScript['interact'] = function () {
+      return 'interact();';
+    };
   }
 }

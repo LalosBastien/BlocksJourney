@@ -16,6 +16,7 @@ import {
 } from '../../providers/Api/levelRequest.service';
 
 import Ladder from './ladder';
+import Switch from './switch';
 @Component({
     selector: 'app-phaser',
     templateUrl: './phaser.component.html',
@@ -74,6 +75,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     oneStars;
     twoStars;
     threeStars;
+    switches;
     objFail;
     objSuccess;
 
@@ -149,6 +151,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.load.image('grid', 'assets/game/grid-cell-80.png');
         this.game.load.image('ladderMid', 'assets/game/ladderMid.png');
         this.game.load.image('ladderTop', 'assets/game/ladderTop.png');
+        this.game.load.image('switchLeft', 'assets/game/sprites/switchLeft.png');
+        this.game.load.image('switchRight', 'assets/game/sprites/switchRight.png');
+        this.game.load.image('bridge', 'assets/game/tiles/bridge2.png');
         this.game.load.image('coinIco', 'assets/game/sprites/coinIco.png');
         this.game.load.image('energyIco', 'assets/game/sprites/energy.png');
 
@@ -252,6 +257,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.component[element.name + 's'].push(newSprite);
         });
 
+        this.component.switches = this.json.switches ? this.json.switches.map(data => new Switch(data, this.component.game)) : [];
+
         this.game.physics.enable(this.component.monsters, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.component.spikes, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.component.coins, Phaser.Physics.ARCADE);
@@ -313,6 +320,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.looseSound = this.game.add.audio('looser');
         this.component.coinSound = this.game.add.audio('coin');
         this.component.bgSound.play();
+
     }
 
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
@@ -370,6 +378,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.toggleLvlEnd();
         this.replaceCoins();
         this.handleEndGameSound(win);
+        this.closeBridges();
         this.steps = 0;
         this.coinCount = 0;
         this.player.x = this.data.player.x;
@@ -388,6 +397,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.blockly.resetInterpreter();
         await this.validateLevel(time, win ? 'success' : 'failed', this.data.player.initialEnergy - this.energyLevel, this.message.stars);
     }
+
+    closeBridges() {
+        this.switches.forEach(theSwitch => theSwitch.switchable.close());
+    }
+
     checkObjCompletion(data) {
         let stars = 0;
         let objComplete = {}
@@ -484,6 +498,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             }, () => true, this);
         });
 
+
+        this.component.switches.forEach(theSwitch => theSwitch.update(this.component.player))
+
         this.game.physics.arcade.collide(this.component.player, this.component.target, () => {
             if (this.component.started) {
                 const time = Date.now() - this.component.timerStart;
@@ -579,6 +596,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.debug.body(this.component.player);
         this.game.debug.body(this.component.layer);
 
+
         this.component.monsters.forEach(monster => {
             this.game.debug.body(monster);
         });
@@ -654,12 +672,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 return ladder.checkCollision(this.player);
             }
         }, false);
-        console.log("checkLadder() ", r && !this.wasOnLadder);
         return this.blockly.interpreter.createPrimitive(r && !this.wasOnLadder);
     }
 
     useLadder(value) {
-        console.log("coucou")
         const direction = value > 0;
         this.ladders.forEach(ladder => {
             if (ladder.checkCollision(this.player)) {
@@ -680,6 +696,14 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         // this.items.push("items");
     }
 
+    async interact() {
+        this.switches.forEach(theSwitch => {
+            if (theSwitch.checkCollision(this.player)) {
+                theSwitch.switch();
+            }
+        });
+    }
+
     highlightBlock(id) {
         this.blockly.workspace.highlightBlock(id.data);
         this.currentBlock = id.data;
@@ -698,6 +722,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         interpreter.setProperty(scope, 'up', interpreter.createNativeFunction(this.up.bind(this)));
         interpreter.setProperty(scope, 'down', interpreter.createNativeFunction(this.down.bind(this)));
         interpreter.setProperty(scope, 'pick', interpreter.createNativeFunction(this.pick.bind(this)));
+        interpreter.setProperty(scope, 'interact', interpreter.createNativeFunction(this.interact.bind(this)));
         interpreter.setProperty(scope, 'highlightBlock', interpreter.createNativeFunction(this.highlightBlock.bind(this)));
         interpreter.setProperty(scope, 'log', interpreter.createNativeFunction(this.interpreterLog));
     }
