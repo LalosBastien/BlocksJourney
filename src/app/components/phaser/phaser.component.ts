@@ -74,6 +74,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     oneStars;
     twoStars;
     threeStars;
+    objFail;
+    objSuccess;
 
     @Input() api: LevelRequestService;
     @Input() data: any;
@@ -85,7 +87,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit() {
         this.detector = { rightHole: false, leftHole: false };
         this.runAlgo = this.runAlgo.bind(this);
-        this.initStarsAssets();
+        this.initAssets();
         // this.data = json;
         this.meta = this.data.level;
         this.objectifs = this.data.objectifs;
@@ -710,10 +712,13 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     ngOnDestroy(): void {
         this.game.destroy();
     }
-    initStarsAssets(){
+    initAssets(){
         this.emptyStars = require('../../../assets/game/star0.png');
         this.oneStars = require('./../../../assets/game/star1.png');
         this.twoStars = require('./../../../assets/game/star2.png');
         this.threeStars = require('./../../../assets/game/star3.png');
+        this.objFail = require('./../../../assets/game/objFail.png')
+        this.objSuccess = require('./../../../assets/game/objSuccess.png')
+
     }
 }
