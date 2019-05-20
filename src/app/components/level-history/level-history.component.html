@@ -1,9 +1,15 @@
-<div>
-    <mat-table style="margin-left: 3%;" #table
-        [dataSource]="historyDataSource" matSort>
-
+<mat-card>
+    <button mat-icon-button [matMenuTriggerFor]="historyMenu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #historyMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+        <mat-checkbox [checked]="filtered" (change)="displaySuccess()" class="mat-menu-item">
+            Afficer tous les status
+        </mat-checkbox>
+    </mat-menu>
+    <mat-table style="margin-left: 3%;" #table [dataSource]="historyDataSource" matSort>
         <!--- Note that these columns can be defined in any order.
-    The actual rendered columns are set as a property on the row definition" -->
+The actual rendered columns are set as a property on the row definition" -->
 
         <!-- TotalTime Column -->
         <ng-container matColumnDef="totalTime">
@@ -34,4 +40,8 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-</div>
+    <mat-card-actions>
+        <mat-paginator [pageSize]="5" [hidePageSize]="true">
+        </mat-paginator>
+    </mat-card-actions>
+</mat-card>
