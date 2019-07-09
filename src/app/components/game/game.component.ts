@@ -52,9 +52,9 @@ export class GameComponent implements OnInit {
   }
   async ngOnInit() {
     this.onErrorTriggered = new BehaviorSubject(null);
-    this.onErrorTriggered.subscribe((error) => {
-      if (error != null) {
-        this.openSnackBar('Une erreur s\'est produite : ' + error, 'Ok');
+    this.onErrorTriggered.subscribe((e) => {
+      if (e != null && e.error != null) {
+        this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
       }
     });
     let lvlId = this.route.snapshot.paramMap.get('levelID')

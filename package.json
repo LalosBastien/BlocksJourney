@@ -1,6 +1,6 @@
 {
   "name": "GPE-Client",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Angular 5 with Electron (Typescript + SASS + Hot Reload)",
   "main": "main.js",
   "private": true,
@@ -26,6 +26,7 @@
     "@types/intro.js": "^2.4.3",
     "angular-highcharts": "^5.2.8",
     "angular2-moment": "^1.9.0",
+    "hammerjs": "^2.0.6",
     "highcharts": "^6.0.7",
     "intro.js": "^2.9.3",
     "js-interpreter": "^1.4.6",

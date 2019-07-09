@@ -67,8 +67,6 @@ export function highchartsModules() {
   return [more, solid_gauge, exporting];
 }
 
-import { WebviewDirective } from './directives/webview.directive';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PhaserComponent } from './components/phaser/phaser.component';
@@ -98,7 +96,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     HomeComponent,
-    WebviewDirective,
     PhaserComponent,
     GameComponent,
     BlocklyComponent,

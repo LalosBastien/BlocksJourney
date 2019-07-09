@@ -66,9 +66,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.onErrorTriggered = new BehaviorSubject(null);
-    this.onErrorTriggered.subscribe((error) => {
-      if (error != null) {
-        this.openSnackBar('Une erreur s\'est produite : ' + error, 'Ok');
+    this.onErrorTriggered.subscribe((e) => {
+      if (e != null && e.error != null) {
+        this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
       }
     });
     this.loginForm = this._fb.group({
@@ -88,7 +88,6 @@ export class HomeComponent implements OnInit {
 
     this.flag_fr = require('../../../assets/web/flag_fr.png');
     this.flag_en = require('../../../assets/web/flag_en.png');
-    this.flag_us = require('../../../assets/web/flag_us.png');
     this.logo = require('../../../assets/web/logo-gpe.png');
   }
 
@@ -104,7 +103,7 @@ export class HomeComponent implements OnInit {
       });
 
       if (!login || login.error) {
-        throw login.error;
+        throw login;
       }
       this._router.navigate(['levels']);
     } catch (error) {

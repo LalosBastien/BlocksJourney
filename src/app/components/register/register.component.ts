@@ -45,7 +45,6 @@ export class RegisterComponent implements OnInit {
 
   flag_fr: any;
   flag_en: any;
-  flag_us: any;
 
   constructor(private _apiAuth: AuthRequestService, private _apiRole: RoleRequestService, private _fb: FormBuilder, private _router: Router,
     public snackBar: MatSnackBar, private _translate: TranslateService) { }
@@ -58,9 +57,9 @@ export class RegisterComponent implements OnInit {
       console.log('role', role);
       this.role = role;
     };
-    this.onErrorTriggered.subscribe((error) => {
-      if (error != null) {
-        // this.openSnackBar('Une erreur s\'est produite : ' + error, 'Ok');
+    this.onErrorTriggered.subscribe((e) => {
+      if (e != null && e.error != null) {
+        this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
         this._router.navigate(['/']);
       }
     });
@@ -90,7 +89,6 @@ export class RegisterComponent implements OnInit {
 
     this.flag_fr = require('../../../assets/web/flag_fr.png');
     this.flag_en = require('../../../assets/web/flag_en.png');
-    this.flag_us = require('../../../assets/web/flag_us.png');
     this.roles = (await this._apiRole.getAll()).list;
   }
   async onSubmit() {
@@ -124,8 +122,7 @@ export class RegisterComponent implements OnInit {
   }
 
   checkAccessLevel() {
-    console.log('value', this.register3FormGroup.value.roleCtrl);
-    return this.register3FormGroup.controls.roleCtrl.value === 1;
+    return this.register3FormGroup.value.roleCtrl === '1';
   }
 
   openSnackBar(message: string, action: string) {

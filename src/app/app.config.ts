@@ -2,7 +2,7 @@ import { CONF_LOCAL } from '../environments/environment.local';
 import { CONF_DEV } from '../environments/environment.dev';
 import { CONF_PROD } from '../environments/environment.prod';
 
-const ENV = 'local';
+const ENV = process.env.ENVIRONMENT || 'local';
 
 const LOCAL: String = 'local';
 const DEV: String = 'dev';

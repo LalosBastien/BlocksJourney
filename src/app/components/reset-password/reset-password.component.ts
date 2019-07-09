@@ -37,7 +37,6 @@ export class ResetPasswordComponent implements OnInit {
 
   flag_fr: any;
   flag_en: any;
-  flag_us: any;
   logo: any;
 
   constructor(private _api: AuthRequestService, private _router: Router, private _fb: FormBuilder,
@@ -49,9 +48,9 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.onErrorTriggered = new BehaviorSubject(null);
-    this.onErrorTriggered.subscribe((error) => {
-      if (error != null) {
-        this.openSnackBar('Une erreur s\'est produite : ' + error, 'Ok');
+    this.onErrorTriggered.subscribe((e) => {
+      if (e != null && e.error != null) {
+        this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
       }
     });
     this.resetForm = this._fb.group({
@@ -71,7 +70,6 @@ export class ResetPasswordComponent implements OnInit {
 
     this.flag_fr = require('../../../assets/web/flag_fr.png');
     this.flag_en = require('../../../assets/web/flag_en.png');
-    this.flag_us = require('../../../assets/web/flag_us.png');
     this.logo = require('../../../assets/web/logo-gpe.png');
   }
   async onSubmit() {

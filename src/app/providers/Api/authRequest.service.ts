@@ -32,7 +32,6 @@ export class AuthRequestService extends RequestService {
       }
       return true;
     } catch (error) {
-      console.log('errauth');
       return {
         error
       };

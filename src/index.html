@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>GPE-Client</title>
+  <title>Blocks Journey</title>
   <base href="">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,13 +12,22 @@
 
 </head>
 <body>
-  <app-root style="height: 100%">Loading...</app-root>
+  <app-root style="height: 100%">
+    <p style='padding-top:20%;text-align: center;color:white'>
+        <i class="material-icons fa-spin">cached</i>
+      Loading... 
+  </p>
+</app-root>
 </body>
 <script>
+    // For Electron app
     document.addEventListener("keydown", function (e) {
+      // 'F12'
       if (e.which === 123) {
         require('remote').getCurrentWindow().toggleDevTools();
-      } else if (e.which === 116) {
+      } 
+      // 'F5'
+      else if (e.which === 116) {
         location.reload();
       }
     });
