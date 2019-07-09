@@ -38,6 +38,9 @@ import {
   MatDialogModule,
   MatExpansionModule,
   MatSortModule,
+  MatPaginatorModule,
+  MatCheckboxModule,
+  MatToolbarModule,
 } from '@angular/material';
 import {
   Http,
@@ -116,6 +119,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule,
     MatSortModule,
+    MatPaginatorModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -147,6 +151,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CookieModule.forRoot(),
     ChartModule,
     MomentModule,
+    MatCheckboxModule,
+    MatToolbarModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
