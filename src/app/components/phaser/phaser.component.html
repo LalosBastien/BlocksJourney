@@ -20,7 +20,8 @@
                     <ul style="flex-direction: column">
                         <li *ngFor="let obj of objectifs" style="flex-direction: row">
                             <span class="obj-lib">{{obj.description }} :</span>
-                            <span class="obj-goal">{{obj.goal}}</span>
+                            <span *ngIf="obj.libelle !='Algotime'" class="obj-goal">{{obj.goal}}</span>
+                            <span *ngIf="obj.libelle =='Algotime'" class="obj-goal">{{obj.goal}} s</span>
                         </li>
                     </ul>
                     <button (click)="toggleObj()" id="startLevelBtn" mat-raised-button color="primary">C'est parti
@@ -30,7 +31,8 @@
                     <ng-container *ngIf="message.status">
                         <ul>
                             <li *ngFor="let obj of objectifs">
-                                <span class="obj-lib">{{obj.description }} :</span>
+                                <span *ngIf="obj.libelle !='Algotime'" class="obj-lib">{{obj.description }} : {{obj.result}}</span>
+                                <span *ngIf="obj.libelle =='Algotime'" class="obj-lib">{{obj.description }} : {{obj.result}} s</span>
                                 <span class="obj-goal">
                                     <ng-container *ngIf="message.objComplete[obj.libelle]">
                                             <img src="{{objSuccess}}"  />

@@ -173,8 +173,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             this.json.player.spriteHeight
         );
 
-        this.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bgsound.mp3'));
-        this.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'we_are_one.mp3'));
+        this.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bensound-cute.wav'));
+        this.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'sunny.wav'));
         this.game.load.audio('coin', 'assets/game/audio/coin.wav');
         this.game.load.audio('winner', 'assets/game/audio/weeee.wav');
         this.game.load.audio('looser', 'assets/game/audio/game_over.wav');
@@ -205,15 +205,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.layer.resizeWorld();
 
         //  Only for debug
-        this.component.layer.debug = true;
+        this.component.layer.debug = false;
 
         this.game.physics.arcade.gravity.y = this.json.physics.gravity;
         this.coinCountText = this.game.add.text(32, 50, '', { fill: 'white' });
 
         this.ladders = [];
-
-
-        //this.component.ladder = new Ladder({tileHeight: 3, x: 160, y: 160}, this.game);
         this.component.ladders = this.json.ladders ? this.json.ladders.map(ladder => new Ladder(ladder, this.game)) : [];
 
         this.energy = this.game.add.text(10, 10, '', { fill: '#c79a00' });
@@ -344,18 +341,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, 0);
     }
     replaceCoins() {
-        // console.log('JSON DATA', this.component.json.sprites.coins);
-        console.log('COINS DATA', this.coins);
         this.coins.map((coin) => {
             coin.revive();
             return { ...coin};
         });
-        console.log('COINS DATA NEW', this.coins);
-        // this.coins.map((coin, i) => {
-        //     const { x, y } = this.monstersInitialPositions[i];
-        //     console.log('JSON DATA', this.this.monstersInitialPositions);
-        //     return { ...coin, x, y };
-        // });
     }
 
     replaceMonsters() {
@@ -386,7 +375,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.replaceMonsters();
         this.isPlayerRunning = false;
         this.message.status = win;
-        this.message.text = win ? message.text : (message + '\n Essaye encore');
+        this.message.text = win ? message.text : (message);
         this.message.stars = 0;
         if (win) {
             this.message.data = message.data;
@@ -409,20 +398,21 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         for (let obj of this.objectifs) {
             objComplete[obj.libelle] = false;
             if (obj.libelle == "Coins") {
+                obj.result = data.coins;
                 if (data && (data.coins == obj.goal)) {
-                    console.log('fullcheck')
                     objComplete[obj.libelle] = true;
                     stars += 1;
                 }
             }
-            else if (obj.libelle == "AlgoTime") {
-                console.log(data.time);
+            else if (obj.libelle == "Algotime") {
+                obj.result = data.time;
                 if (data && data.time && data.time <= obj.goal) {
                     objComplete[obj.libelle] = true;
                     stars += 1;
                 }
             }
             else if (obj.libelle == "Energy") {
+                obj.result = data.energy;
                 if (data && data.energy && data.energy <= obj.goal) {
                     objComplete[obj.libelle] = true;
                     stars += 1;
@@ -591,19 +581,20 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     render() {
+        // Only for debug
         // this.game.debug.spriteInfo(this.component.player, 32, 32);
         // this.game.debug.cameraInfo(this.game.camera, 400, 32);
-        this.game.debug.body(this.component.player);
-        this.game.debug.body(this.component.layer);
+        // this.game.debug.body(this.component.player);
+        // this.game.debug.body(this.component.layer);
 
 
-        this.component.monsters.forEach(monster => {
-            this.game.debug.body(monster);
-        });
+        // this.component.monsters.forEach(monster => {
+        //     this.game.debug.body(monster);
+        // });
 
-        this.component.spikes.forEach(spike => {
-            this.game.debug.body(spike);
-        });
+        // this.component.spikes.forEach(spike => {
+        //     this.game.debug.body(spike);
+        // });
     }
 
     async monsterMove(monster: any) {
@@ -737,7 +728,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     ngOnDestroy(): void {
         this.game.destroy();
     }
-    initAssets(){
+    initAssets() {
         this.emptyStars = require('../../../assets/game/star0_white.png');
         this.oneStars = require('./../../../assets/game/star1_white.png');
         this.twoStars = require('./../../../assets/game/star2_white.png');
