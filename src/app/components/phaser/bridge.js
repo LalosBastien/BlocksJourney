@@ -23,7 +23,7 @@ export default class Bridge {
     close() {
         if (this.open) {
             this.switch();
-            this.parent.switch();
+            this.parent.switch(true);
         }
     }
 
@@ -38,6 +38,12 @@ export default class Bridge {
         const boundsBridge  = new Phaser.Rectangle(this.x, this.y, 80, 15);
 
         return Phaser.Rectangle.intersects(boundsBridge, player.body.getBounds(new Phaser.Rectangle()));
+    }
+
+    checkDetection(position) {
+        const boundsBridge  = new Phaser.Rectangle(this.x, this.y, 80, 15);
+        const detector  = new Phaser.Rectangle(position.x, position.y - 5, 10, 60);
+        return Phaser.Rectangle.intersects(boundsBridge, detector);
     }
 
     update(player) {

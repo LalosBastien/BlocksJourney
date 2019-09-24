@@ -28,10 +28,11 @@ export default class Switch {
         this.switchable.update(player);
     }
 
-    switch() {
+    switch(fromSwitchable) {
         this.state = !this.state;
         const name = this.state ? 'switchRight' : 'switchLeft';
-        this.switchable.switch();
+        if (!fromSwitchable)
+            this.switchable.switch();
         this.sprite.loadTexture(name);
     }
 

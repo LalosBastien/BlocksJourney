@@ -391,6 +391,10 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.switches.forEach(theSwitch => theSwitch.switchable.close());
     }
 
+    checkBridgesCollision(position) {
+        return this.switches.find(theSwitch => theSwitch.switchable.checkDetection(position));
+    }
+
     checkObjCompletion(data) {
         let stars = 0;
         let objComplete = {}
@@ -449,8 +453,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.coinCountText.y = this.game.camera.y + 11;
 
         const { x: posX, y: posY } = this.component.player.body.position;
-        this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30, posY + 100);
-        this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30, posY + 100);
+        this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30, posY + 100) && !this.component.checkBridgesCollision({x: posX + 30, y: posY });
+        this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30, posY + 100) && !this.component.checkBridgesCollision({x: posX + 30, y: posY});
 
         this.component.bgClouds.tilePosition.x -= 1 / 2;
 
