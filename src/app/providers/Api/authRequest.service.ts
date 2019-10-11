@@ -11,7 +11,7 @@ import {
 import {
   RequestService
 } from './request.service';
-import {CookieService} from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie';
 
 import {
   UserStorageService
@@ -32,7 +32,6 @@ export class AuthRequestService extends RequestService {
       }
       return true;
     } catch (error) {
-      console.log('errauth');
       return {
         error
       };

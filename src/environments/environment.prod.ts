@@ -1,5 +1,5 @@
 export const CONF_PROD = {
   production: true,
   environment: 'PROD',
-  apiUrl: ''
+  apiUrl: 'https://api.blocksjourney.fr:3000'
 };

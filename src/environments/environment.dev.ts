@@ -1,5 +1,5 @@
 export const CONF_DEV = {
   production: false,
   environment: 'DEV',
-  apiUrl: ''
+  apiUrl: 'https://localhost:3000'
 };

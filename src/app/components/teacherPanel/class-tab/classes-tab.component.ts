@@ -15,12 +15,11 @@ export class ClassesTabComponent implements OnInit {
   // listClass: Array<any>;
   listStudent: Array<any>;
   selectedClass: string;
-  constructor(private _api: TeacherRequestService,private dialog:MatDialog) {
+  constructor(private _api: TeacherRequestService, private dialog: MatDialog) {
 
   }
 
   async ngOnInit() {
-
     // this.classSel = new FormGroup({
     //   currentClass: new FormControl()
     // });
@@ -34,13 +33,15 @@ export class ClassesTabComponent implements OnInit {
       // if (!list) throw "EmptyList"
       // this.listClass = list;
       // this.listClass = [{ id: 1, libelle: 'Classe 1' }, { id: 2, libelle: 'Classe 2' }]
-    } catch (err) { console.error(err) };
+    } catch (err) { console.error(err); }
   }
   async initListStudent() {
     try {
-      let l = await this._api.getLadder();
+      const l = await this._api.getLadder();
       console.log(l);
-      if (!l) throw 'Datas Not available'
+      if (!l) {
+        throw new Error(('Datas Not available'));
+      }
       this.listStudent = l;
       console.log(this.listStudent);
     } catch (err) {
@@ -51,7 +52,6 @@ export class ClassesTabComponent implements OnInit {
 
   }
   openImproveTrackingDialog(student) {
-    let ITD = this.dialog.open(TrackingDialogComponent,{data:student})
-
+    const ITD = this.dialog.open(TrackingDialogComponent, { data: student });
   }
 }

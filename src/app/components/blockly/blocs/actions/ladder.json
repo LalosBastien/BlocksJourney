@@ -1,0 +1,26 @@
+{
+  "type": "ladder",
+  "message0": "Prendre l'echelle vers le %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "DIRECTION",
+      "options": [
+        [
+          "Haut",
+          "Top"
+        ],
+        [
+          "Bas",
+          "Bottom"
+        ]
+      ]
+    }
+  ],
+  "inputsInline": false,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 0,
+  "tooltip": "Fait prendre une échelle au personnage dans la direction demandée.",
+  "helpUrl": ""
+}

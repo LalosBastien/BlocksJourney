@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhaserTestComponent } from './phaser.component';
+import { PhaserComponent } from './phaser.component';
 
-describe('PhaserTestComponent', () => {
-  let component: PhaserTestComponent;
-  let fixture: ComponentFixture<PhaserTestComponent>;
+describe('PhaserComponent', () => {
+  let component: PhaserComponent;
+  let fixture: ComponentFixture<PhaserComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PhaserTestComponent ]
+      declarations: [ PhaserComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PhaserTestComponent);
+    fixture = TestBed.createComponent(PhaserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

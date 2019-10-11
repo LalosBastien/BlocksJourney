@@ -26,7 +26,8 @@
       "REGISTER": {
         "STEP1": "Identifiers",
         "STEP2": "Informations",
-        "STEP3": "Confirmation",
+        "STEP3": "Formation",
+        "STEP4": "Confirmation",
         "NEXT": "Next",
         "BACK": "Back to menu",
         "CONFIRM": "Confirm",

@@ -23,7 +23,7 @@ import {
             width: graphWidth,
             type: 'pie'
             },
-            colors: ['#9CE86A','#E8A502','#D10000'],
+            colors: ['#9CE86A', '#E8A502', '#D10000'],
             title: {
               text: title,
               style: { 'color': '#333', 'fontSize': '18px', 'fontWeight': 'bold'},
@@ -60,7 +60,7 @@ import {
             width: graphWidth,
             type: 'bar'
             },
-            colors: ['#9CE86A','#E8A502','#D10000'],
+            colors: ['#9CE86A', '#E8A502', '#D10000'],
             title: {
               text: title,
               style: { 'color': '#333', 'fontSize': '18px', 'fontWeight': 'bold'},

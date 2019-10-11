@@ -29,7 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
   providers: [AuthRequestService]
 })
 export class ResetPasswordComponent implements OnInit {
-  onErrorTriggered: BehaviorSubject < any > ;
+  onErrorTriggered: BehaviorSubject<any>;
 
   resetForm: FormGroup;
   token: any;
@@ -37,7 +37,6 @@ export class ResetPasswordComponent implements OnInit {
 
   flag_fr: any;
   flag_en: any;
-  flag_us: any;
   logo: any;
 
   constructor(private _api: AuthRequestService, private _router: Router, private _fb: FormBuilder,
@@ -49,30 +48,29 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.onErrorTriggered = new BehaviorSubject(null);
-    this.onErrorTriggered.subscribe((error) => {
-      if (error != null) {
-        this.openSnackBar('Une erreur s\'est produite : ' + error, 'Ok');
+    this.onErrorTriggered.subscribe((e) => {
+      if (e != null && e.error != null) {
+        this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
       }
     });
     this.resetForm = this._fb.group({
       password: [{
-          value: undefined,
-          disabled: false
-        },
-        [Validators.required, Validators.minLength(8)]
+        value: undefined,
+        disabled: false
+      },
+      [Validators.required, Validators.minLength(8)]
       ],
       repeatPassword: [{
-          value: undefined,
-          disabled: false
-        },
-        [Validators.required]
+        value: undefined,
+        disabled: false
+      },
+      [Validators.required]
       ],
     });
 
     this.flag_fr = require('../../../assets/web/flag_fr.png');
     this.flag_en = require('../../../assets/web/flag_en.png');
-    this.flag_us = require('../../../assets/web/flag_us.png');
-    this.logo = require('../../../assets/web/logo-pensalgo.png');
+    this.logo = require('../../../assets/web/logo-gpe.png');
   }
   async onSubmit() {
     try {
