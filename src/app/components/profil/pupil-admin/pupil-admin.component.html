@@ -1,0 +1,72 @@
+<mat-table #table [dataSource]="students">
+
+  <ng-container matColumnDef="username">
+    <mat-header-cell *matHeaderCellDef> Username </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <ng-template [ngIf]="!element.toCreate" [ngIfElse]="inputName">
+        {{element.nom}}
+      </ng-template>
+      <ng-template #inputName>
+        <input matInput [(ngModel)]="element.nom" required>
+      </ng-template>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="firstname">
+    <mat-header-cell *matHeaderCellDef> Firstname </mat-header-cell>
+    <mat-cell *matCellDef="let element"> 
+        <ng-template [ngIf]="!element.toCreate" [ngIfElse]="inputName">
+            {{element.nom}}
+          </ng-template>
+          <ng-template #inputName>
+            <input matInput [(ngModel)]="element.prenom" required>
+          </ng-template>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="password">
+    <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.password}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let element; let i = index">
+      <ng-template [ngIf]="!element.toCreate" [ngIfElse]="cancelAction">
+        <button mat-icon-button aria-label="renew student" matTooltip="reset password" (click)="renewPassword(element)">
+          <mat-icon>autorenew</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="delete student" matTooltip="delete student">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </ng-template>
+      <ng-template #cancelAction>
+        <button mat-icon-button aria-label="cancel add" matTooltip="remove row" (click)="cancelAdd(i)">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </ng-template>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<div #modifier class="container-fluid mt-2">
+  <div class="row justify-content-between">
+    <ng-container>
+      <button mat-raised-button color="secondary" (click)="addStudent()">
+        <mat-icon>person_add</mat-icon>&nbsp;<b>Add</b>
+      </button>
+    </ng-container>
+    <ng-container>
+      <button mat-raised-button color="accent" (click)="createStudents()">
+        <mat-icon>save</mat-icon>&nbsp;<b>Save</b>
+      </button>
+    </ng-container>
+  </div>
+</div>

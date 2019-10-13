@@ -47,7 +47,7 @@ export class RequestService implements OnInit {
         }
         return Promise.reject(error.message || error);
     }
-    protected setNewHeaders(token?) {
+    protected setNewHeaders(token?: string) {
         this.headers = new Headers();
         this.headers.append('Content-type', 'application/json');
         this.headers.append('x-accesstoken', token);
@@ -66,7 +66,7 @@ export class RequestService implements OnInit {
         this.options = new RequestOptions({ headers: this.headers });
     }
 
-    protected async _postRequest(path, data): Promise<any> {
+    protected async _postRequest(path: string, data: any): Promise<any> {
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.post(apiUrl, data, this.options).pipe(
@@ -75,7 +75,7 @@ export class RequestService implements OnInit {
             catchError((e) => this.handleError(e))).toPromise();
     }
 
-    protected async _putRequest(path, data): Promise<any> {
+    protected async _putRequest(path: string, data: any): Promise<any> {
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.put(apiUrl, data, this.options).pipe(
