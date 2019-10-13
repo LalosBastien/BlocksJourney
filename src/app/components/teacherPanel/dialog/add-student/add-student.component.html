@@ -2,9 +2,14 @@
   <mat-card-title>Ajouter un élève</mat-card-title>
   <mat-card-content>
     <mat-form-field class="col-md-12">
-      <input matInput placeholder="Email" formControlName="email" type='email' required>
-      <mat-icon matSuffix>mail</mat-icon>
-      <mat-error>Veuillez entrez une adresse e-mail valide </mat-error>
+      <input matInput placeholder="{{ 'PAGES.TEACHER.FIRSTNAME' | translate }}" formControlName="firstname" type='text' required>
+      <mat-icon matSuffix>face</mat-icon>
+      <mat-error>Veuillez entrez une adresse e-mail valide</mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-md-12">
+      <input matInput placeholder="{{ 'PAGES.TEACHER.LASTNAME' | translate }}" formControlName="name" type='text' required>
+      <mat-icon matSuffix>face</mat-icon>
+      <mat-error>Veuillez entrez une adresse e-mail valide</mat-error>
     </mat-form-field>
   </mat-card-content>
   <mat-card-actions>

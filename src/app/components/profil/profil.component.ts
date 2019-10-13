@@ -8,6 +8,7 @@ import { LocalStorageService } from 'ngx-store';
 })
 export class ProfilComponent implements OnInit {
   user: any;
+  students: any;
 
   constructor(private _localStorageService: LocalStorageService) { }
 

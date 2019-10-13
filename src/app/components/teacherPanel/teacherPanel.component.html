@@ -59,18 +59,6 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-      <ng-container>
-        <div style="background-color: #f2f2f2">
-          <!-- <button mat-icon-button (click)="openDialogAddStudent()"> -->
-          <mat-icon style='padding:1% 1% 1% 2%;font-size:35px;cursor: pointer;color:#333' (click)="openDialogAddStudent()">
-            group_add
-          </mat-icon>
-          <!-- </button> -->
-        </div>
-
-      </ng-container>
-
-
     </mat-tab>
 
     <mat-tab>
@@ -107,10 +95,17 @@
               </mat-grid-list>
               <mat-grid-list cols="4" rowHeight="30px">
                 <mat-grid-tile><b>Temps d'algo</b></mat-grid-tile>
-                <div *ngIf='levelStat.stats.algoTime.worst.Stats && levelStat.stats.algoTime.best.Stats && levelStat.stats.algoTime.average'>
-                  <mat-grid-tile>{{levelStat.stats.algoTime.worst.Stats.value | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.algoTime.worst.id)'>{{levelStat.stats.algoTime.worst.nom}}&nbsp;{{levelStat.stats.algoTime.worst.prenom}}</a> )</i></mat-grid-tile>
+                <div
+                  *ngIf='levelStat.stats.algoTime.worst.Stats && levelStat.stats.algoTime.best.Stats && levelStat.stats.algoTime.average'>
+                  <mat-grid-tile>{{levelStat.stats.algoTime.worst.Stats.value | date: 'mm\:ss'}} &nbsp;<i> ( <a
+                        style='cursor:pointer;color:blue;text-decoration: underline'
+                        (click)='moveToDetail(levelStat.stats.algoTime.worst.id)'>{{levelStat.stats.algoTime.worst.nom}}&nbsp;{{levelStat.stats.algoTime.worst.prenom}}</a>
+                      )</i></mat-grid-tile>
                   <mat-grid-tile>{{levelStat.stats.algoTime.average | date: 'mm\:ss'}}</mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.algoTime.best.Stats.value | date: 'mm\:ss'}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.algoTime.best.id)'>{{levelStat.stats.algoTime.best.nom}}&nbsp;{{levelStat.stats.algoTime.best.prenom}}</a> ) </i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.algoTime.best.Stats.value | date: 'mm\:ss'}} &nbsp;<i> ( <a
+                        style='cursor:pointer;color:blue;text-decoration: underline'
+                        (click)='moveToDetail(levelStat.stats.algoTime.best.id)'>{{levelStat.stats.algoTime.best.nom}}&nbsp;{{levelStat.stats.algoTime.best.prenom}}</a>
+                      ) </i></mat-grid-tile>
 
                 </div>
                 <div *ngIf='!levelStat.stats.algoTime.worst.Stats || !levelStat.stats.algoTime.best.Stats'>
@@ -120,10 +115,17 @@
                 </div>
 
                 <mat-grid-tile><b>Temps Total</b></mat-grid-tile>
-                <div *ngIf='levelStat.stats.totalTime.worst.Stats && levelStat.stats.totalTime.best.Stats && levelStat.stats.totalTime.average'>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value | date: 'hh\:mm\:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a> )</i></mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.average | date: 'hh\:mm\:ss'}}  </mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value | date: 'hh\:mm\:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a> ) </i></mat-grid-tile>
+                <div
+                  *ngIf='levelStat.stats.totalTime.worst.Stats && levelStat.stats.totalTime.best.Stats && levelStat.stats.totalTime.average'>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value | date: 'hh\:mm\:ss'}} <i> ( <a
+                        style='cursor:pointer;color:blue;text-decoration: underline'
+                        (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a>
+                      )</i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.average | date: 'hh\:mm\:ss'}} </mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value | date: 'hh\:mm\:ss'}} <i> ( <a
+                        style='cursor:pointer;color:blue;text-decoration: underline'
+                        (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a>
+                      ) </i></mat-grid-tile>
                 </div>
                 <div *ngIf='!levelStat.stats.totalTime.worst.Stats || !levelStat.stats.totalTime.best.Stats'>
                   <mat-grid-tile *ngIf='levelStat.stats.totalTime.worst == "none"'>None</mat-grid-tile>
@@ -132,10 +134,17 @@
                 </div>
 
                 <mat-grid-tile><b>Energie</b></mat-grid-tile>
-                <div *ngIf='levelStat.stats.energy.worst.Stats && levelStat.stats.algoTime.best.Stats && levelStat.stats.energy.average'>
-                  <mat-grid-tile>{{levelStat.stats.energy.worst.Stats.value}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.energy.worst.id)'>{{levelStat.stats.energy.worst.nom}}&nbsp;{{levelStat.stats.energy.worst.prenom}}</a> )</i></mat-grid-tile>
+                <div
+                  *ngIf='levelStat.stats.energy.worst.Stats && levelStat.stats.algoTime.best.Stats && levelStat.stats.energy.average'>
+                  <mat-grid-tile>{{levelStat.stats.energy.worst.Stats.value}} &nbsp;<i> ( <a
+                        style='cursor:pointer;color:blue;text-decoration: underline'
+                        (click)='moveToDetail(levelStat.stats.energy.worst.id)'>{{levelStat.stats.energy.worst.nom}}&nbsp;{{levelStat.stats.energy.worst.prenom}}</a>
+                      )</i></mat-grid-tile>
                   <mat-grid-tile>{{levelStat.stats.energy.average}}</mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.energy.best.Stats.value}} &nbsp;<i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.energy.best.id)'>{{levelStat.stats.energy.best.nom}}&nbsp;{{levelStat.stats.energy.best.prenom}}</a> ) </i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.energy.best.Stats.value}} &nbsp;<i> ( <a
+                        style='cursor:pointer;color:blue;text-decoration: underline'
+                        (click)='moveToDetail(levelStat.stats.energy.best.id)'>{{levelStat.stats.energy.best.nom}}&nbsp;{{levelStat.stats.energy.best.prenom}}</a>
+                      ) </i></mat-grid-tile>
 
                 </div>
                 <div *ngIf='!levelStat.stats.energy.worst.Stats || !levelStat.stats.energy.best.Stats'>
@@ -143,62 +152,62 @@
                   <mat-grid-tile *ngIf='levelStat.stats.energy.average == "none"'>None</mat-grid-tile>
                   <mat-grid-tile *ngIf='levelStat.stats.energy.best == "none"'>None</mat-grid-tile>
                 </div>
-          <!-- <mat-grid-tile><b>Nombre de blocs utilisés</b></mat-grid-tile>
+                <!-- <mat-grid-tile><b>Nombre de blocs utilisés</b></mat-grid-tile>
                   <mat-grid-tile>12 &nbsp;<i> (lalos_b)</i></mat-grid-tile>
                   <mat-grid-tile>11</mat-grid-tile>
                   <mat-grid-tile>8 &nbsp;<i> (mounj_a) </i></mat-grid-tile> -->
-          </mat-grid-list>
-          </mat-expansion-panel>
-</div>
+              </mat-grid-list>
+            </mat-expansion-panel>
+          </div>
 
-</mat-accordion>
-</mat-card>
-</mat-tab>
-
-<mat-tab>
-  <ng-template mat-tab-label>
-    <mat-icon>insert_chart_outlined</mat-icon>
-    Statistiques globales
-  </ng-template>
-
-  <mat-grid-list cols="3" rowHeight="200px">
-    <mat-grid-tile>
-      <mat-card *ngIf='nbStudent'>
-        <b style='font-size:45px'>{{nbStudent}}</b>
-        <mat-icon style='text-align:center;font-size:64px'>person</mat-icon>
-        <br>Nombre d'éleves en charge
-
+        </mat-accordion>
       </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-card *ngIf='nbGames'>
-        <b style='font-size:45px'>{{nbGames}}</b>
-        <mat-icon style='text-align:center;font-size:64px'>videogame_asset</mat-icon>
-        <br>Nombre de parties jouées
-      </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-card *ngIf='nbLevels'>
-        <b style='font-size:45px'>{{nbLevels}}</b>
-        <mat-icon style='text-align:center;font-size:64px'>games</mat-icon>
-        <br>Nombre de niveaux disponibles
+    </mat-tab>
 
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>insert_chart_outlined</mat-icon>
+        Statistiques globales
+      </ng-template>
 
-  <mat-grid-list cols="2" rowHeight="1:1">
-    <mat-grid-tile>
-      <mat-card>
-        <div [chart]="pieChart"></div>
-      </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-card>
-        <div [chart]="barChart"></div>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-</mat-tab>
-</mat-tab-group>
+      <mat-grid-list cols="3" rowHeight="200px">
+        <mat-grid-tile>
+          <mat-card *ngIf='nbStudent'>
+            <b style='font-size:45px'>{{nbStudent}}</b>
+            <mat-icon style='text-align:center;font-size:64px'>person</mat-icon>
+            <br>Nombre d'éleves en charge
+
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card *ngIf='nbGames'>
+            <b style='font-size:45px'>{{nbGames}}</b>
+            <mat-icon style='text-align:center;font-size:64px'>videogame_asset</mat-icon>
+            <br>Nombre de parties jouées
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card *ngIf='nbLevels'>
+            <b style='font-size:45px'>{{nbLevels}}</b>
+            <mat-icon style='text-align:center;font-size:64px'>games</mat-icon>
+            <br>Nombre de niveaux disponibles
+
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols="2" rowHeight="1:1">
+        <mat-grid-tile>
+          <mat-card>
+            <div [chart]="pieChart"></div>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card>
+            <div [chart]="barChart"></div>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-tab>
+  </mat-tab-group>
 </div>
