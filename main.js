@@ -21,7 +21,7 @@ function createWindow() {
         y: 0,
         width: size.width,
         height: size.height,
-        icon: path.join(__dirname, 'src/assets/web/logo-pensalgo.png')
+        icon: path.join(__dirname, 'src/assets/web/logo-gpe.png')
     });
     if (serve) {
         require('electron-reload')(__dirname, {

@@ -20,7 +20,12 @@ export class AddStudentComponent implements OnInit {
     private _api: TeacherRequestService) {
 
     this.addStudentFormGroup = this._fb.group({
-      email: ['', [Validators.email, Validators.required]],
+      firstname: ['', Validators.compose([
+        Validators.required
+      ])],
+      name: ['', Validators.compose([
+        Validators.required
+      ])],
     });
   }
 
