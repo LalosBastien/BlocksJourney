@@ -1,2 +1,7 @@
 .idea
 node_modules
+.yarnclean
+yarn-error.log
+yarn.lock
+.vscode/launch.json
+package-lock.json
