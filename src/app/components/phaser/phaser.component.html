@@ -62,5 +62,9 @@
     <div id="actions" *ngIf="!showLevelObj && !showLevelEnd">
         <button (click)="runAlgo()" id="startGameBtn" mat-raised-button color="primary">Lancer</button>
         <button (click)="stopAlgo()" id="stopGameBtn" mat-raised-button color="warn">Arrêter</button>
+        <br>
+        <button (click)="muteSound()" id="muteGameBtn" mat-raised-button color="default"><mat-icon class="mat-icon material-icons">volume_off</mat-icon></button>
+        <button (click)="volumeUp()" id="volUpGameBtn" mat-raised-button color="default"><mat-icon class="mat-icon material-icons">volume_up</mat-icon></button>
+        <button (click)="volumeDown()" id="volDownGameBtn" mat-raised-button color="default"><mat-icon class="mat-icon material-icons">volume_down</mat-icon></button>
     </div>
 </div>

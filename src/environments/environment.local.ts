@@ -1,5 +1,5 @@
 export const CONF_LOCAL = {
   production: false,
   environment: 'LOCAL',
-  apiUrl: 'https://localhost:3000'
+  apiUrl: 'http://localhost:3000'
 };

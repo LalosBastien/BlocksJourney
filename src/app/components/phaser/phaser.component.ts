@@ -17,6 +17,7 @@ import {
 
 import Ladder from './ladder';
 import Switch from './switch';
+
 @Component({
     selector: 'app-phaser',
     templateUrl: './phaser.component.html',
@@ -35,7 +36,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     coins: any;
     message: any;
     coinCountText: any;
-    coinCount: any;
+    timerText: any;
     bg: any;
     json: any;
     meta: any;
@@ -88,9 +89,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     showLevelObj: boolean;
     ngOnInit() {
         this.detector = { rightHole: false, leftHole: false };
-        this.runAlgo = this.runAlgo.bind(this);
         this.initAssets();
-        // this.data = json;
         this.meta = this.data.level;
         this.objectifs = this.data.objectifs;
         this.showLevelObj = true;
@@ -98,7 +97,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
-        this.coinCount = 0;
         this.energyTotal = this.data.player.initialEnergy;
         this.energyLevel = this.energyTotal;
         this.energy = {
@@ -106,8 +104,12 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             fill: '#c79a00'
         };
         this.coinCountText = {
-            text: this.coinCount,
+            text: 0,
             fill: '#ffcd02'
+        };
+        this.timerText = {
+            text: 0,
+            fill: 'white'
         };
         this.message = {
             status: 'pending',
@@ -142,10 +144,19 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     preload() {
         this.game.load.tilemap('level', null, this.json.level, Phaser.Tilemap.TILED_JSON);
 
+        // Load all characters from JSON
         this.json.level.tilesets.forEach(element => {
             this.game.load.image(element.name, 'assets/game/tiles/' + element.image);
         });
 
+        // Load audio
+        this.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bensound-cute.wav'));
+        this.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'sunny.wav'));
+        this.game.load.audio('coin', 'assets/game/audio/coin.wav');
+        this.game.load.audio('winner', 'assets/game/audio/weeee.wav');
+        this.game.load.audio('looser', 'assets/game/audio/game_over.wav');
+
+        // Load fixed objects
         this.game.load.image('bg_clouds', 'assets/game/bg_clouds.png');
         this.game.load.image('bg_ground', 'assets/game/bg_ground.png');
         this.game.load.image('grid', 'assets/game/grid-cell-80.png');
@@ -157,6 +168,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.game.load.image('coinIco', 'assets/game/sprites/coinIco.png');
         this.game.load.image('energyIco', 'assets/game/sprites/energy.png');
 
+        // Load goal & player
         this.game.load.spritesheet('star', this.json.goal.path, 16, 16);
         this.json.sprites.forEach(element => {
             this.game.load.spritesheet(
@@ -166,18 +178,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 element.spriteHeight
             );
         });
-
         this.game.load.spritesheet('player',
             this.json.player.path,
             this.json.player.spriteWidth,
             this.json.player.spriteHeight
         );
-
-        this.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bensound-cute.wav'));
-        this.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'sunny.wav'));
-        this.game.load.audio('coin', 'assets/game/audio/coin.wav');
-        this.game.load.audio('winner', 'assets/game/audio/weeee.wav');
-        this.game.load.audio('looser', 'assets/game/audio/game_over.wav');
     }
 
     create() {
@@ -185,36 +190,39 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.steps = 0;
         this.component.started = false;
 
+        // World
         this.component.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.physics.arcade.gravity.y = this.json.physics.gravity;
         this.component.game.stage.backgroundColor = '#fafafa';
         this.component.bgClouds = this.game.add.tileSprite(0, 0, 9000, this.component.height, 'bg_clouds');
         this.component.bgGround = this.game.add.tileSprite(0, 0, 9000, this.component.height, 'bg_ground');
 
-        this.component.collisionEnabled = true;
+        // Audio
+        this.component.bgSound = this.game.add.audio('bg_sounds');
+        this.component.algoSound = this.game.add.audio('algo_sounds');
+        this.component.winSound = this.game.add.audio('winner');
+        this.component.looseSound = this.game.add.audio('looser');
+        this.component.coinSound = this.game.add.audio('coin');
+        this.component.bgSound.play();
 
+        // Map
+        this.component.collisionEnabled = true;
         this.component.bgGround.fixedToCamera = true;
         this.component.map = this.game.add.tilemap('level');
-
         this.json.level.tilesets.forEach(element => {
             this.component.map.addTilesetImage(element.name);
         });
-
         this.component.map.setCollisionByExclusion([13, 14, 15, 16, 17, 46, 47, 48, 49, 50, 51]);
-
         this.component.layer = this.component.map.createLayer(this.json.level.layers[0].name);
         this.component.layer.resizeWorld();
 
         //  Only for debug
         this.component.layer.debug = false;
 
-        this.game.physics.arcade.gravity.y = this.json.physics.gravity;
+        // GUI
         this.coinCountText = this.game.add.text(32, 50, '', { fill: 'white' });
-
-        this.ladders = [];
-        this.component.ladders = this.json.ladders ? this.json.ladders.map(ladder => new Ladder(ladder, this.game)) : [];
-
+        this.timerText = this.game.add.text(32, 50, '', { fill: 'white' });
         this.energy = this.game.add.text(10, 10, '', { fill: '#c79a00' });
-
         this.component.menuBar = this.game.add.bitmapData(this.component.width, 150);
         this.component.formatProgressBar(this.component.menuBar, 0, 0 , this.component.width, 130, '#333');
         this.component.energyBackground = this.game.add.bitmapData(160, 40);
@@ -237,11 +245,16 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.healthBar.anchor.y = 0.5;
         this.component.healthBar.fixedToCamera = true;
 
+
+        // sprites
+        this.ladders = [];
+        this.component.ladders = this.json.ladders ? this.json.ladders.map(ladder => new Ladder(ladder, this.game)) : [];
         this.component.coinImg = this.game.add.sprite(this.component.width - 100, 15, 'coinIco');
         this.component.coinImg.fixedToCamera = true;
         this.energy = this.game.add.text(0, 0, '', {fill: 'white', fontSize: 12});
         this.message = this.game.add.text(0, 0, '', {fill: 'white'});
         this.coinCountText = this.game.add.text(0, 0, '', {fill: 'white'});
+        this.timerText = this.game.add.text(0, 0, '', {fill: 'white'});
 
         this.component.player = this.game.add.sprite(this.json.player.x, this.json.player.y, 'player');
         this.component.target = this.game.add.sprite(this.json.goal.x, this.json.goal.y, 'star');
@@ -256,6 +269,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.component.switches = this.json.switches ? this.json.switches.map(data => new Switch(data, this.component.game)) : [];
 
+        // Properties
         this.game.physics.enable(this.component.monsters, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.component.spikes, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.component.coins, Phaser.Physics.ARCADE);
@@ -310,14 +324,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
         this.game.camera.follow(this.component.player);
         this.game.add.tileSprite(0, 0, 9000, 9000, 'grid');
-
-        this.component.bgSound = this.game.add.audio('bg_sounds');
-        this.component.algoSound = this.game.add.audio('algo_sounds');
-        this.component.winSound = this.game.add.audio('winner');
-        this.component.looseSound = this.game.add.audio('looser');
-        this.component.coinSound = this.game.add.audio('coin');
-        this.component.bgSound.play();
-
     }
 
     formatProgressBar(progressBar, x, y, width, height, fillStyle) {
@@ -340,6 +346,19 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.started = false;
         this.handleEndGame(false, `Perdu : Le personnage n'atteint pas l'objectif`, 0);
     }
+
+    muteSound() {
+        this.game.sound.mute = !this.game.sound.mute;
+    }
+
+    volumeUp() {
+        this.game.sound.volume += 0.1;
+    }
+
+    volumeDown() {
+        this.game.sound.volume -= 0.1;
+    }
+
     replaceCoins() {
         this.coins.map((coin) => {
             coin.revive();
@@ -436,6 +455,16 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     update() {
+        // Timer
+        if (this.component.started) {
+            console.log((Date.now() - this.component.timerStart) / 1000);
+            this.timerText.text = (Date.now() - this.component.timerStart) / 1000;
+            this.timerText.fill = this.component.timerText.fill;
+            this.timerText.x = this.game.camera.x + this.component.width - 500;
+            this.timerText.y = this.game.camera.y + 11;
+        }
+
+        // Energy bar
         this.energy.text = this.component.energyLevel;
         const energyLoose = 160 * (this.component.energyLevel / this.component.energyTotal);
         if (energyLoose < 0 && this.component.started) {
@@ -447,23 +476,32 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.energy.x = this.game.camera.x + this.component.width / 7.5;
         this.energy.y = this.game.camera.y + this.component.height / 24;
 
+        // Coin counter
         this.coinCountText.text = 'x' + this.component.coinCount;
         this.coinCountText.fill = this.component.coinCountText.fill;
         this.coinCountText.x = this.game.camera.x + this.component.width - 70;
         this.coinCountText.y = this.game.camera.y + 11;
 
+        // Hole checker
         const { x: posX, y: posY } = this.component.player.body.position;
-        this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30, posY + 100) && !this.component.checkBridgesCollision({x: posX + 30, y: posY });
-        this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30, posY + 100) && !this.component.checkBridgesCollision({x: posX + 30, y: posY});
+        this.component.detector.rightHole = !this.component.map.getTileWorldXY(posX + 30, posY + 100)
+        && !this.component.checkBridgesCollision({x: posX + 30, y: posY });
+        this.component.detector.leftHole = !this.component.map.getTileWorldXY(posX - 30, posY + 100)
+        && !this.component.checkBridgesCollision({x: posX + 30, y: posY});
 
         this.component.bgClouds.tilePosition.x -= 1 / 2;
 
         if (!this.component.player || !this.component.player.body) {
-
             return;
         }
+
+        // Switch updater
+        this.component.switches.forEach(theSwitch => theSwitch.update(this.component.player));
+
+        // World collider
         this.game.physics.arcade.collide(this.component.player, this.component.layer, () => { }, () => this.component.collisionEnabled);
 
+        // Monster collider
         this.component.monsters.forEach(monster => {
             this.component.monsterMove(monster);
             this.game.physics.arcade.collide(monster, this.component.layer);
@@ -474,27 +512,26 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
             }, () => true, this);
         });
 
+        // Spike collider
         this.component.spikes.forEach(spike => {
             this.game.physics.arcade.collide(this.component.player, spike, () => {
-                console.log('collide with trap');
                 const time = Date.now() - this.timerStart;
                 this.component.handleEndGame(false, 'Perdu: tué par un piège', time);
                 this.component.started = false;
             }, () => true, this);
         });
 
+
+        // Coin collider
         this.component.coins.forEach(coin => {
             this.game.physics.arcade.collide(this.component.player, coin, () => {
-                console.log('collide with coin');
                 coin.kill();
                 this.component.coinSound.play();
                 ++this.component.coinCount;
             }, () => true, this);
         });
 
-
-        this.component.switches.forEach(theSwitch => theSwitch.update(this.component.player))
-
+        // Goal collider
         this.game.physics.arcade.collide(this.component.player, this.component.target, () => {
             if (this.component.started) {
                 const time = Date.now() - this.component.timerStart;
@@ -517,10 +554,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     synchronizeBlockly() {
-        // Handle actions here
         if (this.isPlayerRunning || this.onLadder) {
+            // handle player moves
             this.handleMove();
         } else if (this.started) {
+            // Detect algorithm end || Game over
             if (!this.blockly.interpreter.step()) {
                 this.blockly.interpreter = null;
                 this.started = false;
@@ -548,8 +586,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         const yDirection = this.yTarget > approximateY; // true right, false left
         const playerReachedXTarget = xDirection ? this.xTarget <= approximateX : this.xTarget >= approximateX;
         const playerReachedYTarget = this.onLadder ? yDirection ? this.yTarget <= approximateY : this.yTarget >= approximateY : false;
-       // console.log('targetX', this.xTarget, 'player:', approximateX);
-       // console.log('targetY', this.yTarget, 'player:', approximateY);
         const speedRun = 100;
         const speedJump = 75;
         const speedLadder = 80;
@@ -638,6 +674,17 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.xTarget = this.player.body.position.x + sign * 80;
     }
 
+    async up() {
+        this.ladders.forEach(ladder => {
+            if (ladder.checkCollision(this.player)) {
+                this.onLadder = true;
+                this.yTarget = ladder.y - this.player.body.height;
+                this.collisionEnabled = false;
+                this.player.animations.play('ladder');
+            }
+        });
+    }
+
     rightHole() {
         console.log('Right gunna return ', this.detector.rightHole);
         this.energyLevel -= 25;
@@ -648,17 +695,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         console.log('Left gunna return ', this.detector.leftHole);
         this.energyLevel -= 25;
         return this.blockly.interpreter.createPrimitive(this.detector.leftHole);
-    }
-
-    async up() {
-        this.ladders.forEach(ladder => {
-            if (ladder.checkCollision(this.player)) {
-                this.onLadder = true;
-                this.yTarget = ladder.y - this.player.body.height;
-                this.collisionEnabled = false;
-                this.player.animations.play('ladder');
-            }
-        });
     }
 
     checkLadder() {
@@ -680,10 +716,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                 this.player.animations.play('ladder');
             }
         });
-    }
-
-    async down() {
-        // TODO: implement method
     }
 
     async pick() {
@@ -715,7 +747,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         interpreter.setProperty(scope, 'checkLadder', interpreter.createNativeFunction(this.checkLadder.bind(this)));
         interpreter.setProperty(scope, 'useLadder', interpreter.createNativeFunction(this.useLadder.bind(this)));
         interpreter.setProperty(scope, 'up', interpreter.createNativeFunction(this.up.bind(this)));
-        interpreter.setProperty(scope, 'down', interpreter.createNativeFunction(this.down.bind(this)));
         interpreter.setProperty(scope, 'pick', interpreter.createNativeFunction(this.pick.bind(this)));
         interpreter.setProperty(scope, 'interact', interpreter.createNativeFunction(this.interact.bind(this)));
         interpreter.setProperty(scope, 'highlightBlock', interpreter.createNativeFunction(this.highlightBlock.bind(this)));
