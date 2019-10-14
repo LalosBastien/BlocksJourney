@@ -65,18 +65,22 @@ export class PupilAdminComponent implements OnInit {
     this.students._updateChangeSubscription();
   }
 
-  async renewPassword(student: { id: number; password: any; }) {
+  async renewPassword(students: { id: number; password: any; }[]) {
     try {
-      const response = await this._api.renewStudentPassword(student.id);
+      const response = await this._api.renewStudentPassword(students.map(elem => elem.id));
       if (!response || response.error) {
         throw response.error;
       } else {
-        student.password = response.password;
-        console.log(student);
+        students = response;
+        console.log(students);
       }
     } catch (error) {
       this.onErrorTriggered.next(error);
     }
+  }
+
+  async renewAllStudents() {
+    this.renewPassword(this.students.data);
   }
 
   async createStudents() {

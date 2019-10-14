@@ -388,7 +388,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.handleEndGameSound(win);
         this.closeBridges();
         this.steps = 0;
-        this.coinCount = 0;
+        this.coins = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
         this.replaceMonsters();
@@ -398,7 +398,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.stars = 0;
         if (win) {
             this.message.data = message.data;
-            let { stars, objComplete } = this.checkObjCompletion(message.data);
+            const { stars, objComplete } = this.checkObjCompletion(message.data);
             this.message.objComplete = objComplete;
             this.message.stars = stars;
         }
