@@ -19,13 +19,13 @@
 
   <ng-container matColumnDef="firstname">
     <mat-header-cell *matHeaderCellDef> Firstname </mat-header-cell>
-    <mat-cell *matCellDef="let element"> 
-        <ng-template [ngIf]="!element.toCreate" [ngIfElse]="inputName">
-            {{element.nom}}
-          </ng-template>
-          <ng-template #inputName>
-            <input matInput [(ngModel)]="element.prenom" required>
-          </ng-template>
+    <mat-cell *matCellDef="let element">
+      <ng-template [ngIf]="!element.toCreate" [ngIfElse]="inputName">
+        {{element.nom}}
+      </ng-template>
+      <ng-template #inputName>
+        <input matInput [(ngModel)]="element.prenom" required>
+      </ng-template>
     </mat-cell>
   </ng-container>
 
@@ -38,7 +38,8 @@
     <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
     <mat-cell *matCellDef="let element; let i = index">
       <ng-template [ngIf]="!element.toCreate" [ngIfElse]="cancelAction">
-        <button mat-icon-button aria-label="renew student" matTooltip="reset password" (click)="renewPassword(element)">
+        <button mat-icon-button aria-label="renew student" matTooltip="reset password"
+          (click)="renewPassword([element])">
           <mat-icon>autorenew</mat-icon>
         </button>
         <button mat-icon-button aria-label="delete student" matTooltip="delete student">
@@ -64,6 +65,9 @@
       </button>
     </ng-container>
     <ng-container>
+      <button mat-raised-button color="secondary" (click)="renewAllStudents()">
+        <mat-icon>autorenew</mat-icon>&nbsp;<b>Renew all</b>
+      </button>
       <button mat-raised-button color="accent" (click)="createStudents()">
         <mat-icon>save</mat-icon>&nbsp;<b>Save</b>
       </button>

@@ -14,10 +14,9 @@ import {
 import { CookieService } from 'ngx-cookie';
 
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { map, filter, catchError, tap } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 import { AppConfig } from '../../app.config';
 import { LocalStorage } from 'ngx-store';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class RequestService implements OnInit {

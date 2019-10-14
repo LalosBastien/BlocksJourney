@@ -130,7 +130,6 @@ export class TeacherPanelComponent implements OnInit {
           this.levelStats.push(element);
           console.log(element);
         });
-
         return this.levelStats;
       }
     } catch (error) {

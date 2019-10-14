@@ -53,7 +53,7 @@ export class TeacherRequestService extends RequestService {
         return this._postRequest('/prof/students', students);
     }
 
-    renewStudentPassword(studentId: number): Promise<any> {
-        return this._postRequest('/prof/renew/' + studentId, null);
+    renewStudentPassword(studentId: Number[]): Promise<any> {
+        return this._postRequest('/prof/renew/', studentId);
     }
 }
