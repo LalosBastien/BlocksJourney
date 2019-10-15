@@ -33,6 +33,7 @@ export class GameComponent implements OnInit, AfterViewInit {
   json: any;
   name: string;
   description: string;
+  help: string;
   introStarted: boolean;
   ijs: any;
   helperDisplay: boolean;
@@ -63,9 +64,10 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.json = await this.getJSON(lvlId);
     this.json.objectifs = await this.getObjectifs(this.json.level.id);
     this.name = this.json.level.name;
+    this.help = atob(this.json.level.help);
     this.description = this.json.levelInfo.description;
     this.id = parseInt(this.route.snapshot.paramMap.get('levelID'), 10);
-    this.helperDisplay = true;
+    this.helperDisplay = false;
   }
 
   toggleHelperDisplay() {
@@ -88,19 +90,18 @@ export class GameComponent implements OnInit, AfterViewInit {
       prevLabel: '&larr; Précédent',
       steps: [
         {
-          element: '#game-header',
-          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
-          position: 'bottom'
-        },
-        {
-          element: '#blocklyDiv',
-          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
+          intro: 'Bienvenue sur Blocks Journey !',
           position: 'right'
         },
         {
           element: '#canvasHolder',
-          intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Ton but : ' +
-            'atteindre l\'étoile le plus rapidement possible.',
+          intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Contrôle le personnage pour ' +
+              'atteindre l\'étoile le plus rapidement possible.',
+          position: 'right'
+        },
+        {
+          element: '#blocklyDiv',
+          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
           position: 'right'
         },
         {
@@ -109,8 +110,23 @@ export class GameComponent implements OnInit, AfterViewInit {
           position: 'right'
         },
         {
-          element: document.getElementsByClassName('blocklyTreeRow')[2],
-          intro: 'Pour répéter une action, comme un déplacement, utilise un bloc de boucle.',
+          element: document.getElementsByClassName('blocklyBlockCanvas')[0],
+          intro: 'Différentes actions sont à ta disposition. Elles te permettent de te déplacer d\'une case dans la direction souhaitée.',
+          position: 'right'
+        },
+        {
+          element: '#help-button',
+          intro: 'Ce bouton te permet d\'afficher les notions algoritmiques abordées par les differents niveaux.',
+          position: 'right'
+        },
+        {
+          element: '#canvas-objectifs',
+          intro: 'Tu retrouvera ici le détail des objectifs à accomplir au cours du niveau.',
+          position: 'right'
+        },
+        {
+          element: '#startLevelBtn',
+          intro: 'En appuyant sur ce bouton, tu lance ton niveau !',
           position: 'right'
         },
         {
@@ -131,7 +147,19 @@ export class GameComponent implements OnInit, AfterViewInit {
       ]
     }).start();
 
-    console.log(this.ijs)
+    this.ijs.onafterchange( (targetElement) => {
+      console.log("OnChange !")
+      if (this.ijs._currentStep === 3) {
+        const evt = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+        // If cancelled, don't dispatch our event
+        targetElement.dispatchEvent(evt);
+      }
+    });
+
 
 
   }
