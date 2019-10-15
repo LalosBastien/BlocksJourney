@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component, OnDestroy,
   OnInit
 } from '@angular/core';
@@ -24,7 +25,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   styleUrls: ['./game.component.scss'],
   providers: [LevelRequestService]
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, AfterViewInit {
   error: any;
   onErrorTriggered: BehaviorSubject<any>;
   phaser: PhaserComponent;
@@ -34,11 +35,12 @@ export class GameComponent implements OnInit {
   description: string;
   introStarted: boolean;
   ijs: any;
+  helperDisplay: boolean;
 
 
   constructor(protected _api: LevelRequestService, public _snackBar: MatSnackBar, private route: ActivatedRoute, private _r:Router) {
     this.initIntro = this.initIntro.bind(this);
-    window.addEventListener('blockyLoaded', this.initIntro);
+    //window.addEventListener('blockyLoaded', this.initIntro);
   }
 
 
@@ -47,7 +49,7 @@ export class GameComponent implements OnInit {
       this.navigateToMenu();
   }
 
-  navigateToMenu(){
+  navigateToMenu() {
     this._r.navigate(['/levels']);
   }
   async ngOnInit() {
@@ -57,15 +59,17 @@ export class GameComponent implements OnInit {
         this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
       }
     });
-    let lvlId = this.route.snapshot.paramMap.get('levelID')
+    const lvlId = this.route.snapshot.paramMap.get('levelID');
     this.json = await this.getJSON(lvlId);
-    this.json.objectifs = await this.getObjectifs(this.json.level.id); 
+    this.json.objectifs = await this.getObjectifs(this.json.level.id);
     this.name = this.json.level.name;
     this.description = this.json.levelInfo.description;
     this.id = parseInt(this.route.snapshot.paramMap.get('levelID'), 10);
+    this.helperDisplay = true;
+  }
 
-
-
+  toggleHelperDisplay() {
+    this.helperDisplay = !this.helperDisplay;
   }
 
   initIntro() {
@@ -74,16 +78,27 @@ export class GameComponent implements OnInit {
       return;
     }
     window.removeEventListener('blockyLoaded', this.initIntro);
+
     this.ijs = IntroJs().setOptions({
-      showProgress: true,
+      showProgress: false,
+      scrollToElement: false,
+      showStepNumbers: false,
+      skipLabel: 'Passer',
+      nextLabel: 'Suivant &rarr;',
+      prevLabel: '&larr; Précédent',
       steps: [
+        {
+          element: '#game-header',
+          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
+          position: 'bottom'
+        },
         {
           element: '#blocklyDiv',
           intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
           position: 'right'
         },
         {
-          element: '#gameHolder',
+          element: '#canvasHolder',
           intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Ton but : ' +
             'atteindre l\'étoile le plus rapidement possible.',
           position: 'right'
@@ -115,7 +130,17 @@ export class GameComponent implements OnInit {
         }
       ]
     }).start();
+
+    console.log(this.ijs)
+
+
   }
+
+  ngAfterViewInit() {
+    window.addEventListener('blockyLoaded', this.initIntro);
+    //this.initIntro();
+  }
+
 
   // tslint:disable-next-line:use-life-cycle-interface
   async ngAfterViewChecked() {

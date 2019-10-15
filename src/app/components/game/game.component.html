@@ -1,15 +1,28 @@
 
 
-<div style="width: 100%; height: 100%; background-color: #263238">
+<div id="game-container" style="">
 
   <div id="game-header">
-    <h4 style="padding-top: 5px">{{name}}</h4>
-    <span style="padding-bottom: 5px">{{description}}</span>
+    <h4 style="padding-top: 5px; width: 100%;">{{name}}</h4>
+    <div style="text-align: center; margin: 15px">
+      <button style="display: inline-flex;" mat-icon-button (click)="toggleHelperDisplay()">
+        Aide
+        <mat-icon>{{helperDisplay ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+      </button>
+    </div>
   </div>
 
 <div id="game-component" *ngIf="json && json.objectifs">
+
   <app-blockly [data]=json #blocklyRef></app-blockly>
   <app-phaser [blockly]=blocklyRef [api]="_api" [data]=json  (onNavigate)="navigateTo($event)"></app-phaser>
 </div>
+
+  <div id="game-helper" class="{{helperDisplay ? 'helper-open' : 'helper-close'}}">
+    <div id="game-helper-body">
+
+    </div>
+  </div>
+
 
 </div>
