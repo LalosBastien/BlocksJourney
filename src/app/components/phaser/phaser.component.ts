@@ -98,6 +98,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
+        this.coinCount = 0;
         this.energyTotal = this.data.player.initialEnergy;
         this.energyLevel = this.energyTotal;
         this.energy = {
