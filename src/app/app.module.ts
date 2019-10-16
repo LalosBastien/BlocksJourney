@@ -88,7 +88,6 @@ import { WebStorageModule } from 'ngx-store';
 
 import { CookieModule } from 'ngx-cookie';
 import { MomentModule } from 'angular2-moment';
-import { AddStudentComponent } from './components/teacherPanel/dialog/add-student/add-student.component';
 import { UserRequestService } from './providers/Api/userRequest.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { ProfilComponent } from './components/profil/profil.component';
@@ -112,7 +111,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardComponent,
     LevelMenuComponent,
     TeacherPanelComponent,
-    AddStudentComponent,
     StudentDetailComponent,
     ProfilComponent,
     LevelHistoryComponent,
@@ -120,7 +118,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     PupilAdminComponent
   ],
   entryComponents: [
-    AddStudentComponent
   ],
   imports: [
     BrowserModule,
