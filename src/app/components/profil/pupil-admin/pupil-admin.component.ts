@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TeacherRequestService } from '../../../providers/Api/teacherRequest.service';
 import { MatTableDataSource } from '@angular/material';
 import { AuthRequestService } from '../../../providers/Api/authRequest.service';
-import { element } from 'protractor';
+
+declare var jsPDF: any;
 
 @Component({
   selector: 'app-pupil-admin',
@@ -13,12 +14,15 @@ import { element } from 'protractor';
 })
 export class PupilAdminComponent implements OnInit {
 
+  @ViewChild('table') myTable: ElementRef;
   displayedColumns: string[] = ['username', 'name', 'firstname', 'password', 'actions'];
   onErrorTriggered: BehaviorSubject<any>;
   students: MatTableDataSource<any>;
   prof: any;
 
-  constructor(private _api: TeacherRequestService, private _apiAuth: AuthRequestService) {
+
+
+  constructor(private _api: TeacherRequestService) {
   }
 
   ngOnInit() {
@@ -52,15 +56,44 @@ export class PupilAdminComponent implements OnInit {
   addStudent() {
     this.students.data.push({
       login: '',
-      name: '',
-      firstname: '',
+      nom: '',
+      prenom: '',
       password: '',
       toCreate: true
     });
     this.students._updateChangeSubscription();
   }
 
-  cancelAdd(index: number) {
+  printTable() {
+    try {
+      const columns = ['Login', 'Name', 'Firstname', 'Password'];
+      const doc = new jsPDF('p', 'px', 'a4');
+      doc.setFontSize(36);
+      doc.text(120, 24, 'Student list:');
+      doc.autoTable(columns, this.students.data.map((student: any) => {
+        const studentAsRow = [student.login, student.nom, student.prenom, student.password];
+        return studentAsRow;
+      }));
+      doc.save('export.pdf');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async deleteStudent(student: { id: number }, index: number) {
+    try {
+      const response = await this._api.deleteStudent(student.id);
+      if (!response || response.error) {
+        throw response.error;
+      } else {
+        this.removeRow(index);
+      }
+    } catch (error) {
+      this.onErrorTriggered.next(error);
+    }
+  }
+
+  removeRow(index: number) {
     this.students.data.splice(index, 1);
     this.students._updateChangeSubscription();
   }
@@ -71,8 +104,11 @@ export class PupilAdminComponent implements OnInit {
       if (!response || response.error) {
         throw response.error;
       } else {
-        students = response;
-        console.log(students);
+        for (const student of students) {
+          student.password = response.find((s: { id: number; }) => {
+            return s.id === student.id;
+          }).password;
+        }
       }
     } catch (error) {
       this.onErrorTriggered.next(error);
@@ -87,16 +123,16 @@ export class PupilAdminComponent implements OnInit {
     const studentToCreate = this.students.data.filter(student => student.toCreate);
     if (studentToCreate.length > 0) {
       try {
-        const newStudents = await this._api.addStudents({
-          students: studentToCreate.map(function (student) {
+        const response = await this._api.addStudents(
+          studentToCreate.map(function (student) {
             return {
-              name: student.nom,
-              firstname: student.prenom
+              nom: student.nom,
+              prenom: student.prenom
             };
           })
-        });
+        );
         this.students.data = this.students.data.filter(student => !student.toCreate);
-        this.students.data.concat(newStudents);
+        this.students.data = this.students.data.concat(response.students);
         this.students._updateChangeSubscription();
       } catch (error) {
         this.onErrorTriggered.next(error);
