@@ -95,7 +95,7 @@ export class RequestService implements OnInit {
     protected async _deleteRequest(path): Promise<any> {
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
-        return await this.http.get(apiUrl, this.options).pipe(
+        return await this.http.delete(apiUrl, this.options).pipe(
             filter(event => event instanceof Response),
             map((res: Response) => res.json()),
             catchError((e) => this.handleError(e))).toPromise();
