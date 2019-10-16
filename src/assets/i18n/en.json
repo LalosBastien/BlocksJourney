@@ -46,16 +46,31 @@
         "INSTRUCTION": "Be sure to review your personal information before you start on PensAlgo"
       },
       "TEACHER": {
-        "FIRSTNAME": "Enter the Firstname of your pupil",
-        "NAME": "Enter the Name of your pupil"
+        "FIRSTNAME": "Enter the firstname of your pupil",
+        "NAME": "Enter the name of your pupil"
       },
       "PROFILE": {
         "TITLE": "Profile",
         "ROLE_PROF": "Teacher",
         "ROLE_STUDENT": "Pupil",
         "IDENTITY": "Identity",
-        "ADMIN": "Your pupils",
-        "LOGIN": "Username"
+        "LOGIN": "Username",
+        "NAME": "Name",
+        "FIRSTNAME":"Firstname",
+        "ADMIN": {
+          "TITLE": "Your pupils",
+          "FIRSTNAME_INPUT": "Enter your pupil name",
+          "NAME_INPUT": "Enter your pupil firstname",
+          "ACTIONS": {
+            "ADD": "Add",
+            "PRINT": "Print pupil list",
+            "SAVE": "Save new pupils",
+            "RENEW": "Renwe password",
+            "RENEW_ALL": "Renew all passwords",
+            "CANCEL": "Cancel",
+            "DELETE": "Delete"
+          }
+        }
       },
       "MAIN": {
         "ACCOUNT": "My account",

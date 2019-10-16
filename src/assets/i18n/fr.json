@@ -46,20 +46,35 @@
         "INSTRUCTION": "Veillez à bien relire vos informations personnelles avant de vous lancer pour la première sur PensAlgo"
       },
       "TEACHER": {
-        "FIRSTNAME": "Entrer le Prénom de l'élève",
-        "NAME": "Entrer le Nom de l'élève"
+        "FIRSTNAME_INPUT": "Entrer le prénom de l'élève",
+        "NAME_INPUT": "Entrer le nom de l'élève"
       },
       "PROFILE": {
         "TITLE": "Profil",
         "ROLE_PROF": "Enseignant",
         "ROLE_STUDENT": "Élève",
         "IDENTITY": "Identité",
-        "ADMIN": "Vos élèves",
-        "LOGIN": "Identifiant"
+        "LOGIN": "Identifiant",
+        "NAME": "Nom",
+        "FIRSTNAME":"Prénom",
+        "ADMIN": {
+          "TITLE": "Vos élèves",
+          "FIRSTNAME_INPUT": "Entrer le prénom de l'élève",
+          "NAME_INPUT": "Entrer le nom de l'élève",
+          "ACTIONS": {
+            "ADD": "Ajouter",
+            "PRINT": "Imprimer la liste",
+            "SAVE": "Enregistrer les ajouts",
+            "RENEW": "Renouveller le mot de passe",
+            "RENEW_ALL": "Renouveller les mot de passes",
+            "CANCEL": "Annuler",
+            "DELETE": "Supprimer"
+          }
+        }
       },
       "MAIN": {
         "ACCOUNT": "Mon compte",
-        "STATS": "Statistique",
+        "STATS": "Statistiques",
         "PLAY": "Jouer",
         "LOGOUT": "Déconnexion"
       },
