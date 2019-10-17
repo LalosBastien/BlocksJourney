@@ -35,6 +35,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     spikes: any;
     coins: any;
     message: any;
+    coinCount: number;
     coinCountText: any;
     timerText: any;
     bg: any;
@@ -97,6 +98,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.data = this.data.levelInfo;
         this.started = false;
         this.i = 0;
+        this.coinCount = 0;
         this.energyTotal = this.data.player.initialEnergy;
         this.energyLevel = this.energyTotal;
         this.energy = {
@@ -334,6 +336,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     runAlgo() {
+        this.coinCount = 0;
         this.blockly.generateCode(this.bindInterpreter.bind(this));
         this.started = true;
         this.timerStart = Date.now();
@@ -388,7 +391,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.handleEndGameSound(win);
         this.closeBridges();
         this.steps = 0;
-        this.coins = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
         this.replaceMonsters();
