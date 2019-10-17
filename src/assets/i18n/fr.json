@@ -50,7 +50,7 @@
         "NAME_INPUT": "Entrer le nom de l'élève"
       },
       "PROFILE": {
-        "TITLE": "Profil",
+        "TITLE": "Mon profil",
         "ROLE_PROF": "Enseignant",
         "ROLE_STUDENT": "Élève",
         "IDENTITY": "Identité",
@@ -58,15 +58,15 @@
         "NAME": "Nom",
         "FIRSTNAME":"Prénom",
         "ADMIN": {
-          "TITLE": "Vos élèves",
+          "TITLE": "Mes élèves",
           "FIRSTNAME_INPUT": "Entrer le prénom de l'élève",
           "NAME_INPUT": "Entrer le nom de l'élève",
           "ACTIONS": {
             "ADD": "Ajouter",
             "PRINT": "Imprimer la liste",
             "SAVE": "Enregistrer les ajouts",
-            "RENEW": "Renouveller le mot de passe",
-            "RENEW_ALL": "Renouveller les mot de passes",
+            "RENEW": "Renouveler le mot de passe",
+            "RENEW_ALL": "Renouveler les mots de passe",
             "CANCEL": "Annuler",
             "DELETE": "Supprimer"
           }

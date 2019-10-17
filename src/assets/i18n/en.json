@@ -50,7 +50,7 @@
         "NAME": "Enter the name of your pupil"
       },
       "PROFILE": {
-        "TITLE": "Profile",
+        "TITLE": "My profile",
         "ROLE_PROF": "Teacher",
         "ROLE_STUDENT": "Pupil",
         "IDENTITY": "Identity",
@@ -58,7 +58,7 @@
         "NAME": "Name",
         "FIRSTNAME":"Firstname",
         "ADMIN": {
-          "TITLE": "Your pupils",
+          "TITLE": "My pupils",
           "FIRSTNAME_INPUT": "Enter your pupil name",
           "NAME_INPUT": "Enter your pupil firstname",
           "ACTIONS": {

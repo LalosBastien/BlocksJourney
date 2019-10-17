@@ -28,7 +28,7 @@
                             </h6>
                             <div mat-line style="display: flex;
                                 align-items: center;">
-                                <span>- Status:</span>
+                                <span>- Statut:</span>
                                 <mat-icon class="mat-icon-rtl-mirror" [ngStyle]="{'color':statusColor(lvl.status)}">
                                     {{statusIcon(lvl.status)}}
                                 </mat-icon>
@@ -48,7 +48,7 @@
                             <a mat-raised-button color="primary" [routerLink]="['../game', lvl.id]">Jouer</a>
                         </mat-list-item>
                         <button mat-button (click)="toggleExpansion(lvl)">
-                            <span>Résultats</span>
+                            <span>Mes résultats</span>
                             <mat-icon class="mat-icon-rtl-mirror">
                                 {{lvl.isExpended ? 'expand_more' : 'chevron_right'}}
                             </mat-icon>

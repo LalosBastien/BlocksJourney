@@ -1,7 +1,6 @@
-.container {
-  background-color: black !important;
+.container-fluid {
+  //background-color: black !important;
   height: 100%;
-  width: 100%;
   align-items: center;
   justify-content: center;
   background: url(../../../assets/game/game-background.jpg) no-repeat center fixed;
@@ -40,5 +39,10 @@
     left: 50%;
     background-color: indianred;
     color: white;
+  }
+
+  .faded-panel {
+    min-height: 162px;
+    background-color: rgba(255, 255, 255, .8);
   }
 }
