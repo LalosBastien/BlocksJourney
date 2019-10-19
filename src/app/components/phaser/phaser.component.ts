@@ -35,6 +35,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     spikes: any;
     coins: any;
     message: any;
+    coinCount: any;
     coinCountText: any;
     timerText: any;
     bg: any;

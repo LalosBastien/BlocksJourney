@@ -1,0 +1,82 @@
+###############
+# Definitions #
+###############
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - export TAG_VERSION=${CI_COMMIT_REF_NAME}
+  - export PROJECT_NAME=gpe
+  - export REPO=bastienlalos
+
+##############
+#    Jobs    #
+##############
+
+# ========== ONLY FOR TAGS x.x.x =========
+
+# Construct client images
+build-docker:
+  tags: 
+    - gpe-runner
+  stage: build
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker build -t $PROJECT_NAME-client:$TAG_VERSION .
+
+# Push image to registry
+publish:
+  tags: 
+    - gpe-runner
+  stage: build
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker tag $PROJECT_NAME-client:$TAG_VERSION $REPO/$PROJECT_NAME-client:latest
+
+# Build sources
+build-ec2:
+  tags: 
+    - gpe-runner-client
+  stage: build
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - npm install
+    - ng build
+
+# Deploy to swarm
+deploy-docker:
+  tags: 
+    - gpe-runner
+  stage: deploy
+  only:
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker stack deploy -c docker/docker-compose.yml $PROJECT_NAME
+
+# Deploy to ec2
+deploy-ec2:
+  tags: 
+    - gpe-runner-client
+  stage: deploy
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - sudo cp -r dist/* /var/www/
+    - sudo service nginx reload
