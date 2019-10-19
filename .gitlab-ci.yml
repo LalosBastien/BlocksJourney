@@ -43,19 +43,6 @@ publish:
   script:
     - docker tag $PROJECT_NAME-client:$TAG_VERSION $REPO/$PROJECT_NAME-client:latest
 
-# Build sources
-build-ec2:
-  tags: 
-    - gpe-runner-client
-  stage: build
-  only:
-    - /^version-([0-9]+\.){2}[0-9]+$/
-  except:
-    - branches
-  script:
-    - npm install
-    - ng build
-
 # Deploy to swarm
 deploy-docker:
   tags: 
@@ -78,5 +65,7 @@ deploy-ec2:
   except:
     - branches
   script:
+    - npm install
+    - ng build
     - sudo cp -r dist/* /var/www/
     - sudo service nginx reload
