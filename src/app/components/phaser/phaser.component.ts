@@ -155,7 +155,11 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // Load audio
-
+        this.component.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bensound-cute.mp3'));
+        this.component.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'sunny.wav'));
+        this.component.game.load.audio('coin', 'assets/game/audio/coin.wav');
+        this.component.game.load.audio('winner', 'assets/game/audio/weeee.wav');
+        this.component.game.load.audio('looser', 'assets/game/audio/game_over.wav');
 
         // Load fixed objects
         this.game.load.image('bg_clouds', 'assets/game/bg_clouds.png');
@@ -191,13 +195,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.component.steps = 0;
         this.component.started = false;
 
-        this.component.game.load.audio('bg_sounds', 'assets/game/audio/' + (this.json.audio.bgSound || 'bensound-cute.wav'));
-        this.component.game.load.audio('algo_sounds', 'assets/game/audio/' + (this.json.audio.algoSound || 'sunny.wav'));
-        this.component.game.load.audio('coin', 'assets/game/audio/coin.wav');
-        this.component.game.load.audio('winner', 'assets/game/audio/weeee.wav');
-        this.component.game.load.audio('looser', 'assets/game/audio/game_over.wav');
 
-        this.component.game.load.start();
+
+        //this.component.game.load.start();
 
         // World
         this.component.game.physics.startSystem(Phaser.Physics.ARCADE);

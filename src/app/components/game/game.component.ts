@@ -64,7 +64,7 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.json = await this.getJSON(lvlId);
     this.json.objectifs = await this.getObjectifs(this.json.level.id);
     this.name = this.json.level.name;
-    this.help = atob(this.json.level.help);
+    this.help = this.json.level.help;
     this.description = this.json.levelInfo.description;
     this.id = parseInt(this.route.snapshot.paramMap.get('levelID'), 10);
     this.helperDisplay = false;
@@ -110,17 +110,12 @@ export class GameComponent implements OnInit, AfterViewInit {
           position: 'right'
         },
         {
-          element: document.getElementsByClassName('blocklyBlockCanvas')[0],
-          intro: 'Différentes actions sont à ta disposition. Elles te permettent de te déplacer d\'une case dans la direction souhaitée.',
-          position: 'right'
-        },
-        {
           element: '#help-button',
           intro: 'Ce bouton te permet d\'afficher les notions algoritmiques abordées par les differents niveaux.',
           position: 'right'
         },
         {
-          element: '#canvas-objectifs',
+          element: '.obj-box',
           intro: 'Tu retrouvera ici le détail des objectifs à accomplir au cours du niveau.',
           position: 'right'
         },
