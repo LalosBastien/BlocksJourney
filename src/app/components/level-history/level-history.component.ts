@@ -29,7 +29,6 @@ export class LevelHistoryComponent implements OnInit {
 
     ngOnInit(): void {
         this.filtered = true;
-        this.displaySuccess();
         this.historyDataSource.filterPredicate = function (data, f): boolean {
             return !f || data.status === f;
         };
@@ -39,11 +38,5 @@ export class LevelHistoryComponent implements OnInit {
     ngAfterViewInit() {
         this.historyDataSource.sort = this.sort;
         this.historyDataSource.paginator = this.paginator;
-    }
-
-    displaySuccess() {
-        console.log(this.filtered);
-        this.filtered = !this.filtered;
-        this.historyDataSource.filter = this.filtered ? '' : 'success';
     }
 }
