@@ -33,6 +33,7 @@
         "STEP4": "Confirmation",
         "BACK": "Back to menu",
         "CONFIRM": "Confirm",
+        "MAJ": "start with a capital letter",
         "USERNAME": "Enter an account name",
         "PASSWORD": "Enter a password",
         "C_PASSWORD": "Confirm your password",

@@ -3,7 +3,7 @@
   <h2>{{ 'PAGES.PROFILE.TITLE' | translate }}</h2>
   <mat-list>
     <mat-list-item *ngIf="user.role.accessLevel == 2">
-      <mat-icon>info</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.LOGIN' | translate }}:&nbsp;</b><i style="color:gray;">#{{ user.profId }}</i>
+      <mat-icon>info</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.LOGIN' | translate }}:&nbsp;</b><i style="color:gray;">{{ user.profId }}</i>
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>

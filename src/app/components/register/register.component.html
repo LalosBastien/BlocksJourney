@@ -20,6 +20,7 @@
           <input matInput placeholder="{{ 'PAGES.REGISTER.USERNAME' | translate }}" formControlName="nameCtrl" required>
           <mat-icon matSuffix>account_circle</mat-icon>
           <mat-error>{{ 'PAGES.REGISTER.USERNAME_ERR' | translate }}</mat-error>
+          <mat-hint align="end">min. 8 - {{ 'PAGES.REGISTER.MAJ' | translate }}</mat-hint>
         </mat-form-field>
         <div>
           <mat-form-field class="col-md-6">
@@ -27,6 +28,7 @@
               [type]="hide ? 'password' : 'text'" type="password" required>
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
             <mat-error>{{ 'PAGES.REGISTER.PASSWORD_ERR' | translate }}</mat-error>
+            <mat-hint align="end">min. 8</mat-hint>
           </mat-form-field>
           <mat-form-field class="col-md-6">
             <input matInput placeholder="{{ 'PAGES.REGISTER.C_PASSWORD' | translate }}"
@@ -70,11 +72,13 @@
           <input matInput placeholder="{{ 'PAGES.REGISTER.FIRSTNAME' | translate }}" formControlName="firstnameCtrl"
             required>
           <mat-icon matSuffix>face</mat-icon>
+          <mat-hint align="end">{{ 'PAGES.REGISTER.MAJ' | translate }}</mat-hint>
         </mat-form-field>
         <mat-form-field class="col-md-6">
           <input matInput placeholder="{{ 'PAGES.REGISTER.LASTNAME' | translate }}" formControlName="lastnameCtrl"
             required>
           <mat-icon matSuffix>face</mat-icon>
+          <mat-hint align="end">{{ 'PAGES.REGISTER.MAJ' | translate }}</mat-hint>
         </mat-form-field>
       </div>
     </app-form-step>
