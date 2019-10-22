@@ -41,6 +41,7 @@ publish:
   except:
     - branches
   script:
+    - docker login docker.io
     - docker tag $PROJECT_NAME-client:$TAG_VERSION $REPO/$PROJECT_NAME-client:latest
     - docker push $REPO/$PROJECT_NAME-client:latest
 
