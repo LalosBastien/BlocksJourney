@@ -70,5 +70,5 @@ deploy-ec2:
   script:
     - npm install
     - ng build
-    - sudo cp -r dist/* /var/www/
+    - sudo cp -r dist/* /var/www/html/
     - sudo service nginx reload
