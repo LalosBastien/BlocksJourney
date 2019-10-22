@@ -1,0 +1,24 @@
+version: "3.6"
+
+services:
+  client:
+    image: bastienlalos/gpe-client:latest
+    environment:
+      - ENV=PROD
+      - API_HOST=api
+    ports:
+      - "4000:80"
+    networks:
+      - gpe-net
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+
+networks:
+  gpe-net:
+    external: true
+ 

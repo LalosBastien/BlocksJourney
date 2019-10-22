@@ -2,11 +2,11 @@ import { CONF_LOCAL } from '../environments/environment.local';
 import { CONF_DEV } from '../environments/environment.dev';
 import { CONF_PROD } from '../environments/environment.prod';
 
-const ENV = 'local';
+const ENV = process.env.ENV || 'PROD';
 
-const LOCAL: String = 'local';
-const DEV: String = 'dev';
-const PROD: String = 'prod';
+const LOCAL: String = 'LOCAL';
+const DEV: String = 'DEV';
+const PROD: String = 'PROD';
 
 let conf: any;
 

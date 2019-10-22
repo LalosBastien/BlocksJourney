@@ -34,14 +34,14 @@ export class RequestService implements OnInit {
     ngOnInit(): void {
         this.setNewHeaders();
     }
-    private clearStorage(){
+    private clearStorage() {
         this.currentToken = null;
         this.currentUser = null;
     }
     private handleError(error: any): Promise<any> {
-        let status = error.status;
+        const status = error.status;
         error = error.json();
-        if(status == 403 || status == 500){
+        if (status === 403 || status === 500) {
             this.clearStorage();
             this._router.navigate(['']);
         }
@@ -67,7 +67,6 @@ export class RequestService implements OnInit {
     }
 
     protected async _postRequest(path, data): Promise<any> {
-        console.log('==> [POST]: ' + path + ' <==');
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.post(apiUrl, data, this.options).pipe(
@@ -77,7 +76,6 @@ export class RequestService implements OnInit {
     }
 
     protected async _putRequest(path, data): Promise<any> {
-        console.log('==> [PUT]: ' + path + ' <==');
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.put(apiUrl, data, this.options).pipe(
@@ -87,10 +85,8 @@ export class RequestService implements OnInit {
     }
 
     protected async _getRequest(path): Promise<any> {
-        console.log('==> [GET]: ' + path + ' <==');
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
-        this.http.get(apiUrl,this.options).subscribe(e => console.log(e));
         return await this.http.get(apiUrl, this.options).pipe(
             filter(event => event instanceof Response),
             map((res: Response) => res.json()),
@@ -98,7 +94,6 @@ export class RequestService implements OnInit {
     }
 
     protected async _deleteRequest(path): Promise<any> {
-        console.log('==> [DELETE]: ' + path + ' <==');
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.get(apiUrl, this.options).pipe(

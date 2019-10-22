@@ -18,9 +18,9 @@ import { UserRequestService } from '../Api/userRequest.service';
 export class UserStorageService {
     @LocalStorage('access-token') token;
     @LocalStorage('currentUser') user;
-    constructor(private _userAPI:UserRequestService, private _localStorageService:LocalStorageService) {
+    constructor(private _userAPI: UserRequestService, private _localStorageService: LocalStorageService) {
     }
-    
+
     getToken() {
         return this.token;
     }
@@ -30,11 +30,8 @@ export class UserStorageService {
         this.setUserData();
     }
     async setUserData(){
-        console.log("TOKEN", this.token)
-        let u = await this._userAPI.getUser(this.token.idUtilisateur);
-        console.log("SETING STORAGE : ", u)
+        const u = await this._userAPI.getUser(this.token.idUtilisateur);
         this._localStorageService.set('currentUser', u);
-        console.log("SET DONE LETS CHECK : ", this.user)
     }
     clearStore() {
         this.token = null;

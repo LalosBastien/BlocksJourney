@@ -11,7 +11,7 @@ import { AddStudentComponent } from './dialog/add-student/add-student.component'
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-teacherPanel',
+  selector: 'app-teacher-panel',
   templateUrl: './teacherPanel.component.html',
   styleUrls: ['./teacherPanel.component.scss'],
   providers: [TeacherRequestService]
@@ -61,13 +61,13 @@ export class TeacherPanelComponent implements OnInit {
     console.log(globalProgress);
     this.pieChart = this._chartBuilder.generatePieChart('Éleves ayant terminé le jeu', 450, 450, [{
       name: 'Terminé',
-      y: Math.round((globalProgress.complete).toFixed(2)*100)
-    },{
+      y: Math.round((globalProgress.complete).toFixed(2) * 100)
+    }, {
       name: 'En cours',
-      y: Math.round((globalProgress.inProgress).toFixed(2)*100)
+      y: Math.round((globalProgress.inProgress).toFixed(2) * 100)
     }, {
       name: 'Pas commencé',
-      y: Math.round((globalProgress.notStarted).toFixed(2)*100)
+      y: Math.round((globalProgress.notStarted).toFixed(2) * 100)
     }]);
   }
   getStackChart(progressByLevel) {
@@ -144,16 +144,18 @@ export class TeacherPanelComponent implements OnInit {
     });
   }
   openDialogAddStudent() {
-    let d = this._dialog.open(AddStudentComponent, {
-      width: "350",
-      height: "250"
+    const d = this._dialog.open(AddStudentComponent, {
+      width: '350',
+      height: '250'
     });
     d.afterClosed().subscribe((res) => {
-      if (res.message) this._snackBar.open(res.messsage, null, { duration: 2000 })
-    })
+      if (res.message) {
+        this._snackBar.open(res.messsage, null, { duration: 2000 });
+      }
+    });
   }
 
-  moveToDetail(id) {
+  moveToDetail(id: number) {
     this._router.navigate(['teacherPanel/student/' + id]);
   }
 

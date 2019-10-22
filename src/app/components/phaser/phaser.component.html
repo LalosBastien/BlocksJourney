@@ -1,5 +1,70 @@
-<div id="gameHolder" style="padding-left: 5px; height: 100%; display: table-cell; vertical-align: middle;" >
-    <div id="canvasHolder"></div>
-    <button (click)="runAlgo()" id="startGameBtn" style="margin-top: 10px; width: 30%" mat-raised-button color="primary">Lancer</button>
-    <button (click)="stopAlgo()" id="stopGameBtn" style="margin-top: 10px; width: 30%" mat-raised-button color="warn">Arrêter</button>
+<div style="display:flex;flex-direction: column">
+
+    <div id="gameHolder">
+        <div id="canvasHolder">
+
+        </div>
+        <div id="canvas-objectifs" class="obj-resume" *ngIf="showLevelObj || showLevelEnd">
+            <div class="obj-box">
+                <h1 *ngIf="showLevelObj">Objectifs</h1>
+                <ng-container *ngIf="showLevelEnd">
+                    <h2>{{this.message.text}}</h2>
+                    <ng-container *ngIf="message.stars == 0"><img src="{{emptyStars}}" class="starsSize" />
+                    </ng-container>
+                    <ng-container *ngIf="message.stars == 1"><img src="{{oneStars}}" class="starsSize" /></ng-container>
+                    <ng-container *ngIf="message.stars == 2"><img src="{{twoStars}}" class="starsSize" /></ng-container>
+                    <ng-container *ngIf="message.stars == 3"><img src="{{threeStars}}" class="starsSize" />
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="showLevelObj">
+                    <ul style="flex-direction: column">
+                        <li *ngFor="let obj of objectifs" style="flex-direction: row">
+                            <span class="obj-lib">{{obj.description }} :</span>
+                            <span *ngIf="obj.libelle !='Algotime'" class="obj-goal">{{obj.goal}}</span>
+                            <span *ngIf="obj.libelle =='Algotime'" class="obj-goal">{{obj.goal}} s</span>
+                        </li>
+                    </ul>
+                    <button (click)="toggleObj()" id="startLevelBtn" mat-raised-button color="primary">C'est parti
+                        !</button>
+                </ng-container>
+                <ng-container *ngIf="showLevelEnd">
+                    <ng-container *ngIf="message.status">
+                        <ul>
+                            <li *ngFor="let obj of objectifs">
+                                <span *ngIf="obj.libelle !='Algotime'" class="obj-lib">{{obj.description }} : {{obj.result}}</span>
+                                <span *ngIf="obj.libelle =='Algotime'" class="obj-lib">{{obj.description }} : {{obj.result}} s</span>
+                                <span class="obj-goal">
+                                    <ng-container *ngIf="message.objComplete[obj.libelle]">
+                                            <img src="{{objSuccess}}"  />
+                                    </ng-container>
+                                    <ng-container *ngIf="!message.objComplete[obj.libelle]">
+                                            <img src="{{objFail}}"  />
+                                    </ng-container>
+                                </span>
+                            </li>
+                        </ul>
+                    </ng-container>
+
+
+                    <br />
+                    <ng-container *ngIf="!message.status">
+                        <button (click)="toggleLvlEnd()" id="startLevelBtn" mat-raised-button
+                            color="primary">Réessayer</button>
+                    </ng-container>
+                    <button (click)="navigateToMenu()" id="startLevelBtn" mat-raised-button color="primary">Liste des
+                        Chapitre</button>
+
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+    <div id="actions" *ngIf="!showLevelObj && !showLevelEnd">
+        <button (click)="runAlgo()" id="startGameBtn" mat-raised-button color="primary">Lancer</button>
+        <button (click)="stopAlgo()" id="stopGameBtn" mat-raised-button color="warn">Arrêter</button>
+        <br>
+        <button (click)="muteSound()" id="muteGameBtn" mat-raised-button color="default"><mat-icon class="mat-icon material-icons">volume_off</mat-icon></button>
+        <button (click)="volumeUp()" id="volUpGameBtn" mat-raised-button color="default"><mat-icon class="mat-icon material-icons">volume_up</mat-icon></button>
+        <button (click)="volumeDown()" id="volDownGameBtn" mat-raised-button color="default"><mat-icon class="mat-icon material-icons">volume_down</mat-icon></button>
+    </div>
 </div>

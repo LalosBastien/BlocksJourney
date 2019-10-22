@@ -5,10 +5,10 @@
 
 Stack :
 - Angular v5.2.9
-- Angular-CLI v1.7.4
 - Electron v1.8.4
 - Electron Builder v20.8.1
-- Phaser v
+- Phaser v2.10.6
+- Blockly v1.0s
 
 Can :
 - Run in a local development/production environment with Electron & Hot reload

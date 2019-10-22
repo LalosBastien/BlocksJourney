@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class TrackingDialogComponent implements OnInit {
 
   student: any;
-  levels:any;
+  levels: any;
   constructor(
     public dialogRef: MatDialogRef<TrackingDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public _student: any) {
