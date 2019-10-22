@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component, OnDestroy,
   OnInit
 } from '@angular/core';
@@ -24,7 +25,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   styleUrls: ['./game.component.scss'],
   providers: [LevelRequestService]
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, AfterViewInit {
   error: any;
   onErrorTriggered: BehaviorSubject<any>;
   phaser: PhaserComponent;
@@ -32,13 +33,15 @@ export class GameComponent implements OnInit {
   json: any;
   name: string;
   description: string;
+  help: string;
   introStarted: boolean;
   ijs: any;
+  helperDisplay: boolean;
 
 
   constructor(protected _api: LevelRequestService, public _snackBar: MatSnackBar, private route: ActivatedRoute, private _r:Router) {
     this.initIntro = this.initIntro.bind(this);
-    window.addEventListener('blockyLoaded', this.initIntro);
+    //window.addEventListener('blockyLoaded', this.initIntro);
   }
 
 
@@ -47,7 +50,7 @@ export class GameComponent implements OnInit {
       this.navigateToMenu();
   }
 
-  navigateToMenu(){
+  navigateToMenu() {
     this._r.navigate(['/levels']);
   }
   async ngOnInit() {
@@ -57,15 +60,18 @@ export class GameComponent implements OnInit {
         this.openSnackBar('Une erreur s\'est produite : ' + e.error, 'Ok');
       }
     });
-    let lvlId = this.route.snapshot.paramMap.get('levelID')
+    const lvlId = this.route.snapshot.paramMap.get('levelID');
     this.json = await this.getJSON(lvlId);
-    this.json.objectifs = await this.getObjectifs(this.json.level.id); 
+    this.json.objectifs = await this.getObjectifs(this.json.level.id);
     this.name = this.json.level.name;
+    this.help = this.json.level.help;
     this.description = this.json.levelInfo.description;
     this.id = parseInt(this.route.snapshot.paramMap.get('levelID'), 10);
+    this.helperDisplay = false;
+  }
 
-
-
+  toggleHelperDisplay() {
+    this.helperDisplay = !this.helperDisplay;
   }
 
   initIntro() {
@@ -74,18 +80,28 @@ export class GameComponent implements OnInit {
       return;
     }
     window.removeEventListener('blockyLoaded', this.initIntro);
+
     this.ijs = IntroJs().setOptions({
-      showProgress: true,
+      showProgress: false,
+      scrollToElement: false,
+      showStepNumbers: false,
+      skipLabel: 'Passer',
+      nextLabel: 'Suivant &rarr;',
+      prevLabel: '&larr; Précédent',
       steps: [
         {
-          element: '#blocklyDiv',
-          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
+          intro: 'Bienvenue sur Blocks Journey !',
           position: 'right'
         },
         {
-          element: '#gameHolder',
-          intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Ton but : ' +
-            'atteindre l\'étoile le plus rapidement possible.',
+          element: '#canvasHolder',
+          intro: 'Voici l\'espace de jeu. C\'est ici que s\'effectuera l\'action que tu as programmé. Contrôle le personnage pour ' +
+              'atteindre l\'étoile le plus rapidement possible.',
+          position: 'right'
+        },
+        {
+          element: '#blocklyDiv',
+          intro: 'Voici l\'espace algorithmique. C\'est ici que tu construira ton algorithme!',
           position: 'right'
         },
         {
@@ -94,28 +110,35 @@ export class GameComponent implements OnInit {
           position: 'right'
         },
         {
-          element: document.getElementsByClassName('blocklyTreeRow')[2],
-          intro: 'Pour répéter une action, comme un déplacement, utilise un bloc de boucle.',
+          element: '#help-button',
+          intro: 'Ce bouton te permet d\'afficher les notions algoritmiques abordées par les differents niveaux.',
           position: 'right'
         },
-        {
-          element: '#startGameBtn',
-          intro: 'Ce bouton permet de lancer ton algorithme et met en mouvement ton héro.',
-          position: 'right'
-        },
-        {
-          element: '#stopGameBtn',
-          intro: 'Ce bouton permet de stopper ton algorithme, si tu t\'es trompé par exemple.',
-          position: 'right'
-        },
-        {
-          element: '#menu-play',
-          intro: 'Pour revenir à la liste des niveaux, passe par le menu.',
-          position: 'right'
-        }
       ]
     }).start();
+
+    this.ijs.onafterchange( (targetElement) => {
+      console.log("OnChange !")
+      if (this.ijs._currentStep === 3) {
+        const evt = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+        // If cancelled, don't dispatch our event
+        targetElement.dispatchEvent(evt);
+      }
+    });
+
+
+
   }
+
+  ngAfterViewInit() {
+    window.addEventListener('blockyLoaded', this.initIntro);
+    //this.initIntro();
+  }
+
 
   // tslint:disable-next-line:use-life-cycle-interface
   async ngAfterViewChecked() {

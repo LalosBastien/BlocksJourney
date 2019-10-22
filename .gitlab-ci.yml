@@ -1,0 +1,74 @@
+###############
+# Definitions #
+###############
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - export TAG_VERSION=${CI_COMMIT_REF_NAME}
+  - export PROJECT_NAME=gpe
+  - export DOCKER_USER=bastienlalos
+  - export DOCKER_PASSWORD=21dc356a-98d3-487b-ad0a-9040eb688dd7
+
+##############
+#    Jobs    #
+##############
+
+# ========== ONLY FOR TAGS x.x.x =========
+
+# Construct client images
+build-docker:
+  tags:
+    - gpe-runner
+  stage: build
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker build -t $PROJECT_NAME-client:$TAG_VERSION .
+
+# Push image to registry
+publish:
+  tags:
+    - gpe-runner
+  stage: build
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker tag $PROJECT_NAME-client:$TAG_VERSION $DOCKER_USER/$PROJECT_NAME-client:latest
+    - docker push $DOCKER_USER/$PROJECT_NAME-client:latest
+
+# Deploy to swarm
+deploy-docker:
+  tags:
+    - gpe-runner
+  stage: deploy
+  only:
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker stack deploy -c docker/docker-compose.yml $PROJECT_NAME
+
+# Deploy to ec2
+deploy-ec2:
+  tags:
+    - gpe-runner-client
+  stage: deploy
+  only:
+    - /^version-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - npm install
+    - ng build
+    - sudo cp -r dist/* /var/www/html/
+    - sudo service nginx reload
