@@ -19,7 +19,7 @@ before_script:
 
 # Construct client images
 build-docker:
-  tags: 
+  tags:
     - gpe-runner
   stage: build
   only:
@@ -32,7 +32,7 @@ build-docker:
 
 # Push image to registry
 publish:
-  tags: 
+  tags:
     - gpe-runner
   stage: build
   only:
@@ -42,10 +42,11 @@ publish:
     - branches
   script:
     - docker tag $PROJECT_NAME-client:$TAG_VERSION $REPO/$PROJECT_NAME-client:latest
+    - docker push $REPO/$PROJECT_NAME-client:latest
 
 # Deploy to swarm
 deploy-docker:
-  tags: 
+  tags:
     - gpe-runner
   stage: deploy
   only:
@@ -57,7 +58,7 @@ deploy-docker:
 
 # Deploy to ec2
 deploy-ec2:
-  tags: 
+  tags:
     - gpe-runner-client
   stage: deploy
   only:
