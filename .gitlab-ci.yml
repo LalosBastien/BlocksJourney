@@ -9,7 +9,8 @@ stages:
 before_script:
   - export TAG_VERSION=${CI_COMMIT_REF_NAME}
   - export PROJECT_NAME=gpe
-  - export REPO=bastienlalos
+  - export DOCKER_USER=bastienlalos
+  - export DOCKER_PASSWORD=21dc356a-98d3-487b-ad0a-9040eb688dd7
 
 ##############
 #    Jobs    #
@@ -41,9 +42,9 @@ publish:
   except:
     - branches
   script:
-    - docker login docker.io
-    - docker tag $PROJECT_NAME-client:$TAG_VERSION $REPO/$PROJECT_NAME-client:latest
-    - docker push $REPO/$PROJECT_NAME-client:latest
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker tag $PROJECT_NAME-client:$TAG_VERSION $DOCKER_USER/$PROJECT_NAME-client:latest
+    - docker push $DOCKER_USER/$PROJECT_NAME-client:latest
 
 # Deploy to swarm
 deploy-docker:
