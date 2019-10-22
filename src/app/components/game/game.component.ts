@@ -114,31 +114,6 @@ export class GameComponent implements OnInit, AfterViewInit {
           intro: 'Ce bouton te permet d\'afficher les notions algoritmiques abordées par les differents niveaux.',
           position: 'right'
         },
-        {
-          element: '.obj-box',
-          intro: 'Tu retrouvera ici le détail des objectifs à accomplir au cours du niveau.',
-          position: 'right'
-        },
-        {
-          element: '#startLevelBtn',
-          intro: 'En appuyant sur ce bouton, tu lance ton niveau !',
-          position: 'right'
-        },
-        {
-          element: '#startGameBtn',
-          intro: 'Ce bouton permet de lancer ton algorithme et met en mouvement ton héro.',
-          position: 'right'
-        },
-        {
-          element: '#stopGameBtn',
-          intro: 'Ce bouton permet de stopper ton algorithme, si tu t\'es trompé par exemple.',
-          position: 'right'
-        },
-        {
-          element: '#menu-play',
-          intro: 'Pour revenir à la liste des niveaux, passe par le menu.',
-          position: 'right'
-        }
       ]
     }).start();
 
