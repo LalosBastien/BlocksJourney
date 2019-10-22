@@ -407,6 +407,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.stars = 0;
         if (win) {
             this.message.data = message.data;
+            console.log(this.message.data)
             let { stars, objComplete } = this.checkObjCompletion(message.data);
             this.message.objComplete = objComplete;
             this.message.stars = stars;
@@ -466,7 +467,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     update() {
         // Timer
         if (this.component.started) {
-            console.log((Date.now() - this.component.timerStart) / 1000);
             this.timerText.text = (Date.now() - this.component.timerStart) / 1000;
             this.timerText.fill = this.component.timerText.fill;
             this.timerText.x = this.game.camera.x + this.component.width - 500;
@@ -548,7 +548,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
                     data: {
                         steps: this.component.steps,
                         time: Math.floor(time / 1000),
-                        energy: Math.floor(1000 - this.component.energyLevel),
+                        energy: Math.floor(this.component.energyTotal - this.component.energyLevel),
                         coins: this.component.coinCount
                     },
                     text: 'Gagné !'
