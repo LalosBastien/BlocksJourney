@@ -10,17 +10,55 @@
 }
 
 #game-component {
-  display: inline-flex; 
-  height: 100%;
+  display: inline-flex;
   width: 100%;
+  height: calc(100% - 55px);;
   text-align: center;
   background-color: white
 }
 #game-header {
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 10%; 
+  height: 55px;
   background-color: #263238;
   border-bottom: 1px #222222 solid;
   text-align: center;
   color: white;
+}
+
+#game-helper {
+  position: absolute;
+  top: 55px;
+  width: 65%;
+  background: #263238;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+.helper-open {
+  max-height: 80%;
+  padding: 0 6px 6px 6px;
+  transition: all .5s ease-in-out, padding .5s cubic-bezier(0, 1, 0, 1);
+}
+
+.helper-close {
+  max-height: 0;
+  padding: 0;
+  transition: all .5s ease-in-out, padding .5s cubic-bezier(1, 0, 1, 0);
+}
+
+#game-helper-body {
+  background: #fafafa;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-bottom: 10px;
+  text-align: initial;
+}
+
+#game-container {
+  width: 100%;
+  height: 100%;
+  background-color: white
 }
