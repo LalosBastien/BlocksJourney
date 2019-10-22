@@ -121,9 +121,9 @@
 
                 <mat-grid-tile><b>Temps Total</b></mat-grid-tile>
                 <div *ngIf='levelStat.stats.totalTime.worst.Stats && levelStat.stats.totalTime.best.Stats && levelStat.stats.totalTime.average'>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value | date: 'hh\:mm\:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a> )</i></mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.average | date: 'hh\:mm\:ss'}}  </mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value | date: 'hh\:mm\:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a> ) </i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.worst.Stats.value * 1000 | date: 'HH:mm:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.worst.id)'>{{levelStat.stats.totalTime.worst.nom}}&nbsp;{{levelStat.stats.totalTime.worst.prenom}}</a> )</i></mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.average * 1000 | date: 'HH:mm:ss'}}  </mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.totalTime.best.Stats.value * 1000 | date: 'HH:mm:ss'}}  <i> ( <a style='cursor:pointer;color:blue;text-decoration: underline' (click)='moveToDetail(levelStat.stats.totalTime.best.id)'>{{levelStat.stats.totalTime.best.nom}}&nbsp;{{levelStat.stats.totalTime.best.prenom}}</a> ) </i></mat-grid-tile>
                 </div>
                 <div *ngIf='!levelStat.stats.totalTime.worst.Stats || !levelStat.stats.totalTime.best.Stats'>
                   <mat-grid-tile *ngIf='levelStat.stats.totalTime.worst == "none"'>None</mat-grid-tile>
