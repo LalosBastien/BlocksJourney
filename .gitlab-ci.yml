@@ -5,6 +5,7 @@
 stages:
   - build
   - deploy
+  - cleanup
 
 before_script:
   - export TAG_VERSION=${CI_COMMIT_REF_NAME}
@@ -72,3 +73,16 @@ deploy-ec2:
     - ng build
     - sudo cp -r dist/* /var/www/html/
     - sudo service nginx reload
+
+# clean docker
+clean-docker:
+  tags:
+    - gpe-runner
+  stage: cleanup
+  only:
+    - /^docker-([0-9]+\.){2}[0-9]+$/
+    - /^version-([0-9]+\.){2}[0-9]+$/
+  except:
+    - branches
+  script:
+    - docker system prune -f
