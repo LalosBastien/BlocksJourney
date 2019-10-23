@@ -14,10 +14,9 @@ import {
 import { CookieService } from 'ngx-cookie';
 
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { map, filter, catchError, tap } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 import { AppConfig } from '../../app.config';
 import { LocalStorage } from 'ngx-store';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class RequestService implements OnInit {
@@ -47,7 +46,7 @@ export class RequestService implements OnInit {
         }
         return Promise.reject(error.message || error);
     }
-    protected setNewHeaders(token?) {
+    protected setNewHeaders(token?: string) {
         this.headers = new Headers();
         this.headers.append('Content-type', 'application/json');
         this.headers.append('x-accesstoken', token);
@@ -66,7 +65,7 @@ export class RequestService implements OnInit {
         this.options = new RequestOptions({ headers: this.headers });
     }
 
-    protected async _postRequest(path, data): Promise<any> {
+    protected async _postRequest(path: string, data: any): Promise<any> {
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.post(apiUrl, data, this.options).pipe(
@@ -75,7 +74,7 @@ export class RequestService implements OnInit {
             catchError((e) => this.handleError(e))).toPromise();
     }
 
-    protected async _putRequest(path, data): Promise<any> {
+    protected async _putRequest(path: string, data: any): Promise<any> {
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
         return await this.http.put(apiUrl, data, this.options).pipe(
@@ -96,7 +95,7 @@ export class RequestService implements OnInit {
     protected async _deleteRequest(path): Promise<any> {
         const apiUrl = this.apiRoot + path;
         this._setHeaders();
-        return await this.http.get(apiUrl, this.options).pipe(
+        return await this.http.delete(apiUrl, this.options).pipe(
             filter(event => event instanceof Response),
             map((res: Response) => res.json()),
             catchError((e) => this.handleError(e))).toPromise();

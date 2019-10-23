@@ -1,43 +1,44 @@
 <mat-sidenav-container class="main-menu">
     <mat-sidenav class="menu-content" mode="side" opened="{{showMenu()}}">
-        <div style="width: 100px; height: 100%; background-color: #263238; ">
+        <div class="main-menu-bar">
             <mat-nav-list style="padding: 0; margin: 0">
-                <mat-list-item (click)="goToProfil()" style="display: block; height: 100px; border-bottom: 1px #222222 solid;">
+                <mat-list-item (click)="goToProfil()" class="main-menu-item">
                     <div style="text-align: center">
                         <button style="display: inline-flex;" mat-icon-button>
-                            <mat-icon style="font-size: 45px; color: white">person</mat-icon>
+                            <mat-icon class="main-menu-icon">person</mat-icon>
                         </button>
-                        <span style="font-size: 12px; color: #fff;">Profile</span>
+                        <span class="main-menu-label">{{ 'PAGES.MAIN.ACCOUNT' | translate}}</span>
                     </div>
                 </mat-list-item>
-                <mat-list-item id="menu-play" (click)="goToLevels()" style="display: block; height: 100px; border-bottom: 1px #222222 solid;">
-                        <div style="text-align: center">
-                            <button style="display: inline-flex;" mat-icon-button>
-                                <mat-icon style="font-size: 45px; color: white">games</mat-icon>
-                            </button>
-                            <span style="font-size: 12px; color: #fff;">Jouer</span>
-                        </div>
-                </mat-list-item>
-                <mat-list-item *ngIf="currentUser && currentUser.role.accessLevel >= 2" (click)="goToTeacherPanel()" style="display: block; height: 100px; border-bottom: 1px #222222 solid;">
+                <mat-list-item id="menu-play" (click)="goToLevels()" class="main-menu-item">
                     <div style="text-align: center">
                         <button style="display: inline-flex;" mat-icon-button>
-                            <mat-icon style="font-size: 45px; color: white">show_chart</mat-icon>
+                            <mat-icon class="main-menu-icon">games</mat-icon>
                         </button>
-                        <span style="font-size: 12px; color: #fff;">Statistiques</span>
+                        <span class="main-menu-label">{{ 'PAGES.MAIN.PLAY' | translate}}</span>
                     </div>
                 </mat-list-item>
-                <mat-list-item (click)="logout()" style="display: block; height: 100px; border-bottom: 1px #222222 solid;">
+                <mat-list-item *ngIf="currentUser && currentUser.role.accessLevel >= 2" (click)="goToTeacherPanel()"
+                    class="main-menu-item">
                     <div style="text-align: center">
                         <button style="display: inline-flex;" mat-icon-button>
-                            <mat-icon style="font-size: 45px; color: white">power_settings_new</mat-icon>
+                            <mat-icon class="main-menu-icon">show_chart</mat-icon>
                         </button>
-                        <span style="font-size: 12px; color: #fff;">Déconnexion</span>
+                        <span class="main-menu-label">{{ 'PAGES.MAIN.STATS' | translate}}</span>
+                    </div>
+                </mat-list-item>
+                <mat-list-item (click)="logout()" class="main-menu-item">
+                    <div style="text-align: center">
+                        <button style="display: inline-flex;" mat-icon-button>
+                            <mat-icon class="main-menu-icon">power_settings_new</mat-icon>
+                        </button>
+                        <span class="main-menu-label">{{ 'PAGES.MAIN.LOGOUT' | translate}}</span>
                     </div>
                 </mat-list-item>
             </mat-nav-list>
         </div>
     </mat-sidenav>
-    <mat-sidenav-content style="background-color: #263238;"><router-outlet></router-outlet></mat-sidenav-content>
+    <mat-sidenav-content style="background-color: #263238;">
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
 </mat-sidenav-container>
-
-

@@ -24,28 +24,60 @@
         "ALGO_ZONE_TITLE": "Your code : "
       },
       "REGISTER": {
+        "TITLE": "Registration",
+        "STUDENT": "Pupil",
+        "PROF": "Professor",
         "STEP1": "Identifiers",
-        "STEP2": "Informations",
-        "STEP3": "Formation",
+        "STEP2": "Formation",
+        "STEP3": "Informations",
         "STEP4": "Confirmation",
-        "NEXT": "Next",
         "BACK": "Back to menu",
         "CONFIRM": "Confirm",
+        "MAJ": "start with a capital letter",
         "USERNAME": "Enter an account name",
         "PASSWORD": "Enter a password",
+        "C_PASSWORD": "Confirm your password",
         "USERNAME_ERR": "Please enter an username",
         "PASSWORD_ERR": "Please enter a password",
         "EMAIL": "Please enter a email address",
         "EMAIL_ERR": "Please enter a valid email address",
-        "FIRSTNAME": "Entrez your firstname",
-        "LASTNAME": "Entrez your lastname",
-        "C_USERNAME": "Username",
-        "C_PASSWORD": "Password",
-        "C_EMAIL": "E-mail address",
-        "C_FIRSTNAME": "Firstname",
-        "C_LASTNAME": "Lastname",
+        "FIRSTNAME": "Enter your firstname",
+        "LASTNAME": "Enter your lastname",
         "WELCOME": "Hello, we welcome you to PensAlgo and remain at your disposal when needed!",
         "INSTRUCTION": "Be sure to review your personal information before you start on PensAlgo"
+      },
+      "TEACHER": {
+        "FIRSTNAME": "Enter the firstname of your pupil",
+        "NAME": "Enter the name of your pupil"
+      },
+      "PROFILE": {
+        "TITLE": "My profile",
+        "ROLE_PROF": "Teacher",
+        "ROLE_STUDENT": "Pupil",
+        "IDENTITY": "Identity",
+        "LOGIN": "Username",
+        "NAME": "Name",
+        "FIRSTNAME":"Firstname",
+        "ADMIN": {
+          "TITLE": "My pupils",
+          "FIRSTNAME_INPUT": "Enter your pupil name",
+          "NAME_INPUT": "Enter your pupil firstname",
+          "ACTIONS": {
+            "ADD": "Add",
+            "PRINT": "Print pupil list",
+            "SAVE": "Save new pupils",
+            "RENEW": "Renwe password",
+            "RENEW_ALL": "Renew all passwords",
+            "CANCEL": "Cancel",
+            "DELETE": "Delete"
+          }
+        }
+      },
+      "MAIN": {
+        "ACCOUNT": "My account",
+        "STATS": "Stats",
+        "PLAY": "Play",
+        "LOGOUT": "Logout"
       },
       "PASSWORD": {
         "EMAIL_HINT": "Please enter the email address of your account we will send you a reset link",

@@ -1,29 +1,35 @@
-<div class="container" style="background-color: #263238; ">
+<div class="container-fluid" style="background-color: #263238; ">
   <img (click)="setToFr()" style="cursor:pointer;width:2%;margin-left:0%;" src="{{flag_fr}}">
   <img (click)="setToEn()" style="cursor:pointer;width:2%;margin-left:0.5%;" src="{{flag_en}}">
   <br><img style="width:25%;margin-left:37%;" src="{{logo}}">
-  <h1 class="title">
-  </h1>
-  <p class="subtitle">
-    {{ 'PAGES.HOME.SUBTITLE' | translate }}
-  </p>
 
-  <div class="col-md-12">
+  <div class="container col-md-8">
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline" style="margin-left:25%">
-        <mat-label>{{ 'PAGES.HOME.ACCOUNT_NAME' | translate }}</mat-label>
-        <input matInput formControlName="username" [(ngModel)]="model.username" ngControl="username" [errorStateMatcher]="matcher" type="text">
-        <mat-icon matSuffix>account_circle</mat-icon>
-        <mat-error>{{ 'PAGES.HOME.ACCOUNT_NAME_ERR' | translate }}</mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline" style="margin-left:10%">
-        <mat-label>{{ 'PAGES.HOME.PASSWORD' | translate }}</mat-label>
-        <input matInput formControlName="password" [(ngModel)]="model.password" ngControl="password" [errorStateMatcher]="matcher" [type]="hide ? 'password' : 'text'" type="password" name="password" placeholder="Entrez votre mot de passe">
-        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-        <mat-error>{{ 'PAGES.HOME.PASSWORD_ERR' | translate }}</mat-error>
-      </mat-form-field>
-      <a style="margin-left:60%" routerLink="/forgot-password" routerLinkActive="active">{{ 'PAGES.HOME.FORGOT_PASSWORD' | translate }}</a>
-      <br><button type="submit" class="launch-btn" mat-button [disabled]="!loginForm.valid">{{ 'PAGES.HOME.SIGN_IN' | translate }} </button>
+      <mat-card class="faded-panel">
+        <p class="subtitle">
+          {{ 'PAGES.HOME.SUBTITLE' | translate }}
+        </p>
+        <mat-form-field appearance="outline" style="margin-left:20%;">
+          <mat-label>{{ 'PAGES.HOME.ACCOUNT_NAME' | translate }}</mat-label>
+          <input matInput formControlName="username" [(ngModel)]="model.username" ngControl="username"
+            [errorStateMatcher]="matcher" type="text">
+          <mat-icon matSuffix>account_circle</mat-icon>
+          <mat-error>{{ 'PAGES.HOME.ACCOUNT_NAME_ERR' | translate }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="margin-left:10%">
+          <mat-label>{{ 'PAGES.HOME.PASSWORD' | translate }}</mat-label>
+          <input matInput formControlName="password" [(ngModel)]="model.password" ngControl="password"
+            [errorStateMatcher]="matcher" [type]="hide ? 'password' : 'text'" type="password" name="password"
+            placeholder="Entrez votre mot de passe">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <mat-error>{{ 'PAGES.HOME.PASSWORD_ERR' | translate }}</mat-error>
+        </mat-form-field>
+        <a style="margin-left:60%" routerLink="/forgot-password"
+          routerLinkActive="active">{{ 'PAGES.HOME.FORGOT_PASSWORD' | translate }}</a>
+      </mat-card>
+
+      <br><button type="submit" class="launch-btn" mat-button
+        [disabled]="!loginForm.valid">{{ 'PAGES.HOME.SIGN_IN' | translate }} </button>
     </form>
   </div>
   <button class="signup-btn" routerLink="register" mat-button>{{ 'PAGES.HOME.SIGN_UP' | translate }}</button>

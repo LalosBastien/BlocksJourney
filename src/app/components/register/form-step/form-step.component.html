@@ -1,0 +1,9 @@
+<mat-card class="border form-step">
+  <mat-toolbar mat-card-title-group class="form-step-header" [color]="color">
+      <mat-card-title>{{ groupLabel }}</mat-card-title>
+  </mat-toolbar>
+
+  <form [formGroup]="formGroup">
+    <ng-content></ng-content>
+  </form>
+</mat-card>

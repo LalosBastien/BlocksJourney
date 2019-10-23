@@ -343,6 +343,7 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     runAlgo() {
+        this.coinCount = 0;
         this.blockly.generateCode(this.bindInterpreter.bind(this));
         this.started = true;
         this.timerStart = Date.now();
@@ -397,7 +398,6 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.handleEndGameSound(win);
         this.closeBridges();
         this.steps = 0;
-        this.coinCount = 0;
         this.player.x = this.data.player.x;
         this.player.y = this.data.player.y;
         this.replaceMonsters();
@@ -407,8 +407,8 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
         this.message.stars = 0;
         if (win) {
             this.message.data = message.data;
-            console.log(this.message.data)
-            let { stars, objComplete } = this.checkObjCompletion(message.data);
+            console.log(this.message.data);
+            const { stars, objComplete } = this.checkObjCompletion(message.data);
             this.message.objComplete = objComplete;
             this.message.stars = stars;
         }
@@ -426,25 +426,23 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
 
     checkObjCompletion(data) {
         let stars = 0;
-        let objComplete = {}
+        const objComplete = {};
         console.log(data);
-        for (let obj of this.objectifs) {
+        for (const obj of this.objectifs) {
             objComplete[obj.libelle] = false;
-            if (obj.libelle == "Coins") {
+            if (obj.libelle == 'Coins') {
                 obj.result = data.coins;
                 if (data && (data.coins == obj.goal)) {
                     objComplete[obj.libelle] = true;
                     stars += 1;
                 }
-            }
-            else if (obj.libelle == "Algotime") {
+            } else if (obj.libelle == 'Algotime') {
                 obj.result = data.time;
                 if (data && data.time && data.time <= obj.goal) {
                     objComplete[obj.libelle] = true;
                     stars += 1;
                 }
-            }
-            else if (obj.libelle == "Energy") {
+            } else if (obj.libelle == 'Energy') {
                 obj.result = data.energy;
                 if (data && data.energy && data.energy <= obj.goal) {
                     objComplete[obj.libelle] = true;
@@ -458,7 +456,9 @@ export class PhaserComponent implements OnInit, OnChanges, OnDestroy {
     async validateLevel(algoTime, status, energyConsumed, stars) {
         try {
             await this.api.validate(this.meta.id, algoTime, status, energyConsumed, stars);
-            await this.api.get(this.meta.id);
+            if (status !== 'success') {
+                await this.api.get(this.meta.id);
+            }
         } catch (e) {
             console.log('not validated', e);
         }

@@ -29,6 +29,10 @@ export class TeacherRequestService extends RequestService {
         return this._getRequest('/prof/ladder');
     }
 
+    getStudents(): Promise<any> {
+        return this._getRequest('/prof/students');
+    }
+
     getGlobalStats(): Promise<any> {
         return this._getRequest('/prof/statsGlobal');
     }
@@ -37,8 +41,19 @@ export class TeacherRequestService extends RequestService {
         return this._getRequest('/prof/statsByLevel');
     }
 
-    inviteStudent(emails): Promise<any> {
+    inviteStudent(emails: any[]): Promise<any> {
         return this._postRequest('/prof/invite', { emails });
     }
 
+    deleteStudent(studentId: number): Promise<any> {
+        return this._deleteRequest('/prof/student/' + studentId);
+    }
+
+    addStudents(students: any): Promise<any> {
+        return this._postRequest('/prof/students', students);
+    }
+
+    renewStudentPassword(studentId: Number[]): Promise<any> {
+        return this._postRequest('/prof/renew/', studentId);
+    }
 }

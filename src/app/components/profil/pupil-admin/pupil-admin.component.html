@@ -1,0 +1,83 @@
+<div #table>
+  <mat-table [dataSource]="students">
+
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef> {{ 'PAGES.PROFILE.LOGIN' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.login}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> {{ 'PAGES.PROFILE.NAME' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-template [ngIf]="!element.toCreate" [ngIfElse]="inputName">
+          {{element.nom}}
+        </ng-template>
+        <ng-template #inputName>
+          <input matInput [(ngModel)]="element.nom" placeholder="{{ 'PAGES.PROFILE.ADMIN.NAME_INPUT' | translate }}">
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="firstname">
+      <mat-header-cell *matHeaderCellDef> {{ 'PAGES.PROFILE.FIRSTNAME' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-template [ngIf]="!element.toCreate" [ngIfElse]="inputName">
+          {{element.prenom}}
+        </ng-template>
+        <ng-template #inputName>
+          <input matInput [(ngModel)]="element.prenom" placeholder="{{ 'PAGES.PROFILE.ADMIN.FIRSTNAME_INPUT' | translate }}">
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="password">
+      <mat-header-cell *matHeaderCellDef> {{ 'PAGES.HOME.PASSWORD' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.password}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let element; let i = index">
+        <ng-template [ngIf]="!element.toCreate" [ngIfElse]="cancelAction">
+          <button mat-icon-button aria-label="renew student" matTooltip="{{ 'PAGES.PROFILE.ADMIN.ACTIONS.RENEW' | translate }}"
+            (click)="renewPassword([element])">
+            <mat-icon>autorenew</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="delete student" matTooltip="{{ 'PAGES.PROFILE.ADMIN.ACTIONS.DELETE' | translate }}"
+            (click)="deleteStudent(element, i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </ng-template>
+        <ng-template #cancelAction>
+          <button mat-icon-button aria-label="cancel add" matTooltip="{{ 'PAGES.PROFILE.ADMIN.ACTIONS.CANCEL' | translate }}" (click)="removeRow(i)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; let even = even; columns: displayedColumns;" [ngClass]="{gray: even}"></mat-row>
+  </mat-table>
+</div>
+
+<div #modifier class="container-fluid mt-2">
+  <div class="row justify-content-between">
+    <ng-container>
+      <button mat-raised-button color="secondary" (click)="addStudent()">
+        <mat-icon>person_add</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.ADMIN.ACTIONS.ADD' | translate }}</b>
+      </button>
+    </ng-container>
+    <ng-container>
+      <button mat-raised-button color="secondary" (click)="renewAllStudents()">
+        <mat-icon>autorenew</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.ADMIN.ACTIONS.RENEW_ALL' | translate }}</b>
+      </button>
+      <button mat-raised-button color="secondary" (click)="printTable()">
+        <mat-icon>print</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.ADMIN.ACTIONS.PRINT' | translate }}</b>
+      </button>
+      <button mat-raised-button color="secondary" (click)="createStudents()">
+        <mat-icon>save</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.ADMIN.ACTIONS.SAVE' | translate }}</b>
+      </button>
+    </ng-container>
+  </div>
+</div>

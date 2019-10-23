@@ -24,28 +24,60 @@
         "ALGO_ZONE_TITLE": "Ton code : "
       },
       "REGISTER": {
+        "TITLE": "Inscription",
+        "STUDENT": "Élève",
+        "PROF": "Enseignant",
         "STEP1": "Identifiants",
-        "STEP2": "Informations",
-        "STEP3": "Formation",
+        "STEP2": "Formation",
+        "STEP3": "Informations",
         "STEP4": "Confirmation",
-        "NEXT": "Suivant",
         "BACK": "Retour au menu",
         "CONFIRM": "Confirmer",
+        "MAJ": "Commence par une majuscule",
         "USERNAME": "Entrez un nom de compte",
         "PASSWORD": "Entrez un mot de passe",
+        "C_PASSWORD": "Confirmer votre mot de passe",
         "USERNAME_ERR": "Veuillez entrer un nom d'utilisateur",
         "PASSWORD_ERR": "Veuillez entrer un mot de passe",
         "EMAIL": "Entrez une adresse email",
         "EMAIL_ERR": "Veuillez entrer une adresse email valide",
         "FIRSTNAME": "Entrez votre prénom",
         "LASTNAME": "Entrez votre nom",
-        "C_USERNAME": "Nom d'utilisateur",
-        "C_PASSWORD": "Mot de passe",
-        "C_EMAIL": "Adresse e-mail",
-        "C_FIRSTNAME": "Prénom",
-        "C_LASTNAME": "Nom",
         "WELCOME": "Bonjour, nous vous souhaitons la bienvenue sur PensAlgo et restons à votre disposition en cas de besoin !",
         "INSTRUCTION": "Veillez à bien relire vos informations personnelles avant de vous lancer pour la première sur PensAlgo"
+      },
+      "TEACHER": {
+        "FIRSTNAME_INPUT": "Entrer le prénom de l'élève",
+        "NAME_INPUT": "Entrer le nom de l'élève"
+      },
+      "PROFILE": {
+        "TITLE": "Mon profil",
+        "ROLE_PROF": "Enseignant",
+        "ROLE_STUDENT": "Élève",
+        "IDENTITY": "Identité",
+        "LOGIN": "Identifiant",
+        "NAME": "Nom",
+        "FIRSTNAME":"Prénom",
+        "ADMIN": {
+          "TITLE": "Mes élèves",
+          "FIRSTNAME_INPUT": "Entrer le prénom de l'élève",
+          "NAME_INPUT": "Entrer le nom de l'élève",
+          "ACTIONS": {
+            "ADD": "Ajouter",
+            "PRINT": "Imprimer la liste",
+            "SAVE": "Enregistrer les ajouts",
+            "RENEW": "Renouveler le mot de passe",
+            "RENEW_ALL": "Renouveler les mots de passe",
+            "CANCEL": "Annuler",
+            "DELETE": "Supprimer"
+          }
+        }
+      },
+      "MAIN": {
+        "ACCOUNT": "Mon compte",
+        "STATS": "Statistiques",
+        "PLAY": "Jouer",
+        "LOGOUT": "Déconnexion"
       },
       "PASSWORD": {
         "EMAIL_HINT": "Veuillez entrez l'adresse email de votre compte nous vous enverrons un lien de réinitialisation",

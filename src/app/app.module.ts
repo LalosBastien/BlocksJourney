@@ -59,10 +59,12 @@ import { RequestService } from './providers/Api/request.service';
 import {
   ChartBuilderService
 } from './providers/chart-builder.service';
+
 import {
   ChartModule,
   HIGHCHARTS_MODULES
 } from 'angular-highcharts';
+
 import * as more from 'highcharts/highcharts-more.src';
 import * as exporting from 'highcharts/modules/exporting.src';
 import * as solid_gauge from 'highcharts/modules/solid-gauge.src';
@@ -86,11 +88,12 @@ import { WebStorageModule } from 'ngx-store';
 
 import { CookieModule } from 'ngx-cookie';
 import { MomentModule } from 'angular2-moment';
-import { AddStudentComponent } from './components/teacherPanel/dialog/add-student/add-student.component';
 import { UserRequestService } from './providers/Api/userRequest.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { ProfilComponent } from './components/profil/profil.component';
 import { LevelHistoryComponent } from './components/level-history/level-history.component';
+import { RegisterStepComponent } from './components/register/form-step/form-step.component';
+import { PupilAdminComponent } from './components/profil/pupil-admin/pupil-admin.component';
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -108,13 +111,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardComponent,
     LevelMenuComponent,
     TeacherPanelComponent,
-    AddStudentComponent,
     StudentDetailComponent,
     ProfilComponent,
-    LevelHistoryComponent
+    LevelHistoryComponent,
+    RegisterStepComponent,
+    PupilAdminComponent
   ],
   entryComponents: [
-    AddStudentComponent
   ],
   imports: [
     BrowserModule,

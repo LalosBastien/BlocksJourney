@@ -7,7 +7,6 @@ import { ChartBuilderService } from '../../providers/chart-builder.service';
 import { MatSnackBar, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AddStudentComponent } from './dialog/add-student/add-student.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -130,7 +129,6 @@ export class TeacherPanelComponent implements OnInit {
           this.levelStats.push(element);
           console.log(element);
         });
-
         return this.levelStats;
       }
     } catch (error) {
@@ -141,17 +139,6 @@ export class TeacherPanelComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 5000,
-    });
-  }
-  openDialogAddStudent() {
-    const d = this._dialog.open(AddStudentComponent, {
-      width: '350',
-      height: '250'
-    });
-    d.afterClosed().subscribe((res) => {
-      if (res.message) {
-        this._snackBar.open(res.messsage, null, { duration: 2000 });
-      }
     });
   }
 

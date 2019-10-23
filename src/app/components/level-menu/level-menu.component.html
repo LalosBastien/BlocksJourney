@@ -1,7 +1,7 @@
 <div style="background-color: white; height: 100%">
     <mat-list style="background-color: white">
         <h3 mat-subheader>Niveaux disponibles</h3>
-        <h2 mat-subheader>Progression : {{progression}}%</h2>
+        <h2 mat-subheader>Progression : {{progression | number : '1.0-2' }}%</h2>
         <mat-progress-bar mode="determinate" value="{{progression}}"></mat-progress-bar>
         <mat-accordion>
             <div *ngFor="let ch of chapters">
@@ -17,42 +17,44 @@
                     <div *ngFor="let lvl of ch.levels">
                         <mat-divider></mat-divider>
                         <mat-list-item matLine>
-                            <button mat-icon-button (click)="toggleExpansion(lvl)">
-                                <mat-icon class="mat-icon-rtl-mirror">
-                                    {{lvl.isExpended ? 'expand_more' : 'chevron_right'}}
-                                </mat-icon>
-                            </button>
                             <mat-icon mat-list-icon>games</mat-icon>
 
                             <h4 mat-line>{{lvl.name}}</h4>
 
                             <h6 mat-line> - Difficulté:
-                                <mat-slider [ngClass]="colorByDifficulty(lvl.difficulty)" tickInterval="1" min="0" max="10"
-                                    [(ngModel)]="lvl.difficulty" disabled>
+                                <mat-slider [ngClass]="colorByDifficulty(lvl.difficulty)" tickInterval="1" min="0"
+                                    max="10" [(ngModel)]="lvl.difficulty" disabled>
                                 </mat-slider>
                             </h6>
                             <div mat-line style="display: flex;
                                 align-items: center;">
-                                <span>- Status:</span>
+                                <span>- Statut:</span>
                                 <mat-icon class="mat-icon-rtl-mirror" [ngStyle]="{'color':statusColor(lvl.status)}">
                                     {{statusIcon(lvl.status)}}
                                 </mat-icon>
                             </div>
                             <div mat-line style="display: flex;
                             align-items: center;">
-                            <span>- Objectifs:</span>
-                               <ng-container *ngIf="!lvl.stars || lvl.stars == 0"><img src="{{emptyStars}}" class="starsSize"/></ng-container>
-                               <ng-container *ngIf="lvl.stars == 1"><img src="{{oneStars}}" class="starsSize"/></ng-container>
-                               <ng-container *ngIf="lvl.stars == 2"><img src="{{twoStars}}" class="starsSize"/></ng-container>
-                               <ng-container *ngIf="lvl.stars == 3"><img src="{{threeStars}}" class="starsSize"/></ng-container>                               
-                        </div>
-                            <a mat-button [routerLink]="['../game', lvl.id]">Play</a>
+                                <span>- Objectifs:</span>
+                                <ng-container *ngIf="!lvl.stars || lvl.stars == 0"><img src="{{emptyStars}}"
+                                        class="starsSize" /></ng-container>
+                                <ng-container *ngIf="lvl.stars == 1"><img src="{{oneStars}}" class="starsSize" />
+                                </ng-container>
+                                <ng-container *ngIf="lvl.stars == 2"><img src="{{twoStars}}" class="starsSize" />
+                                </ng-container>
+                                <ng-container *ngIf="lvl.stars == 3"><img src="{{threeStars}}" class="starsSize" />
+                                </ng-container>
+                            </div>
+                            <a mat-raised-button color="primary" [routerLink]="['../game', lvl.id]">Jouer</a>
                         </mat-list-item>
-
-                        <app-level-history
-                            [historyDataSource]="lvl.historyDataSource"
-                            [displayedColumns]="displayedColumns"
-                            [id]="lvl.id"
+                        <button mat-button (click)="toggleExpansion(lvl)">
+                            <span>Mes résultats</span>
+                            <mat-icon class="mat-icon-rtl-mirror">
+                                {{lvl.isExpended ? 'expand_more' : 'chevron_right'}}
+                            </mat-icon>
+                        </button>
+                        <app-level-history [historyDataSource]="lvl.historyDataSource"
+                            [displayedColumns]="displayedColumns" [id]="lvl.id"
                             *ngIf="lvl.isExpended && lvl.history.length > 0">
                         </app-level-history>
                     </div>

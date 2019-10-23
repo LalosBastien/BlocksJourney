@@ -85,10 +85,10 @@ export class LevelMenuComponent implements OnInit {
     toggleExpansion(level: any) {
         level.isExpended = !level.isExpended;
     }
-    getLevelStars(history){
-        let fHist = history.filter(x => x.stars != null).map(x=> x.stars);
+    getLevelStars(history) {
+        const fHist = history.filter(x => x.stars != null).map(x => x.stars);
         fHist.push(0);
-        let max = Math.max(...fHist);
+        const max = Math.max(...fHist);
         return max;
     }
     async getLevels() {
@@ -132,7 +132,7 @@ export class LevelMenuComponent implements OnInit {
             duration: 5000,
         });
     }
-    initStarsAssets(){
+    initStarsAssets() {
         this.emptyStars = require('../../../assets/game/star0.png');
         this.oneStars = require('./../../../assets/game/star1.png');
         this.twoStars = require('./../../../assets/game/star2.png');

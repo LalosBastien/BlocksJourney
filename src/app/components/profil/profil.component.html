@@ -1,9 +1,9 @@
 <div style="background-color: white; height: 100%">
 <mat-card *ngIf="user">
-  <h2>Profil</h2>
+  <h2>{{ 'PAGES.PROFILE.TITLE' | translate }}</h2>
   <mat-list>
     <mat-list-item *ngIf="user.role.accessLevel == 2">
-      <mat-icon>info</mat-icon>&nbsp;<b>#:&nbsp;</b> {{ user.id }}
+      <mat-icon>info</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.LOGIN' | translate }}:&nbsp;</b><i style="color:gray;">{{ user.profId }}</i>
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
@@ -11,12 +11,16 @@
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
-      <mat-icon>face</mat-icon>&nbsp;<b>Identité&nbsp;</b> {{ user.nom }}&nbsp;{{ user.prenom }}
+      <mat-icon>face</mat-icon>&nbsp;<b>{{ 'PAGES.PROFILE.IDENTITY' | translate }}&nbsp;</b> {{ user.nom }}&nbsp;{{ user.prenom }}
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
-      <mat-icon>group</mat-icon>&nbsp;<b>Role:&nbsp;</b> {{ user.role.name }}
+      <mat-icon>group</mat-icon>&nbsp;<b>Role:&nbsp;</b> {{ 'PAGES.PROFILE.ROLE_' + user.role.name | translate }}
     </mat-list-item>
   </mat-list>
+</mat-card>
+<mat-card *ngIf="user.role.accessLevel === 2">
+  <h2>{{ 'PAGES.PROFILE.ADMIN.TITLE' | translate }}</h2>
+  <app-pupil-admin></app-pupil-admin>
 </mat-card>
 </div>
