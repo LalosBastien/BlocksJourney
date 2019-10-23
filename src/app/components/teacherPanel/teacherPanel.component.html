@@ -133,7 +133,7 @@
                         style='cursor:pointer;color:blue;text-decoration: underline'
                         (click)='moveToDetail(levelStat.stats.energy.worst.id)'>{{levelStat.stats.energy.worst.nom}}&nbsp;{{levelStat.stats.energy.worst.prenom}}</a>
                       )</i></mat-grid-tile>
-                  <mat-grid-tile>{{levelStat.stats.energy.average}}</mat-grid-tile>
+                  <mat-grid-tile>{{levelStat.stats.energy.average.toFixed(2)}}</mat-grid-tile>
                   <mat-grid-tile>{{levelStat.stats.energy.best.Stats.value}} &nbsp;<i> ( <a
                         style='cursor:pointer;color:blue;text-decoration: underline'
                         (click)='moveToDetail(levelStat.stats.energy.best.id)'>{{levelStat.stats.energy.best.nom}}&nbsp;{{levelStat.stats.energy.best.prenom}}</a>

@@ -39,4 +39,11 @@ export class LevelHistoryComponent implements OnInit {
         this.historyDataSource.sort = this.sort;
         this.historyDataSource.paginator = this.paginator;
     }
+
+    displaySuccess() {
+        console.log(this.filtered);
+        this.filtered = !this.filtered;
+        this.historyDataSource.filter = this.filtered ? '' : 'success';
+    }
+
 }
