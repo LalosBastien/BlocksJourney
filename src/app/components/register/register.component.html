@@ -20,7 +20,7 @@
           <input matInput placeholder="{{ 'PAGES.REGISTER.USERNAME' | translate }}" formControlName="nameCtrl" required>
           <mat-icon matSuffix>account_circle</mat-icon>
           <mat-error>{{ 'PAGES.REGISTER.USERNAME_ERR' | translate }}</mat-error>
-          <mat-hint align="end">min. 8 - {{ 'PAGES.REGISTER.MAJ' | translate }}</mat-hint>
+          <mat-hint align="end">min. 8</mat-hint>
         </mat-form-field>
         <div>
           <mat-form-field class="col-md-6">
@@ -53,6 +53,8 @@
 
         <mat-form-field *ngIf="checkAccessLevel(accountType.student)" class="col-md-6">
           <input matInput placeholder="Code Prof" formControlName="profIDCtrl" required>
+          <mat-error>Format: aaaa00</mat-error>
+          <mat-hint align="end">Format: aaaa00</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="col-md-6" *ngIf="checkAccessLevel(accountType.professor)">

@@ -1,7 +1,7 @@
 <div style="background-color: white; height: 100%">
     <mat-list style="background-color: white">
         <h3 mat-subheader>Niveaux disponibles</h3>
-        <h2 mat-subheader>Progression : {{progression}}%</h2>
+        <h2 mat-subheader>Progression : {{progression | number : '1.0-2' }}%</h2>
         <mat-progress-bar mode="determinate" value="{{progression}}"></mat-progress-bar>
         <mat-accordion>
             <div *ngFor="let ch of chapters">
