@@ -1,14 +1,17 @@
+# BlocksJourney
 
-# Description
+**<!> This was a school project and it is not maintained <!>**
 
-*Game with Angular5, Electron and Phaser*
+## Description
+
+BlocksJourney is a video game that aim to educates young generations about computers: a fun approach allows to learn fundamental algorithmic concepts and a final pedagogical monitoring interface to teachers allows evaluation in a school setting.
 
 Stack :
 - Angular v5.2.9
 - Electron v1.8.4
 - Electron Builder v20.8.1
 - Phaser v2.10.6
-- Blockly v1.0s
+- Blockly v1.0.0
 
 Can :
 - Run in a local development/production environment with Electron & Hot reload
