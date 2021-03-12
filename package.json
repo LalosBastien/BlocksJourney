@@ -31,7 +31,7 @@
     "highcharts": "^6.0.7",
     "intro.js": "^2.9.3",
     "js-interpreter": "^1.4.6",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.2.5",
     "moment": "^2.24.0",
     "ng-circle-progress": "^1.4.0",
